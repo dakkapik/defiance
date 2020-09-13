@@ -5,7 +5,6 @@ const logger = createLogger({
   transports: [
     new transports.Console({
       level: "info",
-      format: format.simple(),
     }),
     new transports.Console({
       filename: "errors",

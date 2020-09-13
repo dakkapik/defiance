@@ -1,5 +1,5 @@
 function initMap() {
-    var directionsService = new google.maps.DirectionsService();
+    const directionsService = new google.maps.DirectionsService();
 
     document.getElementById("submit-button").addEventListener("click", function () {
         queryRoutes(directionsService);

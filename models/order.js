@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const joi = require("@hapi/joi");
+const joi = require("joi");
 
 function validateOrder(input) {
   const schema = joi.object({
