@@ -21,8 +21,6 @@ async function downloadLastPhoto() {
     res.lastPhotoMetadata = photoDownload.media_info.metadata
 
     fs.writeFile("./imgTest/photo.png", photoDownload.fileBinary, ()=>{
-        //console.log("image downloaded");
-        //console.log(photoDownload.media_info.metadata)
         next();
     })
 }
