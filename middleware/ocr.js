@@ -3,7 +3,7 @@ const logger = require("./logger")
 
 module.exports = function(req, res, next) {
   console.log("starting OCR...")
-  const image = ("./imgTest/bitmap.png")
+  const image = ("./imgTest/photo.png")
   let rectangle = {}
 
   if(req.params.top){
