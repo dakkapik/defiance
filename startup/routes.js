@@ -2,7 +2,7 @@ module.exports = function (app) {
   const express = require("express");
   const orders = require("../routes/orders");
   const users = require("../routes/users");
-  const ocr = require("../routes/ocr")
+  const ocr = require("../routes/ocr");
   const error = require("../middleware/error");
 
   app.use(express.json());

@@ -2,27 +2,37 @@ const { createWorker } = require('tesseract.js');
 const logger = require("./logger")
 
 module.exports = function(req, res, next) {
+  console.log("starting OCR...")
+  const image = ("./imgTest/bitmap.png")
+  let rectangle = {}
 
-  const image = ("../ftp/photos/2020-09-11/19-29-28.jpg")
-  
+  if(req.params.top){
+    rectangle = {
+      top: req.params.top,
+      left: req.params.left,
+      height: req.params.height,
+      width: req.params.width
+    }
+  }else{
+    rectangle = {
+       top: 0,
+       left: 0,
+       height: res.lastPhotoMetadata.dimensions.height,
+       width: res.lastPhotoMetadata.dimensions.width
+     }
+  }
+
   const worker = createWorker();
   
   (async () => {
     await worker.load();
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
-    const { data: { text } } = await worker.recognize(image, 
-        {rectangle:{
-            top: req.body.top,
-            left: req.body.left, 
-            width: req.body.width,
-            height: req.body.height
-        }
-    });
+    const { data: { text } } = await worker.recognize(image, {rectangle: rectangle});
     res.send(text)
-    next()
+    next();
     await worker.terminate();
-
+    console.log("ocr finished...")
   })();
 
 }
