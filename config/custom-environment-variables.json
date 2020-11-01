@@ -1,4 +1,6 @@
 {
-  "db": "db",
-  "jwtPrivateKey": "defiance_jwtPrivateKey"
+    "g_drive_credentials":"dCredentials",
+    "g_drive_token":"dToken",
+    "GOOGLE_APPLICATION_CREDENTIALS": "GCCredentials"
+
 }

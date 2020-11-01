@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control</title>
+    <script defer src="http://localhost:3001/socket.io/socket.io.js"></script>
+    <script defer src="/js/missionControl.js"></script>
+    <style>
+        #driver-position-container {
+            float: left;
+            overflow: hidden;
+            width: 400px;
+        }
+        .driver-container-child {
+            float: left;
+            width: 120px;
+        }
+        #side-bar{
+            float: right;
+        }
+        #side-bar ul{
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <div id='driver-position-container'>
+
+        <h1 class="driver-container-child">driver 1: </h1>
+        <div class="driver-container-child">
+            <h2 id='driver1X'></h1>
+            <h2 id='driver1Y'></h2>
+        </div>
+    
+    </div>
+    <div id='driver-position-container'>
+        <h1 class="driver-container-child">driver 2: </h1>
+        <div class="driver-container-child">
+            <h2 id='driver2X'></h1>
+            <h2 id='driver2Y'></h2>
+        </div>
+    </div>
+    <div id="side-bar">
+        <ul>
+            <li id="user-1">User 1</li>
+            <li id="user-2">User 2</li>
+            <li id="user-3">User 3</li>
+        </ul>
+    </div>
+</body>
+</html>

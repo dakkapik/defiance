@@ -5,8 +5,11 @@ const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
 router.get("/", async (req, res) => {
-  const users = await User.find().sort("firstName");
-  res.send(users);
+  res.render('ejs/directionMap')
+});
+
+router.get("/query", async (req, res) => {
+  res.render('ejs/directionQuery')
 });
 
 router.get("/:id", async (req, res) => {
