@@ -23,15 +23,19 @@ socket.on('users', users=>{
     // user1.innerHTML = `${users[1].rank}: ${users[1].name}`
 })
 
-socket.on('fuck', fuck=>{
-    console.log(fuck)
+
+socket.on('mouse-coords', coords=>{
+    console.log(coords)
+    driver1X.innerHTML = coords.x
+    driver1Y.innerHTML = coords.y
 })
 
-socket.on('something', coords=>{
+socket.on('driver-coords', coords=>{
     console.log(coords)
-    driver1X.innerHTML = coords.clientX
-    driver1Y.innerHTML = coords.clientY
+    driver1X.innerHTML = coords.x
+    driver1Y.innerHTML = coords.y
 })
+
 
 //need room to talk to each other?
 //why do they reconnect?

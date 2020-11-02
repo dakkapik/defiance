@@ -2,7 +2,8 @@ const logger = require('../middleware/logger')
 
 module.exports = function(io){
     
-    let users = []
+    const rooms = {}
+    const users = []
 
     io.on('connection', socket =>{
         logger.log('info', 'new connection')
@@ -21,11 +22,14 @@ module.exports = function(io){
             socket.emit('users', users)
         })
 
-        socket.emit('fuck', 'fuck')
-
         socket.on('mouse-position', coords=>{
+
+            io.emit('mouse-coords', coords)
+        })
+
+        socket.on('driver-position', coords=>{
             console.log(coords)
-            socket.emit('mouse-coords', {coords})
+            io.emit('driver-coords', coords)
         })
     })
 }

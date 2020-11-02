@@ -1,16 +1,16 @@
 const express = require("express");
 const app = express();
 const server = require('http').createServer(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, { perMessageDeflate: false })
 
 const logger = require("./middleware/logger");
 
-// require("./startup/db")();
+require("./startup/db")();
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app)
 require("./startup/socket")(io)
-// require("./startup/config")()
+require("./startup/config")()
 
 
 const port = process.env.PORT || 3001;
