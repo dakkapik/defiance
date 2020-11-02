@@ -12,7 +12,7 @@ router.get('/', async(req, res)=>{
 
 router.get('/:id', async(req, res)=>{
   const user = await User.findOne({employeeId: req.params.id})
-  if(!user) return res.status(404).send('employee ID not found')
+  if(!user) return res.status(404).send({message: 'employee ID not found'})
   res.status(200).send(user)
   //get user, for mobile login and such
 })
