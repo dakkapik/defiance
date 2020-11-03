@@ -2,15 +2,55 @@
 
 const driversContainer = document.getElementById('drivers-container')
 
-const drivers = ['felipe', 'george', 'jesus', 'jack', 'joon','allan']
-const orders = [['115 fukc you', 'eat my ass ave', 'he he popo'], ['big ass bigg tits', 'death death death', 'good good']]
-
-// drivers.forEach(addDriver(drivers))
-
-for(let i = 0; i < drivers.length; i++){
-
-    addDriver({driver: drivers[i], ordersList: orders[i]})
+const getActiveDrivers = async () => {
+    const activeDrivers = []
+    const drivers = await fetch('https://defiance.herokuapp.com/api/users')
+    .then(response=>{
+        if (!response.status == 200){
+            return response.json()
+            .catch(()=>{
+                throw new Error(response.status)
+            })
+            .then(({message})=>{
+                throw new Error(message || response.status)
+            })
+        }
+        return response.json()
+    })
+    drivers.forEach(driver => {
+        if(driver.isActive === true){
+            activeDrivers.push(driver)
+        }
+    });
+    return activeDrivers
 }
+
+const getActiveOrders = async () => {
+    const activeOrders = []
+    const orders = await fetch('http://defiance.heroku.com/api/orders')
+    .then(response=>{
+        if (!response.status == 200){
+            return response.json()  
+            .catch(()=>{
+                throw new Error(response.status)
+            })
+            .then(({message})=>{
+                throw new Error(message || response.status)
+            })
+        }
+        return response.json()
+    })
+    orders.forEach(order=>{
+        if(order.status != 'delivered'){
+            activeOrders.push(order)
+        }
+    });
+    return activeOrders
+}
+
+getActiveDrivers().then(res=>{console.log(res)})
+getActiveOrders().then(res=>{console.log(res)})
+
 
 function addDriver({driver, ordersList}){
 
@@ -25,21 +65,26 @@ function addDriver({driver, ordersList}){
     driverX.innerHTML = 'coordsX'
     const driverY = document.createElement('h2')
     driverY.innerHTML = 'coordsY'
-    console.log(driver)
-    console.log(ordersList)
-    
+
     const orderUl = document.createElement('ul')
     orderUl.style.float = 'right'
 
-    for(let i = 0; i < ordersList.length; i++){
-        const order = document.createElement('li')
-        order.innerText = ordersList[i]
-        orderUl.appendChild(order)
+    if(ordersList){
+        for(let i = 0; i < ordersList.length; i++){
+            const order = document.createElement('li')
+            order.innerText = ordersList[i]
+            orderUl.appendChild(order)
+        }
+    
+        driverCoords.append(driverX, driverY)
+        driverContainer.append(driverName, driverCoords, orderUl)
+        driversContainer.append(driverContainer)
+    }else{
+        driverCoords.append(driverX, driverY)
+        driverContainer.append(driverName, driverCoords)
+        driversContainer.append(driverContainer)
     }
-    driverCoords.append(driverX, driverY)
-    driverContainer.append(driverName, driverCoords)
-    driverContainer.append(orderUl)
-    driversContainer.append(driverContainer)
+        
 
 }
 

@@ -1,58 +1,84 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 const joi = require("joi");
+const { object } = require("joi");
 
-function validateOrder(input) {
-  const schema = joi.object({
-    orderNumber: joi.string().required(),
-    name: joi.string(),
-    dateTime: joi.string(),
-    phone: joi.string(),
-    address: joi.string(),
-    city: joi.string(),
-    zipCode: joi.string(),
-    cost: joi.string(),
-  });
+function validateOrder(order) {
+    const schema = joi.object({
+        orderNumber: joi.number().required(),
+        status: joi.string(),
+        driver: joi.number(),
+        date: joi.string(),
+        time: joi.string(),
+        firstName: joi.string(),
+        lastName: joi.string(),
+        phoneNumber: joi.string(),
+        address: joi.string().required(),
+        city: joi.string(),
+        zip: joi.string(),
+        marker: joi.object(),
+    })
+    return schema.validate(order)
+};
 
-  return schema.validate(input);
-}
-
-const Order = new mongoose.model(
-  "Orders",
-  new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     orderNumber: {
-      type: Number,
-      required: true,
+        type: Number,
+        required: true,
     },
-    name: {
-      type: String,
-      required: false,
+    status: {
+        type: String,
+        default: 'unassigned'
     },
-    dateTime: {
-      type: Date,
-      required: false,
+    driver: {
+        type: Number,
     },
-    phone: {
-      type: String,
-      required: false,
+    date: {
+        type: String,
+        required: false
+    },
+    time: {
+        type: String,
+        required: false
+    },
+    firstName: {
+        type: String,
+        required: false,
+        minlength: 2,
+        maxlength: 50,
+    },
+    lastName: {
+        type: String,
+        required: false,
+        minlength: 2,
+        maxlength: 50,
+    },
+    phoneNumber: {
+        type: String,
+        required: false,
+        minlength: 10,
+        maxlength: 16,
     },
     address: {
-      type: String,
-      required: false,
+        type: String,
+        required: true,
+        minlength: 4,
+        maxlength: 255,
     },
     city: {
-      type: String,
-      required: false,
+        type: String,
+        required: false,
     },
-    zipCode: {
-      type: String,
-      required: false,
+    zip: {
+        type: String,
+        required: false
     },
-    cost: {
-      type: String,
-      required: false,
-    },
-  })
-);
+    marker: {
+      type: Object,
+      required: false
+    }
+});
 
-exports.validateOrder = validateOrder;
-exports.Order = Order;
+const Order = new mongoose.model("Orders", orderSchema);
+
+module.exports.Order = Order;
+module.exports.validateOrder = validateOrder;
