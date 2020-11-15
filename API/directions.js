@@ -11,4 +11,8 @@ router.get('/client', (req, res)=>{
     res.render('ejs/client')
 })
 
+router.get('/controlPanel', (req, res)=>{
+    res.render('ejs/controlPanel')
+})
+
 module.exports = router
