@@ -9,6 +9,8 @@ const storeButton = document.getElementById('store-button')
 // REMEMBER THIS FOR LOG IN^^^^^
 
 socket.emit('new-user', {number: "store", role: 'MS'})
+//AUTO LOG IN FOR NOW
+
 const getStores = async () => {
     const stores = await fetch('http://defiance.herokuapp.com/api/stores')
     .then(response=>{
@@ -21,7 +23,7 @@ const getStores = async () => {
                 throw new Error(message || response.status)
             })
         }
-        return respnsoe.json()
+        return response.json()
     })
     stores.forEach(stores=>console.log(stores))
 }
@@ -90,7 +92,7 @@ const getData = async () => {
 
 getData().then(res=>addDrivers(res.drivers, res.orders))
 
-
+getStores()
 
 function addDrivers(drivers, orders){
     

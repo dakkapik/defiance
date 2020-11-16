@@ -1,3 +1,5 @@
+path = require('path')
+
 module.exports = function (app) {
   const express = require("express");
   const orders = require("../API/orders");
@@ -9,7 +11,9 @@ module.exports = function (app) {
 
   app.set('view engine','ejs');
   app.use(express.json());
+  app.use(express.static(path.join(__dirname, '..', 'build')))
   app.use(express.static('./views/public'));
+  
   app.use(express.urlencoded({ extended: true }))
 
   app.use("/api/stores", stores);
