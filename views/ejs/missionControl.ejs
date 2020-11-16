@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Control</title>
-    <script defer src="http://localhost:3001/socket.io/socket.io.js"></script>
-    <script defer src="/js/missionControl.js"></script>
+    <script src="http://localhost:3001/socket.io/socket.io.js"defer ></script>
+    <script src="/js/missionControl.js" defer ></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXpwzqh9wNL7cLYBJ2_DUunWkNluiSJNI&callback=initMap&libraries=&v=weekly"defer></script>
+    <script src="/js/map.js" ></script>
     <style>
         body, html {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -93,10 +95,10 @@
         <div id = 'store-header'>
             <h3 id= 'store-text'>Store: </h3>
             <select id="store-select">
-                <option value="Royal Palm">Royal Palm</option>
-                <option value="Coconut Creek">Coconut Creek</option>
-                <option value="Pembroke Pines">Pembroke Pines</option>
-                <option value="Heron Bay">Heron Bay</option>
+                <option value=1>Royal Palm</option>
+                <option value=2>Coconut Creek</option>
+                <option value=3>Pembroke Pines</option>
+                <option value=4>Heron Bay</option>
             </select>
             <div id='store-button'>Log In</div>
         </div>

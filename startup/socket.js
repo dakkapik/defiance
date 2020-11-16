@@ -9,14 +9,25 @@ module.exports = function(io){
         socket.on('new-user', (user)=>{
             socket.id = user.number
             logger.log('info', `new connection: ${socket.id}`)
+            if(user.role === 'driver'){
+                io.emit('new-driver', user.number)
+            }
         })
 
         socket.on('message', (message)=>{
             console.log(`${socket.id}: ${message}`)
         })
 
-        socket.on('disconnect', (reason)=>
-        logger.log('info',`${socket.id} disconnected: ${reason}`))
+        socket.on('user-location', (coords)=>{
+            io.emit('driver-location', {id: socket.id, coords})
+        })
+
+        socket.on('disconnect', (reason)=>{
+            logger.log('info',`${socket.id} disconnected: ${reason}`)
+            
+            io.emit('driver-disconnected', socket.id)
+            
+        })
 
 
 

@@ -4,7 +4,11 @@ const driversContainer = document.getElementById('drivers-container')
 const storeSelect = document.getElementById('store-select')
 const storeButton = document.getElementById('store-button')
 
-storeButton.addEventListener('click', ()=>socket.emit('store-login', storeSelect.value))
+
+// storeButton.addEventListener('click', ()=>socket.emit('new-user', {number: storeSelect.value}))
+// REMEMBER THIS FOR LOG IN^^^^^
+
+socket.emit('new-user', {number: "store", role: 'MS'})
 
 const getActiveDrivers = async () => {
     const activeDrivers = []
@@ -26,7 +30,7 @@ const getActiveDrivers = async () => {
             activeDrivers.push(driver)
         }
     });
-    console.log(activeDrivers)
+    // console.log(activeDrivers)
     return activeDrivers
 }
 
@@ -126,54 +130,16 @@ function addDrivers(drivers, orders){
 
     }
 
-    // window.addEventListener('mousemove', e =>{
-    //     for(i = 0; i<drivers.length; i++){
-    //         let x = document.getElementById(`x-${drivers[i].employeeId}`)
-    //         x.innerHTML = e.clientX
-    //         let y = document.getElementById(`y-${drivers[i].employeeId}`)
-    //         y.innerHTML = e.clientY
-    //     }
-    // })
+    socket.on('driver-location', location=>{
+        // console.log(location)
+        let x = document.getElementById(`x-${location.id}`)
+        let y = document.getElementById(`y-${location.id}`)
 
-    socket.on('user-connected', stores=>{
-        console.log(stores)
+        x.innerHTML = `latitude: ${location.coords.latitude}`
+        y.innerHTML = `longitude: ${location.coords.longitude}`
     })
-
-    socket.on('driver-coords', coords=>{
-        console.log(coords)
-        let x = document.getElementById(`x-${coords.id}`)
-        let y = document.getElementById(`y-${coords.id}`)
-
-        x.innerHTML = `latitude: ${coords.latitude}`
-        y.innerHTML = `longitude: ${coords.longitude}`
-    })
-
-    socket.on('test-message',text=>console.log(text))
     
 }
-socket.on('store-online', (stores)=> {
-    console.log(stores)
-})
-
-
-// socket.on('new-user', () => {
-//     console.log('new user acknoledged')
-//     socket.emit('user-id', {name: 'mission control'})
-// })
-
-// socket.on('users', users=>{
-//     //make users dinamically appear with a loop
-//     // user1.innerHTML = `${users[1].rank}: ${users[1].name}`
-// })
-
-
-// socket.on('mouse-coords', coords=>{
-//     console.log(coords)
-//     driver1X.innerHTML = coords.x
-//     driver1Y.innerHTML = coords.y
-// })
-
-
 
 
 //need room to talk to each other?
