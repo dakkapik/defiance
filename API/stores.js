@@ -8,6 +8,13 @@ router.get('/', async (req, res)=>{
     //get all stores
 })
 
+router.get('/:storeNumber', async (req, res)=>{
+    const store = await Store.findOne({number: req.params.storeNumber})
+    if(!store) return res.status(404).send('store not found')
+
+    res.status(200).send(store)
+})
+
 router.get('/users/:id',async (req,res)=>{
     const store = await Store.findById(req.params.id)
     if(store.users === []) return res.status(200).send({message: 'no users logged in this store'})
