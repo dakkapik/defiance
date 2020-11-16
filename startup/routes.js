@@ -8,11 +8,13 @@ module.exports = function (app) {
   const react = require('../API/react')
   const stores = require('../API/stores')
   const error = require("../middleware/error");
-
-  app.set('view engine','ejs');
+  
+  // app.set('view engine','ejs');
   app.use(express.json());
-  app.use(express.static(path.join(__dirname, '..', 'build')))
-  app.use(express.static('./views/public'));
+
+  app.use(express.static(path.join(__dirname, '../../', 'build')))
+
+  app.use(express.static('./public'));
   
   app.use(express.urlencoded({ extended: true }))
 

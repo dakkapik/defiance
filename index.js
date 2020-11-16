@@ -13,7 +13,7 @@ require("./startup/socket")(io)
 require("./startup/config")()
 
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 
 server.listen(port, () => logger.log("info", "server listening on port " + port));
 
