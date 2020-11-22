@@ -1,0 +1,20 @@
+.body {
+    height: 100%;
+    background-color: #510080;
+}
+
+.map{
+    height: 85%;
+    background-color: green;
+}
+
+.side-bar {
+    width: 25%;
+    background-color: lightcoral;
+    float: right;
+}
+
+.bottom-bar{
+    height: 10%;
+    background-color: magenta;
+}

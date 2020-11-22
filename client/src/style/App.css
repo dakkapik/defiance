@@ -1,0 +1,40 @@
+body {
+  font-size: 20px;
+  background-color:blueviolet;
+}
+
+.body{
+  height: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.nav{
+  height: 7%;
+}
+
+
+.nav-body {
+  background-color: black;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+}
+
+.nav-item {
+  background-color: brown;
+  margin: 10px 10px;
+  flex-grow: 1; 
+}
+
+.link {
+  padding: 5px 0px;
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+}
