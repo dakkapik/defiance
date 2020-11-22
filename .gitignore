@@ -1,7 +1,2 @@
-node_modules/
-imgTest/300dpi.png
-imgTest/300dpi2.jpg
-imgTest/bitmap.png
-imgTest/testImage.jpg
-imgTest/photo.png
-defiance
+/node_modules
+/public
