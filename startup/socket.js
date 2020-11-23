@@ -5,14 +5,19 @@ module.exports = function(io){
     const stores = {}
 
     io.on('connection', socket =>{
+        //new user takes 2 args, user.number  and user.role
+        console.log('new user: ' + socket.id)
+        socket.emit('message','message')
 
-        socket.on('new-user', (user)=>{
-            socket.id = user.number
-            logger.log('info', `new connection: ${socket.id}`)
-            if(user.role === 'driver'){
-                io.emit('new-driver', user.number)
-            }
-        })
+        // socket.on('new-user', (user)=>{
+        //     socket.id = user.number
+        //     logger.log('info', `new connection: ${socket.id}`)
+        //     if(user.role === 'driver'){
+        //         io.emit('new-driver', user.number)
+        //     }else if(user.role === 'store'){
+        //         io.emit('new-store', user.number)
+        //     }
+        // })
 
         socket.on('message', (message)=>{
             console.log(`${socket.id}: ${message}`)

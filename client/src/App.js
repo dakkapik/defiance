@@ -2,11 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import './style/App.css'
+
 import MissionControl from './pages/MissionControl'
 import Home from './pages/Home'
 
 
 export default class NavBar extends React.Component{
+
+
     render() {
         return (
             <Router>

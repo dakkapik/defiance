@@ -12,9 +12,17 @@
     width: 25%;
     background-color: lightcoral;
     float: right;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.driver{
+    
 }
 
 .bottom-bar{
     height: 10%;
     background-color: magenta;
 }
+
