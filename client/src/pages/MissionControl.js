@@ -1,21 +1,15 @@
-import React, { useState }from 'react'
 
+import React, {useState, useEffect} from 'react'
 import '../style/MissionControl.css'
 
-import { SocketStatus }from '../assets/SocketStatus.js'
+const url = 'https://defiance.herokuapp.com/'
 
-const url = 'https://defiance.herokuapp.com'
-// const socketEndPoint = 'http://localhost:3001'
-const test = [{name: "juan", id: 1}, {name: "pedro", id: 2}, {name: "jose", id:3}, {name: "manuel", id:4}]
-
-
-export default function MissionControl () {
-
+export default function MissionControl (){
     return (
         <div className="body">
             <div className="map">
-                <SocketStatus/>
-                <SideBar/> 
+                <SideBar/>
+
             </div>
             <div className="bottom-bar">bottom bar</div>
         </div>
@@ -24,48 +18,46 @@ export default function MissionControl () {
 
 function SideBar () {
 
-    const [users, setUsers] = useState(test)
 
-    const drivers = []
+    const [users, setUsers] = useState([])
 
-    for(let i = 0; i < users.length; i++){
-        drivers.push(
-        <Driver
-            key={test[i].id}
-            onClick={()=>handleClick(test[i])}
-            driver={test[i].name}
-        />)
-    }
+    useEffect(() => {
+
+        const items = [];
+
+        fetch(url+'api/users')
+        .then(res=>res.json())
+        .then(result=>{
+
+            for(let i = 0; i < result.length; i++){
+                items.push(
+                    <SideBarItem
+                        key={result[i]._id}
+                        firstName={result[i].firstName}
+                        employeeId={result[i].employeeId}
+                        isActive={result[i].isActive}
+                        isAdmin={result[i].isAdmin}
+                    />)
+            }
+
+            setUsers(items)
+        })
+        .catch(error=>{console.log('fetch error: ' + error)})
+
+    }, [])
 
     return(
         <div className="side-bar">
-            {drivers}
+            {users}
         </div>
     )
 }
 
-function handleClick(i){
-    console.log(i)
-}
-
-function Driver (props) {
-
-    return(
-        <button
-        key={props}
-        className="driver"
-        onClick={props.onClick}>
-            {props.driver}
-        </button>
+function SideBarItem (props) {
+    return (
+        <div className="side-bar-item">
+            {props.firstName}
+            {props.employeeId}
+        </div>
     )
-}
-
-async function getUsers() {
-    const users = await fetch(`${url}/api/users`)
-    .then((response)=>response.json())
-    .then((json)=>{
-        return json
-    })
-    .catch((error)=>{console.error('this error: '+error)})
-    return users
 }

@@ -6,7 +6,6 @@ function Square(props) {
     
     return (
         <button
-        key={props}
         className="square"
         onClick={props.onClick}
         style={{color: props.colorChange? 'red':'black'}}>
@@ -20,6 +19,7 @@ class Board extends React.Component {
     renderSquare(i){
         return (
         <Square 
+            key={i}
             colorChange={this.props.line.includes(i)}
             value={this.props.squares[i]}
             onClick={()=>{this.props.onClick(i)}}
@@ -45,7 +45,7 @@ class Board extends React.Component {
             grid.push(this.renderRow(i))
         }
         return (
-            <div style={{display: 'flex', flexDirection: 'column-reverse'}} key={grid.length} >{grid}</div>
+            <div style={{display: 'flex', flexDirection: 'column-reverse'}}>{grid}</div>
         );
     }
 }
