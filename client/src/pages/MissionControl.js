@@ -1,15 +1,17 @@
 
 import React, {useState, useEffect} from 'react'
+
 import '../style/MissionControl.css'
 
 const url = 'https://defiance.herokuapp.com/'
 
 export default function MissionControl (){
+
+
     return (
         <div className="body">
             <div className="map">
                 <SideBar/>
-
             </div>
             <div className="bottom-bar">bottom bar</div>
         </div>
@@ -17,7 +19,6 @@ export default function MissionControl (){
 }
 
 function SideBar () {
-
 
     const [users, setUsers] = useState([])
 
