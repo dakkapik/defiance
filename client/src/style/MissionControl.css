@@ -1,6 +1,6 @@
 .body {
     height: 100%;
-    background-color: #510080;
+    background-color: #b487ce;
 }
 
 .map{
@@ -8,18 +8,19 @@
     background-color: green;
 }
 
-.side-bar {
-    width: 25%;
-    background-color: lightcoral;
-    float: right;
+
+.store-item-list{
     display: flex;
+    float: left;
     flex-wrap: wrap;
     flex-direction: column;
+    background-color: yellow;
 }
 
-.driver{
-    
+.store-item{
+    background-color: #510080;
 }
+
 
 .bottom-bar{
     height: 10%;

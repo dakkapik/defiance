@@ -9,7 +9,7 @@ require("./startup/db")();
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app)
-require("./startup/socketAlt")(io)
+require("./startup/socket")(io)
 require("./startup/config")()
 
 const port = process.env.PORT || 3001;

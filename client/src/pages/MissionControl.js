@@ -1,64 +1,77 @@
-
 import React, {useState, useEffect} from 'react'
 
 import '../style/MissionControl.css'
+import SocketStatus from '../assets/SideBar'
 
 const url = 'https://defiance.herokuapp.com/'
 
 export default function MissionControl (){
 
+    const [ loadSocket, setLoadSocket ] = useState(false)
+    const [ store, setStore ] = useState( )
 
     return (
         <div className="body">
             <div className="map">
-                <SideBar/>
+
+                {loadSocket ?  
+                <SocketStatus
+                    store = {store}
+                    handleConnect = {handleConnect}
+                /> 
+                :
+                <StoreSelect
+                    handleConnect = {handleConnect}
+                />}
             </div>
             <div className="bottom-bar">bottom bar</div>
         </div>
     )
+
+    function handleConnect(i){
+        setStore({name: i.name, id: i.number})
+        setLoadSocket(prevState => !prevState)
+    }
 }
 
-function SideBar () {
+function StoreSelect (props) {
 
-    const [users, setUsers] = useState([])
+    const [stores, setStores] = useState()
 
     useEffect(() => {
 
-        const items = [];
+        const items = []
 
-        fetch(url+'api/users')
+        fetch(url + 'api/stores')
         .then(res=>res.json())
         .then(result=>{
-
             for(let i = 0; i < result.length; i++){
-                items.push(
-                    <SideBarItem
-                        key={result[i]._id}
-                        firstName={result[i].firstName}
-                        employeeId={result[i].employeeId}
-                        isActive={result[i].isActive}
-                        isAdmin={result[i].isAdmin}
-                    />)
+                items.push(    
+                <StoreItem
+                    key={result[i]._id}
+                    name={result[i].name}
+                    number={result[i].number}
+                    handleConnect={()=>props.handleConnect(result[i])}
+                />)
             }
-
-            setUsers(items)
+            setStores(items)
         })
-        .catch(error=>{console.log('fetch error: ' + error)})
+        .catch(error=>'fetch error: ' + console.log(error))
 
     }, [])
 
-    return(
-        <div className="side-bar">
-            {users}
+    return (
+        <div className="store-item-list">
+            {stores}
         </div>
     )
 }
 
-function SideBarItem (props) {
+function StoreItem (props) {
     return (
-        <div className="side-bar-item">
-            {props.firstName}
-            {props.employeeId}
+        <div className="store-item">
+            {props.name}
+            <button onClick={props.handleConnect}>CONNECT</button>
         </div>
     )
 }

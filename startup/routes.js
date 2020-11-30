@@ -2,10 +2,9 @@ const path = require('path')
 
 module.exports = function (app) {
   const express = require("express");
-  const index = require('../api/index')
+  const index = require('../API/index')
   const orders = require("../API/orders");
   const users = require("../API/users");
-  // const directions = require('../API/directions');
   const react = require('../API/react')
   const stores = require('../API/stores')
   const error = require("../middleware/error");
@@ -23,7 +22,6 @@ module.exports = function (app) {
   app.use("/api/react", react);
   app.use("/api/orders", orders);
   app.use("/api/users", users);
-  // app.use("/api/directions", directions);
   app.use(error);
 
   app.get('*', (req, res)=>{
