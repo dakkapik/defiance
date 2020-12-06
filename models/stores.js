@@ -5,6 +5,7 @@ function validateStore(input){
     const schema = joi.object({
         number: joi.number().required(),
         name: joi.string().required(),
+        location: joi.object().required(),
         users: joi.array()
     })
     return schema.validate(input)
@@ -18,6 +19,10 @@ const storeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    location:{
+        type: Object,
+        required: true,
     },
     users: {
         type: Array,

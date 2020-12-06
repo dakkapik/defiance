@@ -31,6 +31,7 @@ router.post('/',async (req, res)=>{
 
     store = new Store({
         number: req.body.number,
+        location: req.body.location,
         name: req.body.name,
     })
 
@@ -69,7 +70,7 @@ router.delete('/:id',async (req, res)=>{
         const store = await Store.findById(req.params.id);
         if(!store) return res.status(404).send('store id not found')
     
-        const result = await User.findByIdAndRemove(req.params.id)
+        const result = await Store.findByIdAndRemove(req.params.id)
         res.send({deleted: result})
       }catch(err){
         res.status(404).send(err)

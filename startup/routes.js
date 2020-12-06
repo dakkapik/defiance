@@ -16,13 +16,13 @@ module.exports = function (app) {
   
   app.use(express.urlencoded({ extended: true }))
   
-  
   app.use("/", index)
   app.use("/api/stores", stores);
   app.use("/api/react", react);
   app.use("/api/orders", orders);
   app.use("/api/users", users);
   app.use(error);
+  
 
   app.get('*', (req, res)=>{
     res.sendFile(path.join(__dirname, '../client/build/index.html'))
