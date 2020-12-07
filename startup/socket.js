@@ -16,11 +16,13 @@ module.exports = async function(io){
             
             
             if(user.ms){
+                // room needs to be iniciated somewhere else, on store disconnect everyone has to disconnect and reconnect
                 rooms[user.room] = {users:{}}
                 socket.emit('current-users', rooms[user.room])
             }else{
                 rooms[user.room].users[socket.id] = user.id
-                socket.to(user.room).emit('new-user', rooms[user.room])
+                socket.to(user.room).emit('current-users', rooms[user.room])
+                
             }
         })
 

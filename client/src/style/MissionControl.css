@@ -6,6 +6,8 @@
 .map{
     height: 85%;
     background-color: green;
+    display: flex;
+    flex-direction: row;
 }
 
 
