@@ -2,5 +2,6 @@
     "db": "mongodb+srv://defiance_extract_dev:resolve1615@cluster0.dab6a.mongodb.net/defiance-extract?retryWrites=true&w=majority",
     "g_drive_credentials":"mongoimport --uri mongodb+srv://defiance_extract_dev:resolve1615@cluster0.dab6a.mongodb.net/auth --collection g_drive --type json --file credentials.json",
     "GOOGLE_APPLICATION_CREDENTIALS":"./credentials/vision.js",
-    "g_cloud_credentials":"mongodb+srv://defiance_extract_usr:lizards123@cluster0.dab6a.mongodb.net/<dbname>?retryWrites=true&w=majority"
+    "g_cloud_credentials":"mongodb+srv://defiance_extract_usr:lizards123@cluster0.dab6a.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "test": "test"
 }

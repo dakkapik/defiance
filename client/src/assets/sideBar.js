@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client'
 
+import DynamicDriverList from '../assets/DynamicDriverList'
+
 import '../style/sideBar.css'
 
 const endpoint = "http://localhost:3001"
@@ -9,18 +11,10 @@ const url = 'https://defiance.herokuapp.com/'
 export default function SideBar (props) {
 
     const [socket, setSocket] = useState()
-    const [drivers, setDrivers] = useState([])
-    const [activeDriversIds, setActiveDriversIds] = useState()
-    const [activeDrivers, setActiveDrivers] = useState([])
+    const [activeDriversIds, setActiveDriversIds] = useState({})
+    const [driversPostions, setDriversPositions] = useState({})
 
-    useEffect(() => {
-
-        fetch(url+'api/users')
-        .then(res=>res.json())
-        .then(result=>{setDrivers(result)})
-        .catch(error=>{console.log('fetch error: ' + error)})
-
-    }, [])
+    //IT HAS TO BE A REFERENCE
 
     useEffect(() => {
         const socket = io(endpoint)
@@ -37,31 +31,33 @@ export default function SideBar (props) {
         })
         //on disconnect update
         
+        const driversPos = {}
+
         socket.on('d-position', (position, id)=>{
-            // console.log(id)
+            driversPos[id] = position
+            setDriversPositions(driversPos)
         })
 
         return ()=>{ socket.disconnect() }
 
     }, [props.store])
 
-    useEffect(() => {
+    useEffect(()=>{
+        console.log(driversPostions)
+    }, [driversPostions])
+    // useEffect(() => {
         
-        const list = []
 
-        if(activeDriversIds){
-            Object.values(activeDriversIds).forEach(driverId=>{
-                drivers.forEach(driver=>{
-                    if(driver.employeeId === driverId){
-                        list.push(driver)
-                    }
-                })
-            })
-        }
+    //     const activeList = Object.values(activeDriversIds).reduce((active, driverId)=>{
+            
+    //         if(drivers[driverId] != null ) active.push(drivers[driverId])
+    //         return active
+            
+    //     }, [])
 
-        setActiveDrivers(list)
+    //     setActiveDriversArray(activeList)
         
-    }, [activeDriversIds])
+    // }, [activeDriversIds])
 
    return(
        <div className="socket-status">
@@ -71,41 +67,11 @@ export default function SideBar (props) {
             <p>socket server: {endpoint}</p>
             <button onClick={()=>handleMessage(socket, props.store.name)}>send message</button>
         </div>
-        {activeDrivers[0] ? <DriverList activeDrivers={activeDrivers}/> : null}
+        {activeDriversIds? <DynamicDriverList driversIds={activeDriversIds} positions={driversPostions}/>: null}
        </div>
    )
 }
 
-function DriverList (props){
-    const list = []
-
-    props.activeDrivers.forEach(driver=>{
-        list.push(
-        <SideBarItem
-        key={driver._id}
-        firstName={driver.firstName}
-        employeeId={driver.employeeId}
-        ></SideBarItem>)
-    })
-
-    return(
-        <div>
-            {list}
-        </div>
-    )
-}
-
 function handleMessage(socket, store) {
     socket.send('Royal')
-}
-
-
-
-function SideBarItem (props) {
-    return (
-        <div className="side-bar-item">
-            {props.firstName}
-            {props.employeeId}
-        </div>
-    )
 }

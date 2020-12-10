@@ -22,7 +22,7 @@ export default function MapContainer (props) {
 
 
     useEffect(() => {
-        console.log(props.store)
+        // console.log(props.store)
         if(props.store.location){
             setCenter(props.store.location)
             setZoom(14)
