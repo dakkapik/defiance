@@ -4,6 +4,10 @@ import '../style/App.css'
 
 import Game from '../assets/ticktacktoe'
 
+const newPage = () => {
+    console.log("latest")
+}
+
 export default class Page extends React.Component {
 
     render() {
@@ -14,6 +18,7 @@ export default class Page extends React.Component {
                 flexDirection: 'column',
                 flexGrow: 1,
                 backgroundColor: "orange",
+
             }}>
             <Counter/>
             <div style={{
