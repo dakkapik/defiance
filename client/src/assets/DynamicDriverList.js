@@ -4,9 +4,8 @@ const url = 'https://defiance.herokuapp.com/'
 
 export default function DynamicDriverList(props) {
 
-    const [ drivers, setDrivers ] =  useState()
-
-    // console.log(props.positions)s
+    const [ drivers, setDrivers ] =  useState({})
+    const [ positions, setPositions ] = useState({})
 
     useEffect(() => {
 
@@ -26,35 +25,22 @@ export default function DynamicDriverList(props) {
 
     useEffect(() => {
         console.log(props.positions)
-    }, [props.positions])
+    }, [props.position])
 
 
     const list = []
 
-    Object.values(props.driversIds).forEach(driverId=>{
-        // console.log(props.positions[driverId])
-        list.push(
-            <DriverListItem
-            key={drivers[driverId]._id}
-            firstName={drivers[driverId].firstName}
-            employeeId={drivers[driverId].employeeId}
-            // position={props.positions[driverId]}
-            ></DriverListItem>)
+    // Object.keys(props.positions).forEach(driverId=>{
+    //     // console.log(props.positions[driverId])
+    //     list.push(
+    //         <DriverListItem
+    //         key={drivers[driverId]._id}
+    //         firstName={drivers[driverId].firstName}
+    //         employeeId={drivers[driverId].employeeId}
+    //         position={positions[driverId]}
+    //         ></DriverListItem>)
         
-    })
-    
-    // console.log(list)
-
-    // props.driverIds.forEach(driverId=>{
-    //     console.log(drivers[driverId])
-    //     // list.push(
-    //     // <DriverListItem
-    //     // key={driver._id}
-    //     // firstName={driver.firstName}
-    //     // employeeId={driver.employeeId}
-    //     // ></DriverListItem>)
     // })
-
     return(
         <div>
             {list}
@@ -62,11 +48,12 @@ export default function DynamicDriverList(props) {
     )
 }
 
+
 function DriverListItem (props) {
-    // console.log(props.position)
     return (
         <div className="side-bar-item">
             <h3>{props.firstName} {props.employeeId}</h3>
+            {/* <p>{props.position.timestamp}</p> */}
             {/* <p> transmiting: {props.position? props.position.coords.latitude: null}</p>s */}
             
         </div>

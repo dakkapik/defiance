@@ -1,6 +1,3 @@
-const { eventNames } = require('../middleware/logger')
-const logger = require('../middleware/logger')
-
 module.exports = async function(io){
 
     const users = {}
