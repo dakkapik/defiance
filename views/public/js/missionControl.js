@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3001')
+const socket = io('https://defiance.herokuapp.com')
 const title = document.getElementById('drivers-container-title')
 const driversContainer = document.getElementById('drivers-container')
 const storeSelect = document.getElementById('store-select')
