@@ -8,17 +8,57 @@ import StoreSelect from '../components/StoreSelect'
 
 import '../style/MissionControl.css'
 
+const url = 'https://defiance.herokuapp.com/'
+
 export default function MissionControl (){
     
-    const [ loadSocket, setLoadSocket ] = useState(false)
-    const [ store, setStore ] = useState({store:{}})
+    const [ users, setUsers ] = useState()
+    const [ activeDrivers, setActiveDrivers ] = useState([])
 
-    const [ driversPositions, setDriversPositions ] = useState({})
-  
+    const [ drivers, setDrivers ] = useState([])// this one most generate the driver element that can be manipulated seperatly
+
+    const [ position, setPosition ] = useState({})
+
+    const [ loadSocket, setLoadSocket ] = useState(false)
+
+    const [ store, setStore ] = useState({store:{}})
+    
+    useEffect(()=>{
+        
+        getUsers().then(res=>{ setUsers(res) })
+
+    }, [])
 
     useEffect(()=>{
-        console.log(driversPositions)
-    }, [driversPositions])
+
+        const driverList = []
+
+        activeDrivers.forEach(driver=>{
+            users.forEach(user=>{
+                if(user.employeeId === driver.id){
+                    driverList.push(user)
+                }
+            })
+        })
+
+        setDrivers(driverList)
+
+        //dynamic driver elements
+
+    }, [activeDrivers])
+
+    useEffect(()=>{
+
+        let positions = drivers.map((driver)=>{
+            if(driver.employeeId === position.id){
+                driver.position = position.position
+            }
+            return driver
+        })
+        setDrivers(positions)
+
+    },[position])
+
 
     return (
         <div className="body">
@@ -30,15 +70,15 @@ export default function MissionControl (){
                 <SocketStatus
                     store = {store}
                     handleConnect = {handleStore}
-                    driversPositions = {driversPositions}
-                    setDriversPositions = {setDriversPositions}
+                    setActiveDrivers = {setActiveDrivers}
+                    setPosition = {setPosition}
                 /> 
                 :
                 null}
 
                 {loadSocket ?
                 <DynamicDriverList
-                    positions = {driversPositions}
+                    drivers = {drivers}
                 />
                 :
                 <StoreSelect
@@ -60,3 +100,9 @@ export default function MissionControl (){
 }
 
 
+async function getUsers () {
+    return await fetch(url+'api/users')
+    .then(res=>res.json())
+    .then(result=> {return result} )
+    .catch(error=>{console.log('fetch error: ' + error)})
+}

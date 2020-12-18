@@ -6,9 +6,7 @@ const endpoint = "http://localhost:3001"
 export default function SocketStatus (props) {
 
     const [ socket, setSocket ] = useState()
-    const [ positions, setPositions ] = useState([])
-    const [ history, setHistory ] = useState([])
-
+    
     useEffect(() => {
         const socket = io(endpoint)
         setSocket(socket)
@@ -16,47 +14,33 @@ export default function SocketStatus (props) {
         socket.on('connect',()=>{
 
             socket.emit('new-user', {id: 'mission-control', room: 'Royal', ms: true})
-
+            //on disconnect update from logged in drivers
         })
 
         socket.on('current-users', (data)=>{
+
             const drivers = []
+
             Object.values(data.users).forEach((id)=>{
                 drivers.push({id})
             })
-            setPositions(drivers)
+
+            props.setActiveDrivers(drivers)
         })
+
         //on disconnect update
         
 
         socket.on('d-position', (position, id)=>{
-            // setHistory(history.push(positions))
 
-            positions.forEach(driver=>{
-                if(driver.id === id){
-                    console.log(positions.id)
-                }
-            })
-
-            // Object.values(activeDriversIds).forEach((activeId)=>{
-            //     if(activeId === id){
-            //         setPositions()
-            //     }
-            // })
-            
-            
-            //set up some for of history and a form to refer to each client and give it a coords value
+            props.setPosition({id, position})
+            // on transmition stop
         })
 
         return ()=>{ socket.disconnect() }
 
     }, [props.store])
 
-    useEffect(()=>{
-
-        console.log(positions)
-
-    }, [positions])
 
    return(
        <div className="socket-status">
