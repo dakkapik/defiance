@@ -6,25 +6,48 @@ module.exports = async function(io){
     io.on('connection', (socket)=> {
 
         socket.on('new-user', user => {
-            
-            //this part need to be refactored
 
-            console.log(`user: ${user.id} joined room ${user.room}`)
             users[socket.id] = user.id
-
-            socket.join(user.room)
             
-            if(user.ms){
-                // room needs to be iniciated somewhere else, on store disconnect everyone has to disconnect and reconnect
-                rooms[user.room] = {users:{}}
-                socket.emit('current-users', rooms[user.room])
-            }else{
+            if(Object.keys(rooms).length !== 0){
 
-                if(rooms[user.room]){
-                    rooms[user.room].users[socket.id] = user.id
-                    socket.to(user.room).emit('current-users', rooms[user.room])
+                Object.keys(rooms).forEach(room =>{
+                    if(room === user.room){
+                        if(user.ms){
+                            socket.join(user.room)
+                            socket.to(user.room).broadcast.emit('current-users', rooms[user.room])
+                            console.log(`MS: ${user.id} reconnected room ${user.room}`)
+                        }else{
+                            socket.join(user.room)
+                            rooms[user.room].users[socket.id] = user.id
+                            socket.to(user.room).broadcast.emit('current-users', rooms[user.room])
+                            console.log(`user: ${user.id} connected room ${user.room}`) 
+                        }
+                    }else{
+                        console.log(`room ${user.room} not found`)
+                        
+                        if(user.ms){
+                            console.log('creating room')
+                            rooms[user.room] = {users: {}}
+                            socket.join(user.room)
+                            console.log(`MS: ${user.id} joined room ${user.room}`)
+                        }else{
+                            socket.send('store room not avalible')
+                            //send to client store room not avalible
+                        }
+                    }
+                })
+
+            }else{
+                console.log('no rooms active')
+                if(user.ms){
+                    console.log('starting first room')
+                    rooms[user.room] = {users: {}}
+                    socket.join(user.room)
+                    console.log(`MS: ${user.id} joined room ${user.room}`)
                 }else{
-                    //room not avalible 
+                    socket.send('no store room has been created yet')
+                    // reply to client, store is not avalible or no store rooms have been created
                 }
             }
         })
@@ -38,11 +61,9 @@ module.exports = async function(io){
         })
 
         socket.on('disconnect', reason =>{
-            console.log(`user: ${socket.id} disconnected, ${reason}`)
+            console.log(`user: ${users[socket.id]} disconnected, ${reason}`)
 
             delete users[socket.id]
-
-            // delete user room if MS
 
             getUserRooms(socket).forEach(room=>{
                 delete rooms[room].users[socket.id]
