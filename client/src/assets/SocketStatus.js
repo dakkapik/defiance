@@ -13,12 +13,11 @@ export default function SocketStatus (props) {
 
         socket.on('connect',()=>{
 
-            socket.emit('new-user', {id: 'mission-control', room: 'Royal', ms: true})
+            socket.emit('new-user', {id: 'mission-control', room: 'Royal Palm', ms: true})
             //on disconnect update from logged in drivers
         })
 
         socket.on('current-users', (data)=>{
-
             const drivers = []
 
             Object.values(data.users).forEach((id)=>{
@@ -34,7 +33,8 @@ export default function SocketStatus (props) {
         socket.on('d-position', (position, id)=>{
 
             props.setPosition({id, position})
-            // on transmition stop
+
+            // add on transmition stop event
         })
 
         return ()=>{ socket.disconnect() }
