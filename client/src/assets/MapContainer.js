@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { GoogleMap, LoadScript } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 
 const containerStyle = {
     width: '400px',
@@ -19,10 +19,9 @@ export default function MapContainer (props) {
         lat: 26.27260777215995, 
         lng: -80.27339459701001,
     })
-
+    const [ driverMarkers, setDriverMarkers ] = useState([])
 
     useEffect(() => {
-        // console.log(props.store)
         if(props.store.location){
             setCenter(props.store.location)
             setZoom(14)
@@ -32,6 +31,26 @@ export default function MapContainer (props) {
         }
 
     }, [props.store])
+
+    useEffect(()=>{
+
+        const markers = []
+        props.drivers.forEach(driver=>{
+            if(driver.position){
+                markers.push(
+                    <Marker
+                        key= {driver._id} 
+                        position={{
+                            lat:driver.position.coords.latitude, 
+                            lng: driver.position.coords.longitude}}
+                    />
+                )
+            }
+        })
+        setDriverMarkers(markers)
+
+    }, [props.drivers])
+
     
     const onLoad = React.useCallback(function callback(map) {
         const bounds = new window.google.maps.LatLngBounds();
@@ -52,7 +71,8 @@ export default function MapContainer (props) {
                 onLoad={onLoad}
                 onUnmount={onUnmount}
             >
-                
+            {driverMarkers ? driverMarkers : null}
+
             </GoogleMap>
         </LoadScript>
     );

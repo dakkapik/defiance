@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-// import MapContainer from '../assets/MapContainer'
+import MapContainer from '../assets/MapContainer'
 import SocketStatus from '../assets/SocketStatus'
 import DynamicDriverList from '../assets/DynamicDriverList'
 
@@ -63,9 +63,10 @@ export default function MissionControl (){
     return (
         <div className="body">
             <div className="map">
-                {/* <MapContainer
+                <MapContainer
                     store = {store.store}
-                />  */}
+                    drivers = {drivers}
+                /> 
                 {loadSocket ?  
                 <SocketStatus
                     store = {store}
