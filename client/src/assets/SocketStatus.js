@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import io from 'socket.io-client'
 
-const endpoint = "http://localhost:3001"
+const endpoint = "https://defiance.herokuapp.com/"
 
 export default function SocketStatus (props) {
 
