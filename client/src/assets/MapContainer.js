@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 
 const containerStyle = {
-    width: '400px',
-    height: '400px'
+    width: '800px',
+    height: '600px'
 };
 
 const defaultCenter = {
@@ -40,9 +40,11 @@ export default function MapContainer (props) {
                 markers.push(
                     <Marker
                         key= {driver._id} 
+                        label={driver.firstName}
                         position={{
                             lat:driver.position.coords.latitude, 
                             lng: driver.position.coords.longitude}}
+                        onPositionChanged={()=>{console.log('position changed')}}
                     />
                 )
             }
