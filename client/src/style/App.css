@@ -1,9 +1,9 @@
 body {
   font-size: 20px;
-  background-color:blueviolet;
+  background-color: blueviolet;
 }
 
-.body{
+.body {
   height: 100%;
   position: absolute;
   left: 0;
@@ -12,10 +12,9 @@ body {
   flex-direction: column;
 }
 
-.nav{
+.nav {
   height: 7%;
 }
-
 
 .nav-body {
   background-color: black;
@@ -29,7 +28,7 @@ body {
 .nav-item {
   background-color: brown;
   margin: 10px 10px;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .link {
