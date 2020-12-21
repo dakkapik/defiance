@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
+import '../style/MissionControl.css'
+
+import MockImage from '../Imagefolder/driver.jpg'
+
 export default function DynamicDriverList(props) {
 
     const [ driverList, setDriverList ] = useState([])
@@ -25,7 +29,7 @@ export default function DynamicDriverList(props) {
 
     
     return(
-        <div>
+        <div className="side-bar">
             {driverList}
         </div>
     )
@@ -35,12 +39,13 @@ export default function DynamicDriverList(props) {
 function DriverListItem (props) {
 
     return (
-        <div className="side-bar-item">
+        <div>
             <h3>{props.firstName} {props.employeeId}</h3>
             <p>timestamp: {props.position ? props.position.timestamp : null}</p>
             {/* <p>{props.position.timestamp}</p> */}
             {/* <p> transmiting: {props.position? props.position.coords.latitude: null}</p>s */}
             
+            <img src={MockImage} alt="driver" className="driver-img"/>
         </div>
-    )
+    );
 }
