@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import io from 'socket.io-client'
+import '../style/socket-status.css'
 
 const endpoint = "https://defiance.herokuapp.com/"
+
+
 
 export default function SocketStatus (props) {
 
