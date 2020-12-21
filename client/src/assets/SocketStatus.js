@@ -2,16 +2,14 @@ import React, {useState, useEffect} from 'react'
 import io from 'socket.io-client'
 import '../style/socket-status.css'
 
-const endpoint = "https://defiance.herokuapp.com/"
-
-
+const endpoint = "https://localhost:3001/"
 
 export default function SocketStatus (props) {
 
     const [ socket, setSocket ] = useState()
     
     useEffect(() => {
-        const socket = io(endpoint)
+        const socket = io(process.env.REACT_APP_endpoint)
         setSocket(socket)
 
         socket.on('connect',()=>{

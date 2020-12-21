@@ -6,6 +6,7 @@ import Game from '../components/ticktacktoe'
 export default class Page extends React.Component {
 
     render() {
+
         return(
             <div
             style={{

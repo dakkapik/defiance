@@ -8,7 +8,7 @@ import StoreSelect from '../components/StoreSelect'
 
 import '../style/MissionControl.css'
 
-const url = 'https://defiance.herokuapp.com/'
+const url = 'https://localhost:3001/'
 
 export default function MissionControl (){
     
@@ -102,7 +102,7 @@ export default function MissionControl (){
 
 
 async function getUsers () {
-    return await fetch(url+'api/users')
+    return await fetch(process.env.REACT_APP_endpoint+'api/users')
     .then(res=>res.json())
     .then(result=> {return result} )
     .catch(error=>{console.log('fetch error: ' + error)})
