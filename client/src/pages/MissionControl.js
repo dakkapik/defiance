@@ -61,10 +61,13 @@ export default function MissionControl (){
     return (
         <div className="body">
             <div className="map">
-                <MapContainer
+                {/* <MapContainer
                     store = {store.store}
                     drivers = {drivers}
-                /> 
+                />  */}
+                
+                
+                <div className="side-bar">
                 {loadSocket ?  
                 <SocketStatus
                     store = {store}
@@ -84,6 +87,7 @@ export default function MissionControl (){
                     handleConnect = {handleStore}
                 />
                 }
+                </div>
             </div>
 
             <div className="bottom-bar">bottom bar</div>
@@ -100,7 +104,7 @@ export default function MissionControl (){
 
 
 async function getUsers () {
-    return await fetch(process.env.REACT_APP_endpoint + 'api/users')
+    return await fetch(process.env.REACT_APP_endpoint + '/api/users')
     .then(res=>res.json())
     .then(result=> {return result} )
     .catch(error=>{console.log('fetch error: ' + error)})

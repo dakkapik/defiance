@@ -42,7 +42,7 @@ export default function MapContainer (props) {
                         key= {driver._id} 
                         label={driver.firstName}
                         position={{
-                            lat:driver.position.coords.latitude, 
+                            lat: driver.position.coords.latitude, 
                             lng: driver.position.coords.longitude}}
                         onPositionChanged={()=>{console.log('position changed')}}
                     />

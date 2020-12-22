@@ -8,7 +8,7 @@ export default function StoreSelect (props) {
 
         const items = []
 
-        fetch(process.env.REACT_APP_endpoint + 'api/stores')
+        fetch(process.env.REACT_APP_endpoint + '/api/stores')
         .then(res=>res.json())
         .then(result=>{
             for(let i = 0; i < result.length; i++){
