@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 
 const containerStyle = {
-    width: '800px',
-    height: '600px'
+    width: '80%',
+    height: '100%'
 };
 
 const defaultCenter = {
@@ -65,7 +65,7 @@ export default function MapContainer (props) {
     }, [])
     
     return (
-        <LoadScript googleMapsApiKey="AIzaSyBXpwzqh9wNL7cLYBJ2_DUunWkNluiSJNI">
+        <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
@@ -78,10 +78,4 @@ export default function MapContainer (props) {
             </GoogleMap>
         </LoadScript>
     );
-}
-
-
-const style = {
-    width: '100%',
-    height: '100%'
 }

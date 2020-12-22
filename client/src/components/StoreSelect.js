@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-const url = 'https://defiance.herokuapp.com/'
-
 export default function StoreSelect (props) {
 
     const [stores, setStores] = useState()
@@ -10,7 +8,7 @@ export default function StoreSelect (props) {
 
         const items = []
 
-        fetch(url + 'api/stores')
+        fetch(process.env.REACT_APP_endpoint + 'api/stores')
         .then(res=>res.json())
         .then(result=>{
             for(let i = 0; i < result.length; i++){
