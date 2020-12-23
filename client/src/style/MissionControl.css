@@ -1,21 +1,11 @@
-
-
-.store-item-list{
-  display: flex;
-  float: left;
-  flex-wrap: wrap;
-  flex-direction: column;
-  background-color: yellow;
+.body {
+  height: 100%;
+  background-color: #ebe9e9;
 }
 
-.store-item{
-    background-color: #510080;
-}
-
-
-.bottom-bar{
-    height: 10%;
-    background-color: magenta;
+.bottom-bar {
+  height: 10%;
+  background-color: magenta;
 }
 
 /*
@@ -42,12 +32,6 @@ body {
   overflow: hidden;
   display: flex;
 }
-
-.body {
-  height: 100%;
-  background-color: #b487ce;
-}
-
 
 h2,
 h3,
@@ -79,7 +63,7 @@ h4 {
 }
 
 .side-bar-item {
-  background-color: teal;
+  background-color: rgb(2, 36, 36);
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -94,18 +78,16 @@ h4 {
   background-color: #fff;
 }
 
-
-.map{
+.map {
   height: 85%;
-  background-color: green;
+  background-color: rgb(19, 37, 19);
   display: flex;
   flex-direction: row;
 }
 
-
 .bottom-bar {
   height: 10%;
-  background-color: rgb(159, 228, 50);
+  background-color: #ebe9e9;
   font-size: 1.3rem;
   text-align: center;
   font-weight: 600;

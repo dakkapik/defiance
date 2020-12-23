@@ -1,0 +1,10 @@
+.store-list {
+  display: flex;
+  float: left;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: #ebe9e9;
+  padding: 5vh;
+  border-top: 5px solid rgb(70, 65, 65);
+  border-bottom: 5px solid rgb(70, 65, 65);
+}

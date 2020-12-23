@@ -1,22 +1,11 @@
-body {
-  font-size: 20px;
-  background-color:blueviolet;
-}
-
-.body{
-  height: 100%;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  flex-direction: column;
-}
-
-.nav{
+.nav {
   height: 7%;
 }
 
-
+.Tabs-container {
+  display: flex;
+  justify-content: center;
+}
 .nav-body {
   background-color: black;
   margin: 0;
@@ -29,7 +18,7 @@ body {
 .nav-item {
   background-color: brown;
   margin: 10px 10px;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .link {
@@ -37,11 +26,6 @@ body {
   display: flex;
   text-decoration: none;
   justify-content: center;
-}
-
-body {
-  font-size: 20px;
-  background-color: blueviolet;
 }
 
 .body {
