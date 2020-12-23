@@ -1,60 +1,111 @@
 import React, {useState, useEffect} from 'react'
+
+import MapContainer from '../assets/MapContainer'
+import SocketStatus from '../assets/SocketStatus'
+import DynamicDriverList from '../assets/DynamicDriverList'
+
+import StoreSelect from '../components/StoreSelect'
+
 import '../style/MissionControl.css'
 
-const url = 'https://defiance.herokuapp.com/'
-
 export default function MissionControl (){
+    
+    const [ users, setUsers ] = useState()
+    const [ activeDrivers, setActiveDrivers ] = useState([])
+
+    const [ drivers, setDrivers ] = useState([])// this one most generate the driver element that can be manipulated seperatly
+
+    const [ position, setPosition ] = useState({})
+
+    const [ loadSocket, setLoadSocket ] = useState(false)
+
+    const [ store, setStore ] = useState({store:{}})
+    
+    useEffect(()=>{
+        
+        getUsers().then(res=>{ setUsers(res) })
+        
+    }, [])
+
+    useEffect(()=>{
+
+        const driverList = []
+
+        activeDrivers.forEach(driver=>{
+            users.forEach(user=>{
+                if(user.employeeId === driver.id){
+                    driverList.push(user)
+                }
+            })
+        })
+
+        setDrivers(driverList)
+
+        //dynamic driver elements
+
+    }, [activeDrivers])
+
+    useEffect(()=>{
+
+        let positions = drivers.map((driver)=>{
+            if(driver.employeeId === position.id){
+                driver.position = position.position
+            }
+            return driver
+        })
+        setDrivers(positions)
+
+    },[position])
+
+
     return (
         <div className="body">
             <div className="map">
-                <SideBar/>
+                {/* <MapContainer
+                    store = {store.store}
+                    drivers = {drivers}
+                />  */}
+                
+                
+                <div className="side-bar">
+                {loadSocket ?  
+                <SocketStatus
+                    store = {store}
+                    handleConnect = {handleStore}
+                    setActiveDrivers = {setActiveDrivers}
+                    setPosition = {setPosition}
+                /> 
+                :
+                null}
+
+                {loadSocket ?
+                <DynamicDriverList
+                    drivers = {drivers}
+                />
+                :
+                <StoreSelect
+                    handleConnect = {handleStore}
+                />
+                }
+                </div>
             </div>
+
             <div className="bottom-bar">bottom bar</div>
         </div>
     )
+
+    function handleStore(i){
+
+        setStore({store: {name: i.name, id: i.number, location: i.location}})
+        setLoadSocket(prevState => !prevState)
+
+    }
 }
 
-function SideBar () {
 
-    const [users, setUsers] = useState([])
-
-    useEffect(() => {
-
-        const items = [];
-
-        fetch(url+'api/users')
-        .then(res=>res.json())
-        .then(result=>{
-
-            for(let i = 0; i < result.length; i++){
-                items.push(
-                    <SideBarItem
-                        key={result[i]._id}
-                        firstName={result[i].firstName}
-                        employeeId={result[i].employeeId}
-                        isActive={result[i].isActive}
-                        isAdmin={result[i].isAdmin}
-                    />)
-            }
-
-            setUsers(items)
-        })
-        .catch(error=>{console.log('fetch error: ' + error)})
-
-    }, [])
-
-    return(
-        <div className="side-bar">
-            {users}
-        </div>
-    )
-}
-
-function SideBarItem (props) {
-    return (
-        <div className="side-bar-item">
-            {props.firstName}
-            {props.employeeId}
-        </div>
-    )
+async function getUsers () {
+    return await fetch(process.env.REACT_APP_endpoint + '/api/users')
+    .then(res=>res.json())
+    .then(result=> {return result} )
+    .catch(error=>{console.log('fetch error: ' + error)})
 }

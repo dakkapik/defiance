@@ -1,0 +1,18 @@
+.store-name{
+    margin: 0;
+}
+
+.socket-status{
+    float: right;
+    
+}
+
+
+.side-bar {
+    width: 25%;
+    background-color: lightcoral;
+    float: right;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}

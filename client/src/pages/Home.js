@@ -1,12 +1,12 @@
-
 import React, {useState} from 'react';
 import '../style/App.css'
 
-import Game from '../assets/ticktacktoe'
+import Game from '../components/ticktacktoe'
 
 export default class Page extends React.Component {
 
     render() {
+
         return(
             <div
             style={{
@@ -23,7 +23,6 @@ export default class Page extends React.Component {
         )
     }
 }
-
 
 function Counter() {
 
