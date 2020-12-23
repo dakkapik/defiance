@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import MapContainer from "../assets/MapContainer";
 import SocketStatus from "../assets/SocketStatus";
 import DynamicDriverList from "../assets/DynamicDriverList";
 
@@ -19,7 +18,7 @@ export default function MissionControl() {
   const [loadSocket, setLoadSocket] = useState(false);
 
   const [store, setStore] = useState({ store: {} });
-  console.log(process.env.REACT_APP_endpoint);
+
   useEffect(() => {
     getUsers().then((res) => {
       setUsers(res);
@@ -40,7 +39,7 @@ export default function MissionControl() {
     setDrivers(driverList);
 
     //dynamic driver elements
-  }, [activeDrivers]);
+  }, [activeDrivers, users]);
 
   useEffect(() => {
     let positions = drivers.map((driver) => {
@@ -50,7 +49,7 @@ export default function MissionControl() {
       return driver;
     });
     setDrivers(positions);
-  }, [position]);
+  }, [position, drivers]);
 
   return (
     <div className="body">

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { withRouter } from "react-router-dom";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
-import "./style/App.css";
+import { Switch, Route } from "react-router-dom";
 
 import MissionControl from "./pages/MissionControl";
 import Home from "./pages/Home";
@@ -47,21 +45,6 @@ class App extends React.Component {
               />
             </Tabs>
           </div>
-
-          {/* <nav className="nav">
-            <ul className="nav-body">
-              <li className="nav-item" key={"mission-control"}>
-                <Link className="link" to="/missionControl">
-                  DEFIANCE
-                </Link>
-              </li>
-              <li className="nav-item" key={"home"}>
-                <Link className="link" to="/">
-                  HOME
-                </Link>
-              </li>
-            </ul>
-          </nav> */}
 
           <Switch>
             <Route path="/MissionControl" component={MissionControl} />

@@ -1,58 +1,65 @@
-import React, {useState, useEffect} from 'react'
-import io from 'socket.io-client'
-import '../style/socket-status.css'
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
+import "../style/socket-status.css";
 
-export default function SocketStatus (props) {
+export default function SocketStatus({
+  setActiveDrivers,
+  setPosition,
+  store,
+  handleConnect,
+}) {
+  const [socket, setSocket] = useState();
 
-    const [ socket, setSocket ] = useState()
-    
-    useEffect(() => {
-        const socket = io(process.env.REACT_APP_endpoint)
-        setSocket(socket)
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_endpoint);
+    setSocket(socket);
 
-        socket.on('connect',()=>{
+    socket.on("connect", () => {
+      socket.emit("new-user", {
+        id: "mission-control",
+        room: "Royal Palm",
+        ms: true,
+      });
+      //on disconnect update from logged in drivers
+    });
 
-            socket.emit('new-user', {id: 'mission-control', room: 'Royal Palm', ms: true})
-            //on disconnect update from logged in drivers
-        })
+    socket.on("current-users", (data) => {
+      const drivers = [];
 
-        socket.on('current-users', (data)=>{
-            const drivers = []
+      Object.values(data.users).forEach((id) => {
+        drivers.push({ id });
+      });
 
-            Object.values(data.users).forEach((id)=>{
-                drivers.push({id})
-            })
+      setActiveDrivers(drivers);
+    });
 
-            props.setActiveDrivers(drivers)
-        })
+    //on disconnect update
 
-        //on disconnect update
-        
+    socket.on("d-position", (position, id) => {
+      setPosition({ id, position });
 
-        socket.on('d-position', (position, id)=>{
+      // add on transmition stop event
+    });
 
-            props.setPosition({id, position})
+    return () => {
+      socket.disconnect();
+    };
+  }, [store, setActiveDrivers, setPosition]);
 
-            // add on transmition stop event
-        })
+  return (
+    <div className="socket-status">
+      <div>
+        <h3 className="store-name">{store.name}</h3>
+        <button onClick={handleConnect}>DISCONNECT</button>
+        <p>socket server: {process.env.REACT_APP_endpoint}</p>
+        <button onClick={() => handleMessage(socket, store.name)}>
+          send message
+        </button>
+      </div>
+    </div>
+  );
 
-        return ()=>{ socket.disconnect() }
-
-    }, [props.store])
-
-
-   return(
-       <div className="socket-status">
-        <div>
-            <h3 className="store-name">{props.store.name}</h3>
-            <button onClick={props.handleConnect}>DISCONNECT</button>
-            <p>socket server: {process.env.REACT_APP_endpoint}</p>
-            <button onClick={()=>handleMessage(socket, props.store.name)}>send message</button>
-        </div>
-       </div>
-   )
-
-   function handleMessage(socket, store) {
-       socket.send('Royal')
-   }
+  function handleMessage(socket, store) {
+    socket.send("Royal");
+  }
 }
