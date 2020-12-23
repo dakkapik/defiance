@@ -24,7 +24,7 @@ export default function MissionControl (){
     useEffect(()=>{
         
         getUsers().then(res=>{ setUsers(res) })
-
+        
     }, [])
 
     useEffect(()=>{
