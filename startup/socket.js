@@ -4,7 +4,7 @@ module.exports = async function(io){
     const rooms = {}
 
     io.on('connection', (socket)=> {
-
+        
         socket.on('new-user', user => {
 
             users[socket.id] = user.id
