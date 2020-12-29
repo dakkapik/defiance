@@ -7,11 +7,10 @@ module.exports = function (app) {
   const users = require("../API/users");
   const react = require('../API/react')
   const stores = require('../API/stores')
-  // const keys = require('../API/keys')
   const error = require("../middleware/error");
   
   app.use(express.static(path.join(__dirname, '../client/build')));
-  app.use(express.static(path.join(__dirname, '../public')))
+  // app.use(express.static(path.join(__dirname, '../public')))
   
   app.use(express.json());
   
@@ -22,7 +21,6 @@ module.exports = function (app) {
   app.use("/api/react", react);
   app.use("/api/orders", orders);
   app.use("/api/users", users);
-  // app.use("/api/keys",keys)
   app.use(error);
   
 

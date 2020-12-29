@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import "../style/MissionControl.css";
-
-import MockImage from "../Imagefolder/driver.jpg";
+import MockImage from '../Imagefolder/driver.jpg'
 
 export default function DynamicDriverList(props) {
   /*
