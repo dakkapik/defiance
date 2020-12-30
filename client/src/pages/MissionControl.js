@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import SocketStatus from "../assets/SocketStatus";
 import DynamicDriverList from "../assets/DynamicDriverList";
+import MapContainer from "../assets/MapContainer"
 
 import StoreList from "../components/store-list/store-list.component";
 
 import "../style/MissionControl.css";
 
 export default function MissionControl() {
+
   const [users, setUsers] = useState();
   const [activeDrivers, setActiveDrivers] = useState([]);
 
@@ -39,9 +41,10 @@ export default function MissionControl() {
     setDrivers(driverList);
 
     //dynamic driver elements
-  }, [activeDrivers, users]);
+  }, [activeDrivers]);
 
   useEffect(() => {
+
     let positions = drivers.map((driver) => {
       if (driver.employeeId === position.id) {
         driver.position = position.position;
@@ -49,12 +52,13 @@ export default function MissionControl() {
       return driver;
     });
     setDrivers(positions);
-  }, [position, drivers]);
+
+  }, [ position ]);
 
   return (
     <div className="body">
       <div className="map">
-        {/* <MapContainer store={store.store} drivers={drivers} /> */}
+        <MapContainer store={store.store} drivers={drivers} />
         {loadSocket ? (
           <SocketStatus
             store={store}
@@ -75,8 +79,9 @@ export default function MissionControl() {
     </div>
   );
 
-  function handleStore(i) {
-    setStore({ store: { name: i.name, id: i.number, location: i.location } });
+  function handleStore(store) {
+    console.log(store)
+    setStore({ store: { name: store.name, id: store.number, location: store.location } });
     setLoadSocket((prevState) => !prevState);
   }
 }

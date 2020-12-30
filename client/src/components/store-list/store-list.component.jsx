@@ -12,8 +12,9 @@ const StoreList = ({ handleConnect }) => {
   return (
     <div className="store-list">
       {stores.map((e, i) => (
+        
         <StoreItem
-          i={i}
+          e={e}
           key={e._id}
           name={e.name}
           number={e.number}
