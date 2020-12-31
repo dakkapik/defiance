@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import SocketStatus from "../assets/SocketStatus";
 import DynamicDriverList from "../assets/DynamicDriverList";
 import MapContainer from "../assets/MapContainer"
 
 import StoreList from "../components/store-list/store-list.component";
-
+import axios from "axios";
 import "../style/MissionControl.css";
 
+import { isEqual } from "lodash";
+///api/users
 export default function MissionControl() {
-
   const [users, setUsers] = useState();
   const [activeDrivers, setActiveDrivers] = useState([]);
 
-  const [drivers, setDrivers] = useState([]); // this one most generate the driver element that can be manipulated seperatly
+  const [drivers, setDrivers] = useState([{}]);
 
   const [position, setPosition] = useState({});
 
@@ -21,12 +22,14 @@ export default function MissionControl() {
 
   const [store, setStore] = useState({ store: {} });
 
+  //componentdidMount
   useEffect(() => {
-    getUsers().then((res) => {
-      setUsers(res);
+    axios.get("/api/users").then((res) => {
+      setUsers(res.data);
     });
   }, []);
 
+  //ComponentDidUpdate
   useEffect(() => {
     const driverList = [];
 
@@ -74,7 +77,48 @@ export default function MissionControl() {
           <StoreList handleConnect={handleStore} />
         )}
       </div>
-
+      {/* <button
+        onClick={() =>
+          setPosition({
+            position: {
+              id: 3533,
+              position: {
+                coords: {
+                  accuracy: accuracy + 1,
+                  altitude: 0,
+                  latitude: 26.259,
+                  longitude: -80.27,
+                },
+                mocked: false,
+                timestamp: 5325324523,
+              },
+            },
+          })
+        }
+      >
+        setposition
+      </button>
+      <button
+        onClick={() =>
+          setPosition({
+            position: {
+              id: 3533,
+              position: {
+                coords: {
+                  accuracy: 5,
+                  altitude: 0,
+                  latitude: 26.259,
+                  longitude: -80.27,
+                },
+                mocked: false,
+                timestamp: 5325324523,
+              },
+            },
+          })
+        }
+      >
+        setsameposition
+      </button> */}
       <div className="bottom-bar">bottom bar</div>
     </div>
   );
@@ -84,15 +128,4 @@ export default function MissionControl() {
     setStore({ store: { name: store.name, id: store.number, location: store.location } });
     setLoadSocket((prevState) => !prevState);
   }
-}
-
-async function getUsers() {
-  return await fetch(process.env.REACT_APP_endpoint + "/api/users")
-    .then((res) => res.json())
-    .then((result) => {
-      return result;
-    })
-    .catch((error) => {
-      console.log("fetch error: " + error);
-    });
 }

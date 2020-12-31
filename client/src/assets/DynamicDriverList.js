@@ -7,7 +7,7 @@ export default function DynamicDriverList(props) {
   Mock driver
   */
   const [driverList, setDriverList] = useState([]);
-  console.log(driverList);
+
   useEffect(() => {
     const list = [];
     props.drivers.forEach((driver) => {

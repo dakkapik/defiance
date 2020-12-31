@@ -29,7 +29,7 @@ export default function SocketStatus({
       Object.values(data.users).forEach((id) => {
         drivers.push({ id });
       });
-      console.log('activeDriveres', drivers)
+      console.log("active");
       setActiveDrivers(drivers);
     });
 
