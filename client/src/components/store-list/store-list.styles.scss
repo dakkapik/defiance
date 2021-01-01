@@ -3,12 +3,14 @@
   float: left;
   flex-wrap: wrap;
   flex-direction: column;
-  // background-color: #ebe9e9;
-  background-color: red;
-  padding: 20vh;
+  background-color: #ebe9e9;
+  justify-content: space-evenly;
+  padding: 10vh;
   border-radius: 10px;
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 900px) {
     float: unset;
     padding: 5vh;
+    display: flex;
+    flex-direction: unset;
   }
 }

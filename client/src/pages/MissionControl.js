@@ -127,19 +127,17 @@ export default function MissionControl() {
       <div className="map">
         {/* <MapContainer store={store.store} drivers={drivers} /> */}
         {loadSocket ? (
-          <SocketStatus
-            store={store}
-            handleConnect={handleStore}
-            setActiveDrivers={setActiveDrivers}
-            setPosition={setPosition}
-          />
-        ) : null}
-
-        {loadSocket ? (
-          <DynamicDriverList drivers={drivers} />
+          <div>
+            <SocketStatus
+              store={store}
+              handleConnect={handleStore}
+              setActiveDrivers={setActiveDrivers}
+              setPosition={setPosition}
+            />
+            <DynamicDriverList drivers={drivers} />
+          </div>
         ) : (
-          <div className="store-list"></div>
-          // <StoreList handleConnect={handleStore} />
+          <StoreList handleConnect={handleStore} />
         )}
       </div>
 
