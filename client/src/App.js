@@ -5,55 +5,33 @@ import { withRouter } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
 
 import MissionControl from "./pages/MissionControl";
-import Home from "./pages/Home";
+import HomePage from "./pages/home/home.component";
 
-//Material Ui for the Top Tabs
+import NavBar from "./components/material-ui/nav-bar/nav-bar.component";
 
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import MapIcon from "@material-ui/icons/Map";
-import HomeIcon from "@material-ui/icons/Home";
+import "./App.styles.scss";
+// const styles = () => ({
+//   root: {
+//     //centerizing the nav bar to the middle
+//     "& div": {
+//       justifyContent: "center",
+//     },
+//   },
+// });
+
 class App extends React.Component {
-  state = {
-    value: 0,
-  };
-  handleChange = (event, newValue) => {
-    this.setState({ value: newValue });
-  };
-
   render() {
     return (
-      <div>
-        <div className="body">
-          <div className="Tabs-container">
-            <Tabs
-              value={this.state.value}
-              onChange={this.handleChange}
-              scrollButtons="on"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab
-                onClick={() => this.props.history.push("/missionControl")}
-                label="MAP"
-                icon={<MapIcon />}
-              />
-              <Tab
-                onClick={() => this.props.history.push("/")}
-                label="HOME"
-                icon={<HomeIcon />}
-              />
-            </Tabs>
-          </div>
+      <div className="App">
+        <NavBar />
 
-          <Switch>
-            <Route path="/MissionControl" component={MissionControl} />
-            <Route exact path="/" component={Home} />
-          </Switch>
-        </div>
+        <Switch>
+          <Route path="/MissionControl" component={MissionControl} />
+          <Route exact path="/" component={HomePage} />
+        </Switch>
       </div>
     );
   }
 }
-
+//Wrapping it to make props within component
 export default withRouter(App);

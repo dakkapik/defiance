@@ -11,15 +11,8 @@ const StoreList = ({ handleConnect }) => {
   }, []);
   return (
     <div className="store-list">
-      {stores.map((e, i) => (
-        <StoreItem
-          i={i}
-          key={e._id}
-          name={e.name}
-          number={e.number}
-          location={e.location}
-          handleConnect={handleConnect}
-        />
+      {stores.map((storeinfo, index) => (
+        <StoreItem storeInfo={storeinfo} handleConnect={handleConnect} />
       ))}
     </div>
   );
