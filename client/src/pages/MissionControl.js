@@ -125,9 +125,9 @@ export default function MissionControl() {
   return (
     <div>
       <div className="map">
-        {/* <MapContainer store={store.store} drivers={drivers} /> */}
+        <MapContainer store={store.store} drivers={drivers} />
         {loadSocket ? (
-          <div>
+          <div className="socket-dynamicdrivers">
             <SocketStatus
               store={store}
               handleConnect={handleStore}

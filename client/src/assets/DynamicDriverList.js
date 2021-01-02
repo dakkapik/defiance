@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import MockImage from '../Imagefolder/driver.jpg'
-
+import MockImage from "../Imagefolder/driver.jpg";
+import "./dynamic-driver-list.styles.scss";
 export default function DynamicDriverList(props) {
   /*
   Mock driver
@@ -25,18 +25,23 @@ export default function DynamicDriverList(props) {
 
   return <div className="side-bar">{driverList}</div>;
 }
-
 function DriverListItem(props) {
   return (
-    <div>
-      <h3>
-        {props.firstName} {props.employeeId}
-      </h3>
-      <p>timestamp: {props.position ? props.position.timestamp : null}</p>
-      {/* <p>{props.position.timestamp}</p> */}
-      {/* <p> transmiting: {props.position? props.position.coords.latitude: null}</p>s */}
-
-      <img src={MockImage} alt="driver" className="driver-img" />
+    <div className="sidecard">
+      <img className="sidecard__avatar" src={MockImage} />
+      <div className="sidecard__content">
+        <div className="sidecard__content__name">
+          {props.firstName} {props.employeeId}
+        </div>
+        <div className="sidecard__content__sub">
+          <div className="sidecard__content__sub__text">
+            <div>
+              pos: {props.position ? props.position.coords.latitude : null}
+            </div>
+            <span>Timestamp {props.position.timestamp}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,7 +9,7 @@ const StoreItem = ({ storeInfo, handleConnect }) => {
       <Button
         onClick={() => handleConnect(storeInfo)}
         variant="outlined"
-        color="default"
+        color="inherit"
       >
         Connect
       </Button>

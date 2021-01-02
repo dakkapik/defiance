@@ -3,11 +3,14 @@
   float: left;
   flex-wrap: wrap;
   flex-direction: column;
-  background-color: #ebe9e9;
+
   justify-content: space-evenly;
-  padding: 10vh;
+
   border-radius: 10px;
+  width: 20%;
+  color: white;
   @media screen and (max-width: 900px) {
+    width: unset;
     float: unset;
     padding: 5vh;
     display: flex;

@@ -13,7 +13,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     maxWidth: "100%",
     justifyContent: "center",
-    backgroundColor: "#ebe9e9",
+    backgroundColor: "#202225",
+    color: "white",
   },
 });
 
@@ -33,7 +34,7 @@ const NavBar = ({ history }) => {
           onChange={handleChange}
           variant="fullWidth"
           indicatorColor="secondary"
-          textColor="secondary"
+          textColor="inherit"
           aria-label="icon label tabs example"
         >
           <Tab onClick={() => history.push("/missionControl")} label="MAP" />
