@@ -4,9 +4,8 @@ import SocketStatus from "../assets/SocketStatus";
 import DynamicDriverList from "../assets/DynamicDriverList";
 import MapContainer from "../assets/MapContainer";
 import StoreList from "../components/store-list/store-list.component";
-import "./missioncontrol.styles.scss";
 import { isEqual, clone } from "lodash";
-
+import "./missioncontrol.styles.scss";
 /*
 
 Position's state changes drivers position state
@@ -14,8 +13,10 @@ Position's state changes drivers position state
 during socket inialization 
 
 */
-export default function MissionControl() {
+
+const MissionControl = () => {
   // Renders the Map Mark
+
   const [drivers, setDrivers] = useState([
     {
       firstName: "Felipe",
@@ -67,20 +68,24 @@ export default function MissionControl() {
 
   const [store, setStore] = useState({ store: {} });
 
-  function GetPreviousPosition(value) {
+  const handleStore = (store) => {
+    setStore({
+      store: { name: store.name, id: store.number, location: store.location },
+    });
+    setLoadSocket((prevState) => !prevState);
+  };
+
+  const GetPreviousPosition = (value) => {
     const ref = useRef();
     useEffect(() => {
       ref.current = value;
     });
     return ref.current;
-  }
+  };
   const prevPosition = GetPreviousPosition(position);
-
   //Updates the drivers position whenever position changes in the socket
-  
   useEffect(() => {
-    
-    // Compare prevPosition and current position then SetDrivers()
+    // Compares changes between prevPosition and position
     // This elimnate infinite loop and dependency Error
     if (isEqual(prevPosition, position) === false) {
       //Create a copy of
@@ -93,8 +98,11 @@ export default function MissionControl() {
       setDrivers(drivers_clone);
     }
   }, [position, drivers, prevPosition]);
-  // let latpos = position.position.coords.latitude;
+  let latpos = position.position.coords.latitude;
+  console.log(store);
 
+  //mission control passes the store and the drivers
+  //Map container is dependent on missioncontrol
   return (
     <div>
       <div className="map">
@@ -114,7 +122,7 @@ export default function MissionControl() {
       </div>
 
       <div className="bottom-bar">
-        {/* <button
+        <button
           onClick={() =>
             setPosition({
               id: 3533,
@@ -132,14 +140,10 @@ export default function MissionControl() {
           }
         >
           changePos
-        </button> */}
+        </button>
       </div>
     </div>
   );
-  function handleStore(store) {
-    setStore({
-      store: { name: store.name, id: store.number, location: store.location },
-    });
-    setLoadSocket((prevState) => !prevState);
-  }
-}
+};
+
+export default MissionControl;

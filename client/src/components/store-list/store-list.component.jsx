@@ -5,14 +5,26 @@ import "./store-list.styles.scss";
 const StoreList = ({ handleConnect }) => {
   const [stores, setStores] = useState([]);
   useEffect(() => {
-    axios.get("/api/stores").then((res) => {
-      setStores(res.data);
-    });
+    const source = axios.CancelToken.source();
+    axios
+      .get("/api/stores", {
+        cancelToken: source.token,
+      })
+      .then((res) => {
+        setStores(res.data);
+      });
+    return () => {
+      source.cancel("Component got unmounted");
+    };
   }, []);
   return (
     <div className="store-list">
       {stores.map((storeinfo, index) => (
-        <StoreItem storeInfo={storeinfo} handleConnect={handleConnect} />
+        <StoreItem
+          key={storeinfo._id}
+          storeInfo={storeinfo}
+          handleConnect={handleConnect}
+        />
       ))}
     </div>
   );

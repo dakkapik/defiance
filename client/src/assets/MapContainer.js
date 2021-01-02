@@ -32,19 +32,19 @@ export default function MapContainer(props) {
 
   useEffect(() => {
     const markers = [];
-    props.drivers.forEach((driver) => {
+    props.drivers.forEach((driver, i) => {
       if (driver.position) {
         markers.push(
           <Marker
-            key={driver._id}
+            key={driver.employeeId}
             label={driver.firstName}
             position={{
               lat: driver.position.coords.latitude,
               lng: driver.position.coords.longitude,
             }}
-            onPositionChanged={() => {
-              console.log("position changed");
-            }}
+            // onPositionChanged={() => {
+            //   console.log("position changed");
+            // }}
           />
         );
       }
