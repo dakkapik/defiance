@@ -3,11 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import SocketStatus from "../assets/SocketStatus";
 import DynamicDriverList from "../assets/DynamicDriverList";
 import MapContainer from "../assets/MapContainer";
-
 import StoreList from "../components/store-list/store-list.component";
-import axios from "axios";
 import "./missioncontrol.styles.scss";
-import { isEqual, isEmpty, clone } from "lodash";
+import { isEqual, clone } from "lodash";
 
 /*
 
@@ -17,10 +15,6 @@ during socket inialization
 
 */
 export default function MissionControl() {
-  const [activeDrivers, setActiveDrivers] = useState([
-    { id: 3533 },
-    { id: 4545 },
-  ]);
   // Renders the Map Mark
   const [drivers, setDrivers] = useState([
     {
@@ -54,9 +48,7 @@ export default function MissionControl() {
         timestamp: 5325324523,
       },
     },
-  ]); // this one most generate the driver element that can be manipulated seperatly
-
-  //
+  ]);
   const [position, setPosition] = useState({
     id: 3533,
     position: {
@@ -75,26 +67,6 @@ export default function MissionControl() {
 
   const [store, setStore] = useState({ store: {} });
 
-  const [users, setUsers] = useState({});
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    axios
-      .get("/api/users", {
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        setUsers(response.data);
-      })
-      .catch((err) => {
-        console.log("Catched error: " + err.message);
-      });
-
-    return () => {
-      source.cancel("Component got unmounted");
-    };
-  }, []);
   function GetPreviousPosition(value) {
     const ref = useRef();
     useEffect(() => {
@@ -103,7 +75,7 @@ export default function MissionControl() {
     return ref.current;
   }
   const prevPosition = GetPreviousPosition(position);
-
+  //Updates the drivers position whenever position changes in the socket
   useEffect(() => {
     // Compare prevPosition and current position then SetDrivers()
     // This elimnate infinite loop and dependency Error
@@ -118,8 +90,6 @@ export default function MissionControl() {
       setDrivers(drivers_clone);
     }
   }, [position, drivers]);
-  // let lat = drivers[0].position.coords.latitude;
-  // console.log("socket", loadSocket);
   let latpos = position.position.coords.latitude;
 
   return (
@@ -131,7 +101,6 @@ export default function MissionControl() {
             <SocketStatus
               store={store}
               handleConnect={handleStore}
-              setActiveDrivers={setActiveDrivers}
               setPosition={setPosition}
             />
             <DynamicDriverList drivers={drivers} />
@@ -164,7 +133,6 @@ export default function MissionControl() {
       </div>
     </div>
   );
-  //setDrivers([(drivers[0].position.coords.latitude = lat + 1)])
   function handleStore(store) {
     setStore({
       store: { name: store.name, id: store.number, location: store.location },

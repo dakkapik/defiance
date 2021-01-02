@@ -28,7 +28,7 @@ export default function DynamicDriverList(props) {
 function DriverListItem(props) {
   return (
     <div className="sidecard">
-      <img className="sidecard__avatar" src={MockImage} />
+      <img alt="mock" className="sidecard__avatar" src={MockImage} />
       <div className="sidecard__content">
         <div className="sidecard__content__name">
           {props.firstName} {props.employeeId}
