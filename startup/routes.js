@@ -2,7 +2,6 @@ const path = require('path')
 
 module.exports = function (app) {
   const express = require("express");
-  const index = require('../API/index')
   const orders = require("../API/orders");
   const users = require("../API/users");
   const react = require('../API/react')
@@ -16,7 +15,6 @@ module.exports = function (app) {
   
   app.use(express.urlencoded({ extended: true }))
   
-  app.use("/", index)
   app.use("/api/stores", stores);
   app.use("/api/react", react);
   app.use("/api/orders", orders);

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 const joi = require("joi");
-const { object } = require("joi");
 
 function validateOrder(order) {
     const schema = joi.object({
