@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: "100%",
+  width: "80%",
   height: "100%",
-  borderRadius: "10px",
 };
 
 const defaultCenter = {
@@ -13,7 +12,7 @@ const defaultCenter = {
 };
 
 export default function MapContainer(props) {
-  const [map, setMap] = useState(null);
+  // const [map, setMap] = useState(null);
   const [zoom, setZoom] = useState(15);
   const [center, setCenter] = useState({
     lat: 26.27260777215995,
@@ -33,8 +32,6 @@ export default function MapContainer(props) {
 
   useEffect(() => {
     const markers = [];
-
-    //sets the drivers position
     props.drivers.forEach((driver) => {
       if (driver.position) {
         markers.push(
@@ -55,25 +52,20 @@ export default function MapContainer(props) {
     setDriverMarkers(markers);
   }, [props.drivers]);
 
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map);
-  }, []);
+  // const onLoad = React.useCallback(function callback(map) {
+  //   const bounds = new window.google.maps.LatLngBounds();
+  //   map.fitBounds(bounds);
+  //   setMap(map);
+  // }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
-
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null);
+  // }, []);
+  // onLoad={onLoad}
+  //       onUnmount={onUnmount}
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={zoom}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
         {driverMarkers ? driverMarkers : null}
       </GoogleMap>
     </LoadScript>
