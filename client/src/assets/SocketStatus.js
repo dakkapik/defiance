@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import "../style/socket-status.css";
-
+import "./socketstatus.styles.scss";
+import Button from "@material-ui/core/Button";
 export default function SocketStatus({
   setActiveDrivers,
   setPosition,
@@ -48,14 +48,17 @@ export default function SocketStatus({
 
   return (
     <div className="socket-status">
-      <div>
-        <h3 className="store-name">{store.name}</h3>
-        <button onClick={handleConnect}>DISCONNECT</button>
-        <p>socket server: {process.env.REACT_APP_endpoint}</p>
-        <button onClick={() => handleMessage(socket, store.name)}>
-          send message
-        </button>
-      </div>
+      <Button variant="outlined" color="inherit" onClick={handleConnect}>
+        DISCONNECT
+      </Button>
+
+      <Button
+        variant="outlined"
+        color="inherit"
+        onClick={() => handleMessage(socket, store.name)}
+      >
+        Message
+      </Button>
     </div>
   );
 

@@ -3,8 +3,6 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import MapIcon from "@material-ui/icons/Map";
-import HomeIcon from "@material-ui/icons/Home";
 
 import { withRouter } from "react-router-dom";
 import "./navbar.styles.scss";
@@ -15,7 +13,8 @@ const useStyles = makeStyles({
     flexGrow: 1,
     maxWidth: "100%",
     justifyContent: "center",
-    backgroundColor: "#ebe9e9",
+    backgroundColor: "#202225",
+    color: "white",
   },
 });
 
@@ -29,14 +28,13 @@ const NavBar = ({ history }) => {
 
   return (
     <div className="navbar">
-      <div>Title</div>
       <Paper square className={classes.root}>
         <Tabs
           value={value}
           onChange={handleChange}
           variant="fullWidth"
           indicatorColor="secondary"
-          textColor="secondary"
+          textColor="inherit"
           aria-label="icon label tabs example"
         >
           <Tab onClick={() => history.push("/missionControl")} label="MAP" />
