@@ -22,3 +22,4 @@ const port = process.env.PORT || 3001;
 
 server.listen(port, () => logger.log("info", "server listening on port " + port));
 
+// module.exports = server

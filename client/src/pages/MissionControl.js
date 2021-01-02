@@ -12,7 +12,6 @@ Position's state changes drivers position state
 
 during socket inialization 
 
-
 */
 
 const MissionControl = () => {
