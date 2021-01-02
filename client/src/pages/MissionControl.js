@@ -17,50 +17,50 @@ during socket inialization
 export default function MissionControl() {
   // Renders the Map Mark
   const [drivers, setDrivers] = useState([
-    // {
-    //   firstName: "Felipe",
-    //   lastName: "Rodas",
-    //   employeeId: 3533,
-    //   position: {
-    //     coords: {
-    //       accuracy: 5,
-    //       altitude: 0,
-    //       latitude: 26.259,
-    //       longitude: -80.27,
-    //     },
-    //     mocked: false,
-    //     timestamp: 5325324523,
-    //   },
-    // },
-    // {
-    //   firstName: "George",
-    //   lastName: "Marrone",
-    //   employeeId: 4545,
+    {
+      firstName: "Felipe",
+      lastName: "Rodas",
+      employeeId: 3533,
+      position: {
+        coords: {
+          accuracy: 5,
+          altitude: 0,
+          latitude: 26.259,
+          longitude: -80.27,
+        },
+        mocked: false,
+        timestamp: 5325324523,
+      },
+    },
+    {
+      firstName: "George",
+      lastName: "Marrone",
+      employeeId: 4545,
 
-    //   position: {
-    //     coords: {
-    //       accuracy: 5,
-    //       altitude: 0,
-    //       latitude: 26.3,
-    //       longitude: -80.27,
-    //     },
-    //     mocked: false,
-    //     timestamp: 5325324523,
-    //   },
-    // },
+      position: {
+        coords: {
+          accuracy: 5,
+          altitude: 0,
+          latitude: 26.3,
+          longitude: -80.27,
+        },
+        mocked: false,
+        timestamp: 5325324523,
+      },
+    },
   ]);
   const [position, setPosition] = useState({
-    // id: 3533,
-    // position: {
-    //   coords: {
-    //     accuracy: 5,
-    //     altitude: 0,
-    //     latitude: 26.259,
-    //     longitude: -80.27,
-    //   },
-    //   mocked: false,
-    //   timestamp: 5325324523,
-    // },
+    id: 3533,
+    position: {
+      coords: {
+        accuracy: 5,
+        altitude: 0,
+        latitude: 26.259,
+        longitude: -80.27,
+      },
+      mocked: false,
+      timestamp: 5325324523,
+    },
   });
 
   const [loadSocket, setLoadSocket] = useState(false);

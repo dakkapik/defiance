@@ -1,7 +1,7 @@
-process.env.NODE_ENV = "test";
+process.env.NODE_ENV = "test_local";
 process.env.PORT = 3002;
 
-const { Order } = require("../../../models/order")
+// const { Order } = require("../../../models/order");
 
 const chai = require("chai")
 
@@ -10,29 +10,27 @@ chai.use(chaiHttp);
 
 const should = chai.should();
 
-let server;
+let server = require("../../../server");
 
 describe('orders', () => {
     
-    before((done)=>{
-        server = require("../../../server");
-        done();
-    });
-    afterEach(async ()=>{
-        await Order.deleteMany({},(err)=>{})
-        server.close();
-    })
+    // beforeEach((done)=>{
+    //     server = require("../../../server");
+    //     done();
+    // });
+
+    // afterEach(()=>{
+    //     server.close();
+    // });
 
     describe("/GET orders", ()=>{
         it("should GET all orders", (done)=>{
             chai.request(server)
                 .get("/api/orders")
                 .end((err, res)=>{
-                    res.should.have.status(200);
-                    res.body.should.be.a("array");
-                    res.body.length.should.be.eql(0);
+                    console.log("data", res.body)
+                })
                 done();
-                });
         });
     });
 });

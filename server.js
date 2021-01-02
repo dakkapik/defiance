@@ -1,15 +1,11 @@
 const express = require("express");
 const app = express();
-const server = require('http').createServer(app)
-const io = require('socket.io')(server)
-const config = require('config')
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+if (process.env.NODE_ENV !== "prod") require("dotenv").config();
 
 const logger = require("./middleware/logger");
-
-app.get('/api/test', (req, res)=>{
-    console.log(process.env.g_drive_credentials)
-    res.send(config.get('g_drive_credentials'))
-})
 
 require("./startup/db")();
 require("./startup/routes")(app);
@@ -22,4 +18,4 @@ const port = process.env.PORT || 3001;
 
 server.listen(port, () => logger.log("info", "server listening on port " + port));
 
-// module.exports = server
+module.exports = server
