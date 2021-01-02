@@ -89,7 +89,7 @@ export default function MissionControl() {
       });
       setDrivers(drivers_clone);
     }
-  }, [position, drivers]);
+  }, [position, drivers, prevPosition]);
   let latpos = position.position.coords.latitude;
 
   return (
