@@ -3,7 +3,6 @@ import io from "socket.io-client";
 import "./socketstatus.styles.scss";
 import Button from "@material-ui/core/Button";
 export default function SocketStatus({
-  setActiveDrivers,
   setPosition,
   store,
   handleConnect,
@@ -12,9 +11,10 @@ export default function SocketStatus({
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_endpoint);
-    setSocket(socket);
+    setSocket(socket)
 
     socket.on("connect", () => {
+      console.log('CONNECT REGISTERED')
       socket.emit("new-user", {
         id: "mission-control",
         room: "Royal Palm",
@@ -30,7 +30,7 @@ export default function SocketStatus({
         drivers.push({ id });
       });
       console.log("active");
-      setActiveDrivers(drivers);
+      // setActiveDrivers(drivers);
     });
 
     //on disconnect update
@@ -42,9 +42,10 @@ export default function SocketStatus({
     });
 
     return () => {
+      console.log("socket disconnected")
       socket.disconnect();
     };
-  }, [store, setActiveDrivers, setPosition]);
+  }, [store, setPosition]);
 
   return (
     <div className="socket-status">
@@ -61,8 +62,9 @@ export default function SocketStatus({
       </Button>
     </div>
   );
-
+  
   function handleMessage(socket, store) {
     socket.send("Royal");
   }
+
 }

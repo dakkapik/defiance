@@ -17,50 +17,50 @@ during socket inialization
 export default function MissionControl() {
   // Renders the Map Mark
   const [drivers, setDrivers] = useState([
-    {
-      firstName: "Felipe",
-      lastName: "Rodas",
-      employeeId: 3533,
-      position: {
-        coords: {
-          accuracy: 5,
-          altitude: 0,
-          latitude: 26.259,
-          longitude: -80.27,
-        },
-        mocked: false,
-        timestamp: 5325324523,
-      },
-    },
-    {
-      firstName: "George",
-      lastName: "Marrone",
-      employeeId: 4545,
+    // {
+    //   firstName: "Felipe",
+    //   lastName: "Rodas",
+    //   employeeId: 3533,
+    //   position: {
+    //     coords: {
+    //       accuracy: 5,
+    //       altitude: 0,
+    //       latitude: 26.259,
+    //       longitude: -80.27,
+    //     },
+    //     mocked: false,
+    //     timestamp: 5325324523,
+    //   },
+    // },
+    // {
+    //   firstName: "George",
+    //   lastName: "Marrone",
+    //   employeeId: 4545,
 
-      position: {
-        coords: {
-          accuracy: 5,
-          altitude: 0,
-          latitude: 26.3,
-          longitude: -80.27,
-        },
-        mocked: false,
-        timestamp: 5325324523,
-      },
-    },
+    //   position: {
+    //     coords: {
+    //       accuracy: 5,
+    //       altitude: 0,
+    //       latitude: 26.3,
+    //       longitude: -80.27,
+    //     },
+    //     mocked: false,
+    //     timestamp: 5325324523,
+    //   },
+    // },
   ]);
   const [position, setPosition] = useState({
-    id: 3533,
-    position: {
-      coords: {
-        accuracy: 5,
-        altitude: 0,
-        latitude: 26.259,
-        longitude: -80.27,
-      },
-      mocked: false,
-      timestamp: 5325324523,
-    },
+    // id: 3533,
+    // position: {
+    //   coords: {
+    //     accuracy: 5,
+    //     altitude: 0,
+    //     latitude: 26.259,
+    //     longitude: -80.27,
+    //   },
+    //   mocked: false,
+    //   timestamp: 5325324523,
+    // },
   });
 
   const [loadSocket, setLoadSocket] = useState(false);
@@ -75,8 +75,11 @@ export default function MissionControl() {
     return ref.current;
   }
   const prevPosition = GetPreviousPosition(position);
+
   //Updates the drivers position whenever position changes in the socket
+  
   useEffect(() => {
+    
     // Compare prevPosition and current position then SetDrivers()
     // This elimnate infinite loop and dependency Error
     if (isEqual(prevPosition, position) === false) {
@@ -90,7 +93,7 @@ export default function MissionControl() {
       setDrivers(drivers_clone);
     }
   }, [position, drivers, prevPosition]);
-  let latpos = position.position.coords.latitude;
+  // let latpos = position.position.coords.latitude;
 
   return (
     <div>
@@ -111,7 +114,7 @@ export default function MissionControl() {
       </div>
 
       <div className="bottom-bar">
-        <button
+        {/* <button
           onClick={() =>
             setPosition({
               id: 3533,
@@ -129,7 +132,7 @@ export default function MissionControl() {
           }
         >
           changePos
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ module.exports = async function(io){
 
     io.on('connection', (socket)=> {
         socket.on('new-user', user => {
-
             users[socket.id] = user.id
             
             if(Object.keys(rooms).length !== 0){
