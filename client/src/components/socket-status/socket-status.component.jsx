@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import "./socketstatus.styles.scss";
+import "./socket-status.styles.scss";
 import Button from "@material-ui/core/Button";
-export default function SocketStatus({
+import { toggleDriversSocket } from "../../redux/drivers/drivers.action";
+import { connect } from "react-redux";
+const SocketStatus = ({
   setPosition,
   store,
   handleConnect,
-}) {
+  toggleDriversSocket,
+}) => {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_endpoint);
-    setSocket(socket)
+    setSocket(socket);
 
     socket.on("connect", () => {
-      console.log('CONNECT REGISTERED')
+      console.log("CONNECT REGISTERED");
       socket.emit("new-user", {
         id: "mission-control",
         room: "Royal Palm",
@@ -23,6 +26,7 @@ export default function SocketStatus({
       //on disconnect update from logged in drivers
     });
 
+    //drivers come from here
     socket.on("current-users", (data) => {
       const drivers = [];
 
@@ -42,14 +46,18 @@ export default function SocketStatus({
     });
 
     return () => {
-      console.log("socket disconnected")
+      console.log("socket disconnected");
       socket.disconnect();
     };
   }, [store, setPosition]);
 
   return (
     <div className="socket-status">
-      <Button variant="outlined" color="inherit" onClick={handleConnect}>
+      <Button
+        variant="outlined"
+        color="inherit"
+        onClick={() => toggleDriversSocket(false)}
+      >
         DISCONNECT
       </Button>
 
@@ -62,9 +70,14 @@ export default function SocketStatus({
       </Button>
     </div>
   );
-  
+
   function handleMessage(socket, store) {
     socket.send("Royal");
   }
+};
 
-}
+const mapDispatchToProps = (dispatch) => ({
+  toggleDriversSocket: (bool) => dispatch(toggleDriversSocket(bool)),
+});
+
+export default connect(null, mapDispatchToProps)(SocketStatus);

@@ -1,13 +1,18 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import "./store-item.styles.scss";
+import { connect } from "react-redux";
 
-const StoreItem = ({ storeInfo, handleConnect }) => {
+import { toggleDriversSocket } from "../../redux/drivers/drivers.action";
+
+const StoreItem = ({ storeInfo, toggleDriversSocket }) => {
   return (
     <div className="storeitem">
       <div className="storeitem storeitem--text">{storeInfo.name}</div>
       <Button
-        onClick={() => handleConnect(storeInfo)}
+        onClick={() => {
+          toggleDriversSocket(true);
+        }}
         variant="outlined"
         color="inherit"
       >
@@ -17,4 +22,8 @@ const StoreItem = ({ storeInfo, handleConnect }) => {
   );
 };
 
-export default StoreItem;
+const mapDispatchToProps = (dispatch) => ({
+  toggleDriversSocket: (bool) => dispatch(toggleDriversSocket(bool)),
+});
+
+export default connect(null, mapDispatchToProps)(StoreItem);

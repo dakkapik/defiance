@@ -1,0 +1,10 @@
+.side-bar {
+  right: 0;
+  width: 25%;
+  top: 30vh;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+}

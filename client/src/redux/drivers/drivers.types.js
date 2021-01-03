@@ -1,0 +1,7 @@
+const DriversActionTypes = {
+  SET_DRIVERS: "SET_DRIVERS",
+  SET_DRIVER_POSITION: "SET_DRIVER_POSITION",
+
+  TOGGLE_DRIVERS_SOCKET: "TOGGLE_DRIVERS_SOCKET",
+};
+export default DriversActionTypes;
