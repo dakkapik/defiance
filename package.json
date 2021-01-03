@@ -9,7 +9,9 @@
     "start": "node server.js",
     "dev":"set NODE_ENV=dev&& node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "test": "mocha -w --recursive --timeout 10000"
+    "test": "mocha --recursive --parallel",
+    "testLocal": "mocha --recursive --parallel --watch",
+    "testCoverage": "nyc --reporter=html --reporter=text mocha --recursive"
   },
   "engines": {
     "node": "12.18.2"
