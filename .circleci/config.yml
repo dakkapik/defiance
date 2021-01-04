@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: npm install && npm test
+          command: npm install && export NODE_ENV=test && npm test
   client:
     working_directory: ~/defiance/
     docker:
