@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { toggleDriversSocket } from "../../redux/drivers/drivers.action";
 
-const StoreItem = ({ storeInfo, toggleDriversSocket }) => {
+export const StoreItem = ({ storeInfo, toggleDriversSocket }) => {
   return (
     <div className="storeitem">
       <div className="storeitem storeitem--text">{storeInfo.name}</div>

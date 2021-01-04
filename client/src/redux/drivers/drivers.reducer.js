@@ -14,6 +14,11 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         currentDrivers: action.payload,
         socket: action.payload,
       };
+    case DriversActionTypes.TOGGLE_DRIVERS_SOCKET:
+      return {
+        ...state,
+        socket: action.payload,
+      };
 
     case DriversActionTypes.SET_DRIVER_POSITION:
       return {

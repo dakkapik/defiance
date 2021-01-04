@@ -1,17 +1,28 @@
-import { takeLatest, all, call, put } from "redux-saga/effects";
-import DriversActionTypes from "./drivers.types";
-import { setDrivers } from "./drivers.action";
-//destructure  it to reaveal variable
-export function* Drivers({ payload }) {
+/*
+Data Flow(With Sagas)
+            
+ Components ->  Saga(Generator function) -> Actions(Checks Type(String)) -> Reducers
+
+*/
+import { all, call } from "redux-saga/effects";
+
+export function* CallDrivers() {
   try {
-    yield put(setDrivers(payload));
+    yield;
+    // yield put(ActiveDriverSocket(payload));
   } catch (error) {}
 }
 
-export function* OnDrivers() {
-  yield takeLatest(DriversActionTypes.TOGGLE_DRIVERS_SOCKET, Drivers);
+export function* OnToggleDrivers() {
+  /*
+  takeLatest allows only one fetchData task to run at
+  any moment. And it will be the latest started task.
+  This calls the function Drivers
+  */
+  yield;
+  // yield takeLatest(DriversActionTypes.TOGGLE_DRIVERS_SOCKET, CallDrivers);
 }
 
 export function* driversSagas() {
-  yield all([call(OnDrivers)]);
+  yield all([call(OnToggleDrivers)]);
 }

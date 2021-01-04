@@ -11,7 +11,7 @@ const SocketStatus = ({
   toggleDriversSocket,
 }) => {
   const [socket, setSocket] = useState();
-
+  console.log(socket);
   useEffect(() => {
     const socket = io(process.env.REACT_APP_endpoint);
     setSocket(socket);
@@ -28,13 +28,13 @@ const SocketStatus = ({
 
     //drivers come from here
     socket.on("current-users", (data) => {
+      console.log(data);
       const drivers = [];
 
       Object.values(data.users).forEach((id) => {
         drivers.push({ id });
       });
       console.log("active");
-      // setActiveDrivers(drivers);
     });
 
     //on disconnect update
