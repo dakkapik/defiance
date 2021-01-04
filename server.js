@@ -4,7 +4,6 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 if (process.env.NODE_ENV !== "prod") require("dotenv").config();
-const config = require("config");
 
 const logger = require("./middleware/logger");
 
@@ -16,20 +15,14 @@ require("./startup/socket")(io)
 require("./startup/config")();
 
 let port
-switch(process.env.NODE_ENV){
-    case "prod":
-        port = process.env.PORT
-    break;
-    case "dev":
-        port = process.env.PORT || 3001;
-    break;
-    case "test":
-        port = process.env.PORT || 3002;
-    break;
-    case "test_local":
-        port = 3002;
-    break;
+
+if(process.env.NODE_ENV !== "test_local"){
+    port = process.env.PORT || 3001;
+}else{
+    port = 3002
 }
+
+
 
 server.listen(port, () => logger.log("info", "server listening on port " + port));
 
