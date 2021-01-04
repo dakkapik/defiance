@@ -13,10 +13,9 @@ module.exports = (server) => {describe('ORDERS API', () => {
         Order.deleteMany({}, (err)=>{done()})
     });
 
-    // after((done)=>{
-    //     Order.deleteMany({}, (err)=>{done();})
-    //     // server.close().then(done());
-    // });
+    after((done)=>{
+        Order.deleteMany({}, (err)=>{done();})
+    });
 
     describe("/GET orders (empty)", ()=>{
         it("should GET empty array", (done)=>{
