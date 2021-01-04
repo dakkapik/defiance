@@ -14,10 +14,9 @@ module.exports = (server)=> {
             Store.deleteMany({}, (err)=>{done()})
         });
     
-        // after((done)=>{
-        //     Store.deleteMany({}, (err)=>{done();});
-        //     // server.close().then(done());
-        // });
+        after((done)=>{
+            Store.deleteMany({}, (err)=>{done();});
+        });
     
         describe("/GET stores (empty)", ()=>{
             it("should get an empty array", (done)=>{
