@@ -1,14 +1,17 @@
 {
-  "name": "drive-app",
+  "name": "defiance",
   "version": "1.0.0",
-  "description": "",
+  "description": "driver tracking server",
   "main": "server.js",
   "author": "F&R TEC",
   "license": "ISC",
   "scripts": {
     "start": "node server.js",
+    "dev": "set NODE_ENV=dev&& node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "test": "mocha -w --recursive --timeout 10000"
+    "test": "mocha --recursive --parallel",
+    "testLocal": "set NODE_ENV=test_local&& mocha --recursive --parallel --watch",
+    "coverage": "nyc report --reporter=html"
   },
   "engines": {
     "node": "12.18.2"
@@ -26,7 +29,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.27",
     "morgan": "^1.10.0",
-    "nyc": "^15.1.0",
     "socket.io": "^2.3.0",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.1"
@@ -34,6 +36,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0"
   }
 }

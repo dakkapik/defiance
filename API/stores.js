@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const {Store, validateStore} = require('../models/stores')
+const {Store, validateStore} = require('../models/store')
 
 router.get('/', async (req, res)=>{ 
     const stores = await Store.find().sort('number')

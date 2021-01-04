@@ -43,7 +43,7 @@ router.post('/', async(req, res)=>{
 })
 
 router.put('/:orderNumber', async(req, res)=>{
-  const { error } = validateUser(req.body)
+  const { error } = validateOrder(req.body)
   if(error) return res.status(400).send(error.details[0].message)
 
   try{
@@ -70,12 +70,13 @@ router.put('/:orderNumber', async(req, res)=>{
     );
     res.status(200).send(result)
   } catch (err){
-    res.status(404).send(err)
+    res.status(404).send('order number not found')
   }
   //updata an order by order number
 })
 
 router.put('/setMaker/:orderNumber', async(req, res)=>{
+  //create it's own API
   try{
     const order = await Order.findOne({orderNumber: req.params.orderNumber})
 
@@ -138,10 +139,10 @@ router.put('/updateDriver/:orderNumber', async(req, res)=>{
 router.delete('/:orderNumber', async(req, res)=>{
   try{
     const order = await Order.findOne({orderNumber: req.params.orderNumber});
-    if(!order) return res.status(404).send('employee Id not found')
+    if(!order) return res.status(404).send('order number not found')
 
     const result = await Order.findByIdAndRemove(order._id)
-    res.send({deleted: result})
+    res.status(200).send({deleted: result})
   }catch(err){
     res.status(404).send(err)
   }

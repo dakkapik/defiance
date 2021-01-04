@@ -11,5 +11,5 @@ module.exports = function () {
       useFindAndModify: false,
       useCreateIndex: true,
     })
-    .then(() => logger.log("info", `connected to ${db}`));
+    .then(() => logger.log("info", `connected to db: ${config.get('db_name')}`));
 };

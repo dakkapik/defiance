@@ -1,3 +1,4 @@
 {
+    "db_name":"defiance_test",
     "db": "mongodb+srv://defiance_dev:BulwarkOfDeliverance@cluster0.dab6a.mongodb.net/defiance_test?retryWrites=true&w=majority"
 }
