@@ -1,28 +1,25 @@
-process.env.NODE_ENV = "test_local";
-process.env.PORT = 3002;
-
 const mongoose = require("mongoose")
 const { Order } = require("../../../models/order");
 
 const chai = require("chai")
 const chaiHttp = require("chai-http");
-const server = require("../../../server");
 const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('orders', () => {
+module.exports = (server) => {describe('ORDERS API', () => {
     
     beforeEach((done)=>{
         Order.deleteMany({}, (err)=>{done()})
     });
 
-    after((done)=>{
-        Order.deleteMany({}, (err)=>{done()})
-    });
+    // after((done)=>{
+    //     Order.deleteMany({}, (err)=>{done();})
+    //     // server.close().then(done());
+    // });
 
-    describe("/GET empty orders", ()=>{
-        it("should GET empty order array", (done)=>{
+    describe("/GET orders (empty)", ()=>{
+        it("should GET empty array", (done)=>{
             chai.request(server)
                 .get("/api/orders")
                 .end((err, res)=>{
@@ -82,7 +79,7 @@ describe('orders', () => {
 
         it("should post an order", (done)=>{
             const order = ({
-                orderNumber:273,
+                orderNumber:1,
                 date:"10/07",
                 time:"05:44pm",
                 firstName:"LUIS",
@@ -134,6 +131,89 @@ describe('orders', () => {
                     res.body.__v.should.be.a("number");
                     done();
                 }); 
+        })
+
+        it("should return a 400 error if no order number is present",(done)=>{
+            const order = ({
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            })
+            chai.request(server)
+                .post("/api/orders")
+                .send(order)
+                .end((err, res)=>{
+                    res.should.have.status(400)
+                    res.text.should.eql('"orderNumber" is required')
+                    done();
+                })
+        })
+
+        it("should return a 400 error if no order address is present",(done)=>{
+            const order = ({
+                orderNumber: 1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            })
+            chai.request(server)
+                .post("/api/orders")
+                .send(order)
+                .end((err, res)=>{
+                    res.should.have.status(400)
+                    res.text.should.eql('"address" is required')
+                    done();
+                })
+        })
+
+        it("should return a 400 error if order already exists", (done)=>{
+            const order1 = new Order({
+                orderNumber: 1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            })
+            
+            order1.save((err)=>{
+                if(err){console.log(err)}
+            })
+
+            const order2 = {
+                orderNumber: 1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            }
+
+            chai.request(server)
+                .post("/api/orders")
+                .send(order2)
+                .end((err, res)=>{
+                    if(err){console.log("ERROR: ",err)}
+                    res.should.have.status(400)
+                    res.text.should.eql(`order ${order2.orderNumber} already exist`)
+                    done();
+                })
+            
         })
     });
 
@@ -189,14 +269,136 @@ describe('orders', () => {
                     res.body.zip.should.be.a("string");
                     res.body.__v.should.be.a("number");
                     done();
-                })
-        })
+                });
+        });
+
+        it("should return a 400 error if no order number is present",(done)=>{
+
+            const order = new Order({
+                orderNumber:1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            });
+
+            order.save((err)=>{
+                if(err){console.log(err)}
+            })
+
+            const order2 = {
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            };
+
+            chai.request(server)
+                .put(`/api/orders/${order.orderNumber}`)
+                .send(order2)
+                .end((err, res)=>{
+                    res.should.have.status(400)
+                    res.text.should.eql('"orderNumber" is required')
+                    done();
+                });
+                
+        });
+
+        it("should return a 400 error if no address is present",(done)=>{
+
+            const order = new Order({
+                orderNumber:1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            });
+
+            order.save((err)=>{
+                if(err){console.log(err)}
+            })
+
+            const order2 = {
+                orderNumber:1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            };
+
+            chai.request(server)
+                .put(`/api/orders/${order.orderNumber}`)
+                .send(order2)
+                .end((err, res)=>{
+                    res.should.have.status(400)
+                    res.text.should.eql('"address" is required')
+                    done();
+                });
+                
+        });
+
+        it("should return a 404 error if the order number in the url is not found",(done)=>{
+
+            const order = new Order({
+                orderNumber:1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            });
+
+            order.save((err)=>{
+                if(err){console.log(err)}
+            })
+
+            const order2 = {
+                orderNumber:1,
+                date:"10/07",
+                time:"05:44pm",
+                firstName:"LUIS",
+                lastName:"LUIS",
+                phoneNumber:"(240) 813-5918",
+                address:"4691 NW 66TH DRIVE",
+                city:"CORAL SPRINGS",
+                zip:"33073"
+            };
+
+            chai.request(server)
+                .put(`/api/orders/2`)
+                .send(order2)
+                .end((err, res)=>{
+                    res.should.have.status(404)
+                    res.text.should.eql("order number not found")
+                    done();
+                });
+                
+        });
+
     })
 
     describe("/DELETE order by order number", ()=>{
 
         const order = new Order({
-            orderNumber:273,
+            orderNumber:1,
             date:"10/07",
             time:"05:44pm",
             firstName:"LUIS",
@@ -209,9 +411,7 @@ describe('orders', () => {
 
         it("should delete an order", (done)=>{
             order.save((err)=>{
-
-                if(err){console.log(err)}
-
+                if(err){console.log('ERROR: ',err)}
             })
 
             chai.request(server)
@@ -236,6 +436,7 @@ describe('orders', () => {
                     chai.request(server)
                         .get(`/api/orders/${order.orderNumber}`)
                         .end((err, res)=>{
+                            if(err){console.log("ERROR: ", err)}
                             res.should.have.status(404)
                             res.body.should.be.a("object")
                             res.body.message.should.equal('order not found')
@@ -244,5 +445,22 @@ describe('orders', () => {
             })
             
         })
+
+        it("should return a 404 error if the order number in the url is not found",(done)=>{
+
+            order.save((err)=>{
+                if(err){console.log('ERROR: ',err)}
+            });
+
+            chai.request(server)
+                .delete("/api/orders/2")
+                .end((err, res)=>{
+                    if(err){console.log("ERROR: ", err)}
+                    res.should.have.status(404);
+                    res.text.should.eql("order number not found");
+                    done();
+                })
+        });
     })
-});
+});}
+
