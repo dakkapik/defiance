@@ -3,10 +3,8 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
 import { withRouter } from "react-router-dom";
 import "./navbar.styles.scss";
-
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -49,4 +47,11 @@ const NavBar = ({ history }) => {
     </div>
   );
 };
+// withRouter creates history
+// and history.push() do u know what that is???
+// are you aware of what history.push does?
+// it's like this <link  />
+// it just links you to pages
+// ok well history only exist because of the glue as a prop
+// so withrouter gives this component history
 export default withRouter(NavBar);

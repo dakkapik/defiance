@@ -24,6 +24,8 @@ if(process.env.NODE_ENV !== "test_local"){
 
 
 
-server.listen(port, () => logger.log("info", "server listening on port " + port));
+server.listen(port, () =>
+  logger.log("info", "server listening on port " + port)
+);
 
 module.exports = server;

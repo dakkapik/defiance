@@ -11,7 +11,7 @@ const defaultCenter = {
   lng: -80.27339459701001,
 };
 
-export default function MapContainer(props) {
+const MapContainer = (props) => {
   // const [map, setMap] = useState(null);
   const [zoom, setZoom] = useState(15);
   const [center, setCenter] = useState({
@@ -52,17 +52,6 @@ export default function MapContainer(props) {
     setDriverMarkers(markers);
   }, [props.drivers]);
 
-  // const onLoad = React.useCallback(function callback(map) {
-  //   const bounds = new window.google.maps.LatLngBounds();
-  //   map.fitBounds(bounds);
-  //   setMap(map);
-  // }, []);
-
-  // const onUnmount = React.useCallback(function callback(map) {
-  //   setMap(null);
-  // }, []);
-  // onLoad={onLoad}
-  //       onUnmount={onUnmount}
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
@@ -70,4 +59,6 @@ export default function MapContainer(props) {
       </GoogleMap>
     </LoadScript>
   );
-}
+};
+
+export default MapContainer;
