@@ -3,5 +3,4 @@
 /coverage
 /.env
 /.nyc_output
-/client/.eslintcache
 /.env
