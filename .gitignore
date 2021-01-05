@@ -4,4 +4,5 @@
 /.env
 /.nyc_output
 /client/.eslintcache
-client/.eslintcache
+
+/.env
