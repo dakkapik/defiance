@@ -1,6 +1,7 @@
 import React from "react";
 import { StoreItem } from "./store-item.component";
 import { shallow } from "enzyme";
+
 describe("StoreItem component", () => {
   let wrapper;
   let mockClearItem;

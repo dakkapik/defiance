@@ -3,15 +3,15 @@ import Button from "@material-ui/core/Button";
 import "./store-item.styles.scss";
 import { connect } from "react-redux";
 
-import { toggleDriversSocket } from "../../redux/drivers/drivers.action";
+import { DriverSocketOn } from "../../redux/drivers/drivers.action";
 
-export const StoreItem = ({ storeInfo, toggleDriversSocket }) => {
+export const StoreItem = ({ storeInfo, DriverSocketOn }) => {
   return (
     <div className="storeitem">
       <div className="storeitem storeitem--text">{storeInfo.name}</div>
       <Button
         onClick={() => {
-          toggleDriversSocket(true);
+          DriverSocketOn(storeInfo);
         }}
         variant="outlined"
         color="inherit"
@@ -23,7 +23,7 @@ export const StoreItem = ({ storeInfo, toggleDriversSocket }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDriversSocket: (bool) => dispatch(toggleDriversSocket(bool)),
+  DriverSocketOn: (info) => dispatch(DriverSocketOn(info)),
 });
 
 export default connect(null, mapDispatchToProps)(StoreItem);

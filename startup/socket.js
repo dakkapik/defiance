@@ -4,14 +4,16 @@ module.exports = async function (io) {
 
   io.on("connection", (socket) => {
     console.log(socket.id);
+
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-
+      console.log(users[socket.id]);
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {
             if (user.ms) {
               socket.join(user.room);
+
               socket
                 .to(user.room)
                 .broadcast.emit("current-users", rooms[user.room]);

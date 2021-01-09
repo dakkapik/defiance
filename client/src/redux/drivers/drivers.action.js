@@ -20,3 +20,13 @@ export const toggleDriversSocket = (socketstatus) => ({
   type: DriversActionTypes.TOGGLE_DRIVERS_SOCKET,
   payload: socketstatus,
 });
+
+export const DriverSocketOn = (info) => ({
+  type: DriversActionTypes.DRIVERS_SOCKET_ON,
+  payload: info,
+});
+
+export const DriverSocketOff = (info) => ({
+  type: DriversActionTypes.DRIVERS_SOCKET_OFF,
+  payload: info,
+});

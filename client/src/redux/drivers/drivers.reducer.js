@@ -8,22 +8,15 @@ const INITIAL_STATE = {
 
 const driverReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case DriversActionTypes.SET_DRIVERS:
+    case DriversActionTypes.DRIVERS_SOCKET_ON:
       return {
         ...state,
-        currentDrivers: action.payload,
-        socket: action.payload,
+        socket: true,
       };
-    case DriversActionTypes.TOGGLE_DRIVERS_SOCKET:
+    case DriversActionTypes.DRIVERS_SOCKET_OFF:
       return {
         ...state,
-        socket: action.payload,
-      };
-
-    case DriversActionTypes.SET_DRIVER_POSITION:
-      return {
-        ...state,
-        position: action.payload,
+        socket: false,
       };
 
     default:
