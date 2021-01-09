@@ -1,17 +1,8 @@
-import {
-  all,
-  take,
-  call,
-  fork,
-  takeLatest,
-  put,
-  takeEvery,
-  cancel,
-} from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
+import { all, take, call, takeEvery } from "redux-saga/effects";
+
 import DriversActionTypes from "./drivers.types";
 import io from "socket.io-client";
-import { DriverSocketOn, DriverSocketOff } from "./drivers.action";
+import { DriverSocketOff } from "./drivers.action";
 
 // function* read(socket) {
 //   const channel = yield call(subscribe, socket);

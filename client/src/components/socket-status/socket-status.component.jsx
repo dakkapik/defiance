@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import React from "react";
+// { useState, useEffect }
+// import io from "socket.io-client";
 import "./socket-status.styles.scss";
 import Button from "@material-ui/core/Button";
 import { DriverSocketOff } from "../../redux/drivers/drivers.action";
