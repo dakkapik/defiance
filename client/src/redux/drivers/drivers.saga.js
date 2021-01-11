@@ -1,58 +1,112 @@
-import { all, take, call, takeEvery } from "redux-saga/effects";
-
+import {
+  all,
+  take,
+  call,
+  takeLatest,
+  cancel,
+  fork,
+  put,
+} from "redux-saga/effects";
+import { eventChannel } from "redux-saga";
 import DriversActionTypes from "./drivers.types";
 import io from "socket.io-client";
-import { DriverSocketOff } from "./drivers.action";
+import axios from "axios";
+import { AddActiveDriver } from "./drivers.action";
 
-// function* read(socket) {
-//   const channel = yield call(subscribe, socket);
-//   while (true) {
-//     let action = yield take(channel);
-//     yield put(action);
-//   }
-// }
+export function disconnect(socket) {
+  socket.disconnect();
+}
 
-// function* handleIO(socket) {
-//   yield fork(read, socket);
-//   //yield fork(write, socket); //to send message to socket
-// }
+const getUser = (driverId) => {
+  return axios.get(`/api/users/${driverId}`).then((res) => res.data);
+};
+/*
+let GetUserPromises = [];
 
-export function connect() {
+        Active_driver.forEach((id) => {
+          GetUserPromises.push(getUser(id));
+        });
+        Promise.all(GetUserPromises).then((users) => {
+         
+        });
+*/
+/*
+ let GetUserPromises = [];
+
+        Active_driver.forEach((id) => {
+          GetUserPromises.push(getUser(id));
+        });
+
+        Promise.all(GetUserPromises).then((users) => {
+          emit(AddActiveDriver(users));
+        });
+*/
+function subscribe(socket) {
+  return eventChannel((emit) => {
+    socket.on("current-users", async (data) => {
+      try {
+        //Here lies a bunch of promises
+        let Active_driver = Object.values(data.users);
+        emit(AddActiveDriver(Active_driver));
+      } catch (err) {
+        console.log("User does not exist");
+      }
+    });
+    socket.on("disconnect", (e) => {
+      console.log(e);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  });
+}
+
+function* read(socket) {
+  const channel = yield call(subscribe, socket);
+  while (true) {
+    let action = yield take(channel);
+    yield put(action);
+  }
+}
+
+function* Read_Emit_Or_Write_Emit(socket) {
+  yield fork(read, socket);
+}
+
+export function connect(storeName) {
   const socket = io(process.env.REACT_APP_endpoint);
   return new Promise((resolve, reject) => {
     socket.on("connect", (data) => {
       resolve(socket);
+      socket.emit("new-user", {
+        id: "mission-control",
+        room: storeName,
+        ms: true,
+      });
     });
   });
 }
 
-export function* DriverSocketFlow({ payload }) {
-  //Listen for DriverSocketOn and get the payload
-  //Payload is the onClicked store's information within storeitem component
-  // console.log(payload);
-  const socket = yield call(connect);
+export function* DriverSocketFlow({ payload: { name: StoreName } }) {
+  //connect to the socket
+  const socket = yield call(connect, StoreName);
+  //                    function^   ^ pass in values
 
-  // you can try catch the createsocketchannel
   while (true) {
-    // connect to the socket
-    //connect with id mission control and join room with the store's name
-    socket.emit("new-user", {
-      id: "mission-control",
-      room: payload.name,
-      ms: true,
-    });
-    // handle socket.on to ethier read or write(aka send message)
-    // const task = yield fork(handleIO, socket);
-    // Listen to the action DriverSocketOff  if it's called in a component
-    // then disconnect the socket
-    yield take(DriverSocketOff);
-    socket.disconnect();
+    // not an infinite loop due to yield take(DriversActionTypes.DRIVERS_SOCKET_OFF))
+
+    const emitAction = yield fork(Read_Emit_Or_Write_Emit, socket);
+    //                                   function^          ^ pass in values
+    //turn off everything if Driver_socket_off action has been called
+    yield take(DriversActionTypes.DRIVERS_SOCKET_OFF);
+    yield cancel(emitAction);
+    yield call(disconnect, socket);
   }
 }
-export default DriverSocketFlow;
+// export default DriverSocketFlow;
 //Also a listener listen's Driversocketon within action
 export function* onDriverSocketStart() {
-  yield takeEvery(DriversActionTypes.DRIVERS_SOCKET_ON, DriverSocketFlow);
+  yield takeLatest(DriversActionTypes.DRIVERS_SOCKET_ON, DriverSocketFlow);
 }
 
 export function* driversSagas() {

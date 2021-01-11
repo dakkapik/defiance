@@ -16,6 +16,12 @@ import DriversActionTypes from "./drivers.types";
  * ToggleDriverSocket takes in boolean true or false
  * to activate or disable driversocket
  */
+
+export const AddActiveDriver = (driver) => ({
+  type: DriversActionTypes.ADD_ACTIVE_DRIVER,
+  payload: driver,
+});
+
 export const toggleDriversSocket = (socketstatus) => ({
   type: DriversActionTypes.TOGGLE_DRIVERS_SOCKET,
   payload: socketstatus,

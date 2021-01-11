@@ -1,64 +1,44 @@
-import React from "react";
-// { useState, useEffect }
-// import io from "socket.io-client";
+import React, { useState, useEffect } from "react";
+
+import io from "socket.io-client";
 import "./socket-status.styles.scss";
 import Button from "@material-ui/core/Button";
 import { DriverSocketOff } from "../../redux/drivers/drivers.action";
 
 import { connect } from "react-redux";
-const SocketStatus = ({
-  setPosition,
-  store,
-  handleConnect,
-  DriverSocketOff,
-}) => {
-  // const [socket, setSocket] = useState();
-  // useEffect(() => {
-  //   const socket = io(process.env.REACT_APP_endpoint);
-  //   setSocket(socket);
+const SocketStatus = ({ DriverSocketOff }) => {
+  const [socket, setSocket] = useState();
+  const [connected, setConnected] = useState(false);
+  useEffect(() => {
+    if (!connected) {
+      let socket = io(process.env.REACT_APP_endpoint);
+      socket.on("connect", () => {
+        socket.emit("new-user", {
+          id: 5578,
+          room: "Royal Palm",
+          MS: false,
+        });
+      });
+      setSocket(socket);
+      setConnected(true);
+    } else {
+      socket.disconnect();
+      setConnected(false);
+    }
 
-  //   socket.on("connect", () => {
-  //     console.log("CONNECT REGISTERED");
-  //     socket.emit("new-user", {
-  //       id: "mission-control",
-  //       room: "Royal Palm",
-  //       ms: true,
-  //     });
-  //     //on disconnect update from logged in drivers
-  //   });
+    return () => {};
+  }, [connected]); //runs when there's a change in socket
 
-  //   //drivers come from here
-  //   socket.on("current-users", (data) => {
-  //     console.log("hello!??");
-  //     console.log(data);
-  //     const drivers = [];
+  const newuser = () => {
+    if (!connected) {
+      setConnected(true);
+    } else {
+      setConnected(false);
+    }
+  };
 
-  //     Object.values(data.users).forEach((id) => {
-  //       drivers.push({ id });
-  //     });
-  //     console.log("active");
-  //   });
+  console.log(socket);
 
-  //   //on disconnect update
-  //   // compare id and position
-  //   socket.on("d-position", (position, id) => {
-  //     setPosition({ id, position });
-
-  //     // add on transmition stop event
-  //   });
-
-  //   return () => {
-  //     console.log("socket disconnected");
-  //     socket.disconnect();
-  //   };
-  // }, [store, setPosition]);
-  // const newuser = () => {
-  //   socket.emit("new-user", {
-  //     id: "4545",
-  //     room: "Royal Palm",
-  //     MS: false,
-  //   });
-  // };
   return (
     <div className="socket-status">
       <Button
@@ -68,7 +48,10 @@ const SocketStatus = ({
       >
         DISCONNECT
       </Button>
-      <Button variant="outlined" color="inherit">
+      <Button variant="outlined" color="inherit" onClick={newuser}>
+        New User
+      </Button>
+      <Button variant="outlined" color="inherit" onClick={() => newuser(4545)}>
         New User
       </Button>
 

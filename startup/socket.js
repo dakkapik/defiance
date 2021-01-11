@@ -17,6 +17,7 @@ module.exports = async function (io) {
               socket
                 .to(user.room)
                 .broadcast.emit("current-users", rooms[user.room]);
+
               console.log(`MS: ${user.id} reconnected room ${user.room}`);
             } else {
               socket.join(user.room);
