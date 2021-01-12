@@ -45,7 +45,6 @@ function subscribe(socket) {
   return eventChannel((emit) => {
     socket.on("current-users", async (data) => {
       try {
-
         //Here lies a bunch of promises
         let Active_driver = Object.values(data.users);
         console.log(Active_driver)

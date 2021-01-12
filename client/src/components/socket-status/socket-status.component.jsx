@@ -6,15 +6,33 @@ import Button from "@material-ui/core/Button";
 import { DriverSocketOff } from "../../redux/drivers/drivers.action";
 
 import { connect } from "react-redux";
+import { object } from "joi";
 const SocketStatus = ({ DriverSocketOff }) => {
 
-  const [sockets, setSockets] = useState([]);
+  const [sockets, setSockets] = useState({});
 
-  const newuser = (number) =>{  
-    if(sockets.length === 0){
+  const newuser = (number) =>{ 
+    if(Object.keys(sockets).length === 0){
+      const socket = io(process.env.REACT_APP_endpoint)
+      const conv = sockets;
+      conv[number] = socket;
+      setSockets(conv)
+      socket.on("connect", () => {
+        socket.emit("new-user", {
+          id: number,
+          room: "Royal Palm",
+          MS: false,
+        });
+      });
+    }else{
+      if(sockets[number]){
+        sockets[number].disconnect();
+        delete sockets[number];
+      }else{
         const socket = io(process.env.REACT_APP_endpoint)
-        const user = [{id: number, socket: socket}]
-        setSockets(user)
+        const conv = sockets;
+        conv[number] = socket;
+        setSockets(conv);
         socket.on("connect", () => {
           socket.emit("new-user", {
             id: number,
@@ -22,11 +40,6 @@ const SocketStatus = ({ DriverSocketOff }) => {
             MS: false,
           });
         });
-    }else{      
-      for(let i = 0; i < sockets.length; i++){
-        if(sockets[i].id === number){
-          sockets[i].socket.disconnect();
-        }
       }
     }
   }
