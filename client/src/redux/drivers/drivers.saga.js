@@ -20,35 +20,25 @@ export function disconnect(socket) {
 const getUser = (driverId) => {
   return axios.get(`/api/users/${driverId}`).then((res) => res.data);
 };
-/*
-let GetUserPromises = [];
 
-        Active_driver.forEach((id) => {
-          GetUserPromises.push(getUser(id));
-        });
-        Promise.all(GetUserPromises).then((users) => {
-         
-        });
-*/
-/*
- let GetUserPromises = [];
+const ConvertIds = (UseridArray) => {
+  let GetUserPromises = [];
+  UseridArray.forEach((id) => {
+    GetUserPromises.push(getUser(id));
+  });
+  return GetUserPromises;
+};
 
-        Active_driver.forEach((id) => {
-          GetUserPromises.push(getUser(id));
-        });
-
-        Promise.all(GetUserPromises).then((users) => {
-          emit(AddActiveDriver(users));
-        });
-*/
 function subscribe(socket) {
   return eventChannel((emit) => {
     socket.on("current-users", async (data) => {
       try {
-        //Here lies a bunch of promises
-        let Active_driver = Object.values(data.users);
-        console.log(Active_driver)
-        emit(AddActiveDriver(Active_driver));
+        //Object.values(data.users) convert json to array
+        const PromisesRequest = ConvertIds(Object.values(data.users));
+        //Iterate through all the promises and put em in redux
+        Promise.all(PromisesRequest).then((users) => {
+          emit(AddActiveDriver(users));
+        });
       } catch (err) {
         console.log("User does not exist");
       }
