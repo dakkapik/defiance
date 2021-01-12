@@ -45,8 +45,10 @@ function subscribe(socket) {
   return eventChannel((emit) => {
     socket.on("current-users", async (data) => {
       try {
+
         //Here lies a bunch of promises
         let Active_driver = Object.values(data.users);
+        console.log(Active_driver)
         emit(AddActiveDriver(Active_driver));
       } catch (err) {
         console.log("User does not exist");

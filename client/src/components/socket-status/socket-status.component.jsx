@@ -7,37 +7,56 @@ import { DriverSocketOff } from "../../redux/drivers/drivers.action";
 
 import { connect } from "react-redux";
 const SocketStatus = ({ DriverSocketOff }) => {
-  const [socket, setSocket] = useState();
-  const [connected, setConnected] = useState(false);
-  useEffect(() => {
-    if (!connected) {
-      let socket = io(process.env.REACT_APP_endpoint);
-      socket.on("connect", () => {
-        socket.emit("new-user", {
-          id: 5578,
-          room: "Royal Palm",
-          MS: false,
+
+  const [sockets, setSockets] = useState([]);
+
+  const newuser = (number) =>{  
+    if(sockets.length === 0){
+        const socket = io(process.env.REACT_APP_endpoint)
+        const user = [{id: number, socket: socket}]
+        setSockets(user)
+        socket.on("connect", () => {
+          socket.emit("new-user", {
+            id: number,
+            room: "Royal Palm",
+            MS: false,
+          });
         });
-      });
-      setSocket(socket);
-      setConnected(true);
-    } else {
-      socket.disconnect();
-      setConnected(false);
+    }else{      
+      for(let i = 0; i < sockets.length; i++){
+        if(sockets[i].id === number){
+          sockets[i].socket.disconnect();
+        }
+      }
     }
+  }
+  // useEffect(() => {
+  //   if (!connected) {
+  //     let socket = io(process.env.REACT_APP_endpoint);
+  //     socket.on("connect", () => {
+  //       socket.emit("new-user", {
+  //         id: 5578,
+  //         room: "Royal Palm",
+  //         MS: false,
+  //       });
+  //     });
+  //     setSocket(socket);
+  //     setConnected(true);
+  //   } else {
+  //     socket.disconnect();
+  //     setConnected(false);
+  //   }
 
-    return () => {};
-  }, [connected]); //runs when there's a change in socket
+  //   return () => {};
+  // }, [connected]); //runs when there's a change in socket
 
-  const newuser = () => {
-    if (!connected) {
-      setConnected(true);
-    } else {
-      setConnected(false);
-    }
-  };
-
-  console.log(socket);
+  // const newuser = () => {
+  //   if (!connected) {
+  //     setConnected(true);
+  //   } else {
+  //     setConnected(false);
+  //   }
+  // };
 
   return (
     <div className="socket-status">
@@ -48,7 +67,7 @@ const SocketStatus = ({ DriverSocketOff }) => {
       >
         DISCONNECT
       </Button>
-      <Button variant="outlined" color="inherit" onClick={newuser}>
+      <Button variant="outlined" color="inherit" onClick={()=> newuser(9568)}>
         New User
       </Button>
       <Button variant="outlined" color="inherit" onClick={() => newuser(4545)}>
