@@ -4,14 +4,15 @@ import "./store-item.styles.scss";
 import { connect } from "react-redux";
 
 import { DriverSocketOn } from "../../redux/drivers/drivers.action";
-
-export const StoreItem = ({ storeInfo, DriverSocketOn }) => {
+import { setConnectedStore } from "../../redux/stores/stores.action";
+export const StoreItem = ({ storeInfo, DriverSocketOn, setConnectedStore }) => {
   return (
     <div className="storeitem">
       <div className="storeitem storeitem--text">{storeInfo.name}</div>
       <Button
         onClick={() => {
           DriverSocketOn(storeInfo);
+          setConnectedStore(storeInfo);
         }}
         variant="outlined"
         color="inherit"
@@ -24,6 +25,7 @@ export const StoreItem = ({ storeInfo, DriverSocketOn }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   DriverSocketOn: (info) => dispatch(DriverSocketOn(info)),
+  setConnectedStore: (info) => dispatch(setConnectedStore(info)),
 });
 
 export default connect(null, mapDispatchToProps)(StoreItem);
