@@ -18,9 +18,12 @@ export function disconnect(socket) {
 }
 
 const getUser = (driverId) => {
-  return axios.get(`/api/users/${driverId}`).then((res) => res.data);
+  var CancelToken = axios.CancelToken;
+  var { token } = CancelToken.source();
+  return axios
+    .get(`/api/users/${driverId}`, { cancelToken: token })
+    .then((res) => res.data);
 };
-
 const ConvertIds = (UseridArray) => {
   let GetUserPromises = [];
   UseridArray.forEach((id) => {
@@ -40,7 +43,9 @@ function subscribe(socket) {
           emit(AddActiveDriver(users));
         });
       } catch (err) {
-        console.log("User does not exist");
+        console.log(
+          "A promise has failed to request to the API within PromisesRequest Array "
+        );
       }
     });
     socket.on("disconnect", (e) => {
@@ -60,7 +65,7 @@ function* read(socket) {
   }
 }
 
-function* Read_Emit_Or_Write_Emit(socket) {
+export function* Read_Emit_Or_Write_Emit(socket) {
   yield fork(read, socket);
 }
 
@@ -90,8 +95,9 @@ export function* DriverSocketFlow({ payload: { name: StoreName } }) {
     //                                   function^          ^ pass in values
     //turn off everything if Driver_socket_off action has been called
     yield take(DriversActionTypes.DRIVERS_SOCKET_OFF);
-    yield cancel(emitAction);
+
     yield call(disconnect, socket);
+    yield cancel(emitAction);
   }
 }
 // export default DriverSocketFlow;

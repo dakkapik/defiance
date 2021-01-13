@@ -1,6 +1,10 @@
 .socket-dynamicdrivers {
   color: white;
   background-color: #2f3136;
+  width: 30%;
+  @media screen and (max-width: 900px) {
+    width: unset;
+  }
 }
 .map {
   height: 80vh;
@@ -13,9 +17,10 @@
     height: 60vh;
   }
 }
+
 .map > div:nth-child(2) {
-  width: 80% !important;
-  @media screen and (max-width: 900px) {
-    width: 100% !important;
-  }
+  // width: 100% !important;
+  // @media screen and (max-width: 900px) {
+  //   width: 100% !important;
+  // }
 }

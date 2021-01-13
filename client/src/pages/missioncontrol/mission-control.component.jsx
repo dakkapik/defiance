@@ -65,7 +65,7 @@ const MissionControl = ({ socket }) => {
   return (
     <div>
       <div className="map">
-        {/* <MapContainer store={store.store} drivers={drivers} /> */}
+        <MapContainer store={store.store} drivers={drivers} />
         {socket ? (
           <div className="socket-dynamicdrivers">
             <SocketStatus
