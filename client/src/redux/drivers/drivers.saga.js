@@ -11,7 +11,7 @@ import { eventChannel } from "redux-saga";
 import DriversActionTypes from "./drivers.types";
 import io from "socket.io-client";
 import axios from "axios";
-import { AddActiveDriver } from "./drivers.action";
+import { AddActiveDriver, SetActiveDriverPosition } from "./drivers.action";
 
 export function disconnect(socket) {
   socket.disconnect();
@@ -48,6 +48,14 @@ function subscribe(socket) {
         );
       }
     });
+    //most intensive
+    socket.on("d-position", (position, id, store) => {
+      position["id"] = id;
+      position["store"] = store;
+
+      emit(SetActiveDriverPosition(position));
+    });
+
     socket.on("disconnect", (e) => {
       console.log(e);
     });
@@ -100,7 +108,7 @@ export function* DriverSocketFlow({ payload: { name: StoreName } }) {
     yield cancel(emitAction);
   }
 }
-// export default DriverSocketFlow;
+
 //Also a listener listen's Driversocketon within action
 export function* onDriverSocketStart() {
   yield takeLatest(DriversActionTypes.DRIVERS_SOCKET_ON, DriverSocketFlow);

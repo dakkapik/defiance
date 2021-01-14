@@ -2,9 +2,9 @@ import StoresActionTypes from "./stores.types";
 
 const INITIAL_STATE = {
   stores: [],
+  //by default we start a Royal Palm
   connectedStore: {
     location: { lat: 26.260501899508107, lng: -80.26398159301463 },
-
     name: "Royal Palm",
     number: 1,
     users: [],
