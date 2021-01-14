@@ -6,7 +6,7 @@ import {
   DriverSocketOff,
   ClearActiveDriver,
 } from "../../redux/drivers/drivers.action";
-import { GenerateUser } from "../../components-test/generateuser.component";
+// import { GenerateUser } from "../../components-test/generateuser.component";
 import MoveUser from "../../components-test/move-user.component";
 import { connect } from "react-redux";
 

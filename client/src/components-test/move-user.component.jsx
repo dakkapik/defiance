@@ -58,7 +58,7 @@ const SimUserMove = ({ id }) => {
     }
 
     return () => {};
-  }, [socket, userexist, position, prevPosition]);
+  }, [socket, userexist, position, prevPosition, id]);
 
   const newuser = () => {
     //i just want it so it doesn't create a new socket
