@@ -3,11 +3,9 @@ module.exports = async function (io) {
   const rooms = {};
 
   io.on("connection", (socket) => {
-    console.log(socket.id);
-
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-      console.log(users[socket.id]);
+      // console.log(users[socket.id]);
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {
@@ -60,7 +58,8 @@ module.exports = async function (io) {
     });
 
     socket.on("position", (position, id, store) => {
-      socket.to(store).emit("d-position", position, id);
+      console.log(position, " ", id, " ", store);
+      socket.to(store).emit("d-position", position, id, store);
     });
 
     socket.on("disconnect", (reason) => {

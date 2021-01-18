@@ -10,7 +10,6 @@ import io from "socket.io-client";
 import MockedSocket from "socket.io-mock";
 
 import DriversActionTypes from "./drivers.types";
-import { createMockTask } from "@redux-saga/testing-utils";
 
 //Uses Jest
 jest.mock("socket.io-client");

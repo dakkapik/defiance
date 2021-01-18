@@ -36,6 +36,7 @@ function subscribe(socket) {
   return eventChannel((emit) => {
     socket.on("current-users", async (data) => {
       try {
+        console.log(data);
         //Object.values(data.users) convert json to array
         const PromisesRequest = ConvertIds(Object.values(data.users));
         //Iterate through all the promises and put em in redux
@@ -79,6 +80,7 @@ export function* Read_Emit_Or_Write_Emit(socket) {
 
 export function connect(storeName) {
   const socket = io(process.env.REACT_APP_endpoint);
+
   return new Promise((resolve, reject) => {
     socket.on("connect", (data) => {
       resolve(socket);
@@ -90,12 +92,49 @@ export function connect(storeName) {
     });
   });
 }
+export function socketbug(storeName) {
+  const sockbug = io(process.env.REACT_APP_endpoint);
+  sockbug.on("connect", () => {
+    sockbug.emit("new-user", {
+      room: storeName,
+      MS: false,
+    });
+  });
+  return sockbug;
+}
 
 export function* DriverSocketFlow({ payload: { name: StoreName } }) {
   //connect to the socket
   const socket = yield call(connect, StoreName);
   //                    function^   ^ pass in values
+  /*
 
+
+  When you hit disconnect 
+  and a user connect to a store example. Royal Palms
+  socket.emit('current-users') won't activate. Thus does not show user.
+
+  ****to test***** 
+  
+  first connect then disconnect from store to initalize the room
+
+  then have a user 
+
+  do 
+
+  socket.on("connect", () => {
+  socket.emit("new-user", {
+    id: 4545,
+    room: "Royal Palm",
+    MS: false,
+  });
+  });
+
+  it will not show up..
+
+
+  */
+  const bug = yield call(socketbug, StoreName);
   while (true) {
     // not an infinite loop due to yield take(DriversActionTypes.DRIVERS_SOCKET_OFF))
 
@@ -105,6 +144,7 @@ export function* DriverSocketFlow({ payload: { name: StoreName } }) {
     yield take(DriversActionTypes.DRIVERS_SOCKET_OFF);
 
     yield call(disconnect, socket);
+    yield call(disconnect, bug);
     yield cancel(emitAction);
   }
 }

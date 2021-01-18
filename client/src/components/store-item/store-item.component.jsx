@@ -8,7 +8,7 @@ import { setConnectedStore } from "../../redux/stores/stores.action";
 export const StoreItem = ({ storeInfo, DriverSocketOn, setConnectedStore }) => {
   return (
     <div className="storeitem">
-      <div className="storeitem storeitem--text">{storeInfo.name}</div>
+      {/* <div className="storeitem storeitem--text"></div> */}
       <Button
         onClick={() => {
           DriverSocketOn(storeInfo);
@@ -17,7 +17,7 @@ export const StoreItem = ({ storeInfo, DriverSocketOn, setConnectedStore }) => {
         variant="outlined"
         color="inherit"
       >
-        Connect
+        {storeInfo.name}
       </Button>
     </div>
   );
