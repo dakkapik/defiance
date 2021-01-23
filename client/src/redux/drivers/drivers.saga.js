@@ -92,6 +92,18 @@ export function connect(storeName) {
     });
   });
 }
+/*
+  Socket Bug is for when mission control disconects and reconnects
+  This will emit a new-user of undefined to the server
+  for the function 
+  
+  function subscribe(socket) {  <- in the client 
+        socket.on("current-users", (data) => {
+        }
+  }
+
+  to show the users that were connected
+*/
 export function socketbug(storeName) {
   const sockbug = io(process.env.REACT_APP_endpoint);
   sockbug.on("connect", () => {
@@ -103,6 +115,10 @@ export function socketbug(storeName) {
   return sockbug;
 }
 
+/*
+DriverSocketFlow takes in a storeName
+for the functions to work properly
+*/
 export function* DriverSocketFlow({ payload: { name: StoreName } }) {
   const socket = yield call(connect, StoreName);
 

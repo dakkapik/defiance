@@ -1,5 +1,5 @@
 import DriversActionTypes from "./drivers.types";
-import { uniqWith, isEqual } from "lodash";
+
 const INITIAL_STATE = {
   ActiveMovingDriver: [],
   currentDrivers: [],
@@ -15,29 +15,57 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         socket: true,
       };
     case DriversActionTypes.ADD_ACTIVE_DRIVER:
-      /*
-      if equal do nothing
-      if not equal do something
-      */
-      // console.log("prevstate=", state.currentDrivers);
-
-      /*
-
-      // for (let index_online in online) {
-      //   console.log(online[index_online].employeeId, "is online");
-      // }
-      removeDuplicateDriver = uniqWith(
-          [...state.currentDrivers, ...action.payload],
-          isEqual
-        );
-      */
-      // let removeDuplicateDriver = [];
+      //what we are putting in the state
       const unquie_id_only = [];
+      /*
+      **Objective show circle status***
 
+      It would make sense to make request to the server for whoever
+      lies within that room maybe the user would have an array of stores in their
+      object
+
+      Take for instance this  felipe object 
+
+      {
+      employeeId:6666,
+      Name:'felipe',
+      store:['Royal Palms']
+      }
+
+      Thus when the client does  /api/users/   pass in params {store:'royal palm'}
+      ......
+      it would return all the users that are associated with royal palms
+      and maybe if they work at two stores? which i don't think it be possible lol
+
+      
+      ....
+      Anyways...
+
+      Once all the users are retreived with the their associated stores
+      then we can compare it with the socket.on('current-users')
+
+      and toggle who is online and who is offline...
+
+
+      ***important****
+      this would require the user for reactNative to update /api/users/ object 
+      and add a new key in there with their associated store
+
+      */
       if (state.currentDrivers) {
         const array = [...state.currentDrivers, ...action.payload];
         const map = new Map();
+        //You can get unquie object in many different ways
+        // but i decided to get unquie id by EmployeeId
+        /*
+        here's how it works
+        Example 
+        Input
+        [{id: 32}, {id:32}, {id:2}]
 
+        Output 
+         [{id: 32} {id:2}]
+        */
         for (const item of array) {
           //unquie by id only
           if (!map.has(item.employeeId)) {
@@ -56,13 +84,19 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           }
         }
       }
-
+      //only begin when there is at least one set inside unquie_id_only
       if (unquie_id_only.length) {
-        console.log("payload=", action.payload);
-        console.log("unquie=", unquie_id_only);
-
-        // isEqual(unquie_id_only, action.payload)
+        console.log(action.payload);
         for (let index_driver in unquie_id_only) {
+          //if they are 0 people online put them all offline!
+          if (action.payload.length === 0) {
+            for (let driver_index in unquie_id_only) {
+              unquie_id_only[driver_index].isActive = false;
+            }
+            break;
+          }
+          // Compare what's in state and current-user socket
+          // switch isActive to true or false;
           for (let index_online in action.payload) {
             if (
               unquie_id_only[index_driver].employeeId ===
@@ -104,7 +138,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
       let Activeindex = state.ActiveMovingDriver.findIndex(
         (active) => active.employeeId === action.payload.id
       );
-
+      // if Active driver does not exist  in action.payload
       if (Activeindex === -1) {
         return {
           ...state,
@@ -112,8 +146,6 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           ActiveMovingDriver: [ModifiedDriver, ...state.ActiveMovingDriver],
         };
       } else {
-        //arr[index] = obj;
-
         state.ActiveMovingDriver.splice(Activeindex, 1);
 
         return {
