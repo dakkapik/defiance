@@ -34,9 +34,9 @@ const ConvertIds = (UseridArray) => {
 
 function subscribe(socket) {
   return eventChannel((emit) => {
-    socket.on("current-users", async (data) => {
+    socket.on("current-users", (data) => {
       try {
-        console.log(data);
+        // console.log(data);
         //Object.values(data.users) convert json to array
         const PromisesRequest = ConvertIds(Object.values(data.users));
         //Iterate through all the promises and put em in redux
@@ -104,36 +104,8 @@ export function socketbug(storeName) {
 }
 
 export function* DriverSocketFlow({ payload: { name: StoreName } }) {
-  //connect to the socket
   const socket = yield call(connect, StoreName);
-  //                    function^   ^ pass in values
-  /*
 
-
-  When you hit disconnect 
-  and a user connect to a store example. Royal Palms
-  socket.emit('current-users') won't activate. Thus does not show user.
-
-  ****to test***** 
-  
-  first connect then disconnect from store to initalize the room
-
-  then have a user 
-
-  do 
-
-  socket.on("connect", () => {
-  socket.emit("new-user", {
-    id: 4545,
-    room: "Royal Palm",
-    MS: false,
-  });
-  });
-
-  it will not show up..
-
-
-  */
   const bug = yield call(socketbug, StoreName);
   while (true) {
     // not an infinite loop due to yield take(DriversActionTypes.DRIVERS_SOCKET_OFF))

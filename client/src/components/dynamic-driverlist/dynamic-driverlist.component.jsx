@@ -3,18 +3,24 @@ import "./dynamic-driverlist.styles.scss";
 import DynamicDriver from "../dynamic-driver/dynamic-driver.componet";
 import { connect } from "react-redux";
 
-const DynamicDriverList = ({ Activedriver }) => {
+const DynamicDriverList = ({ currentDrivers }) => {
   return (
     <div className="side-bar">
-      {Activedriver.map((element, index) => (
-        <DynamicDriver key={index} userinfo={element} />
-      ))}
+      {currentDrivers ? (
+        <div>
+          {currentDrivers.map((element, index) => (
+            <DynamicDriver key={index} userinfo={element} />
+          ))}
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  Activedriver: state.drivers.currentDrivers,
+  currentDrivers: state.drivers.currentDrivers,
 });
 
 export default connect(mapStateToProps, null)(DynamicDriverList);

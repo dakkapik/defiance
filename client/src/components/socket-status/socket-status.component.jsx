@@ -6,8 +6,8 @@ import {
   DriverSocketOff,
   ClearActiveDriver,
 } from "../../redux/drivers/drivers.action";
-// import { GenerateUser } from "../../components-test/generateuser.component";
-import MoveUser from "../../components-test/move-user.component";
+import { GenerateUser } from "../../components-test/generateuser.component";
+// import MoveUser from "../../components-test/move-user.component";
 import { connect } from "react-redux";
 
 const SocketStatus = ({ DriverSocketOff, ClearActiveDriver }) => {
@@ -25,9 +25,11 @@ const SocketStatus = ({ DriverSocketOff, ClearActiveDriver }) => {
         Disconnect
       </Button>
 
-      {/* <GenerateUser id={2342} /> */}
-      <MoveUser id={4545} />
-      <MoveUser id={5679} />
+      <GenerateUser id={8954} />
+      <GenerateUser id={2342} />
+      <GenerateUser id={4545} />
+      {/* <MoveUser id={4545} />
+      <MoveUser id={5679} /> */}
     </div>
   );
 };
