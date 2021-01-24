@@ -1,19 +1,16 @@
 .store-list {
+  height: 90vh;
   display: flex;
-  float: left;
-  flex-wrap: wrap;
+
+  justify-content: center;
+
   flex-direction: column;
-
   justify-content: space-evenly;
-
   border-radius: 10px;
-  width: 20%;
-  color: white;
   @media screen and (max-width: 900px) {
-    width: unset;
-    float: unset;
-    padding: 5vh;
+    margin-top: 10px;
     display: flex;
     flex-direction: unset;
+    width: 100%;
   }
 }

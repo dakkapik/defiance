@@ -1,26 +1,61 @@
-.socket-dynamicdrivers {
-  color: white;
-  background-color: #2f3136;
-  width: 30%;
-  @media screen and (max-width: 900px) {
-    width: unset;
-  }
+.misson-control-container {
+  position: relative;
 }
-.map {
-  height: 80vh;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
+.orders {
+  background-color: red;
+}
+
+.emoji {
+  position: absolute;
+  top: 45%;
+
   @media screen and (max-width: 900px) {
-    width: 100%;
-    display: block;
-    height: 60vh;
+    display: none;
   }
 }
 
-.map > div:nth-child(2) {
-  // width: 100% !important;
-  // @media screen and (max-width: 900px) {
-  //   width: 100% !important;
-  // }
+.side-bar-container {
+  width: 40vh;
+  height: 95vh;
+  color: white;
+  background-color: #2f3136;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: auto;
+  transition: width 1s;
+  // for big screen
+  @media screen and (min-width: 2000px) {
+    width: 15vh;
+  }
+  //for small screen
+  @media screen and (max-width: 900px) {
+    position: relative;
+    transition: unset;
+    width: unset;
+    height: fit-content;
+  }
+}
+
+.side-bar-expanded {
+  width: 75%;
+  transition: width 1s;
+  height: 95vh;
+  color: white;
+  background-color: #2f3136;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: auto;
+  // for big screen
+  @media screen and (min-width: 2000px) {
+    width: 15vh;
+  }
+  //for small screen
+  @media screen and (max-width: 900px) {
+    position: relative;
+
+    width: unset;
+    height: fit-content;
+  }
 }

@@ -12,9 +12,9 @@ import { connect } from "react-redux";
 
 const SocketStatus = ({ DriverSocketOff, ClearActiveDriver }) => {
   return (
-    <div className="socket-status">
+    <div className="socket-controller">
       <Button
-        style={{ margin: 15 }}
+        style={{}}
         variant="outlined"
         color="inherit"
         onClick={() => {
@@ -28,6 +28,7 @@ const SocketStatus = ({ DriverSocketOff, ClearActiveDriver }) => {
       <GenerateUser id={8954} />
       <GenerateUser id={2342} />
       <GenerateUser id={4545} />
+      <GenerateUser id={3533} />
       {/* <MoveUser id={4545} />
       <MoveUser id={5679} /> */}
     </div>

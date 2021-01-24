@@ -10,7 +10,6 @@ import "./App.styles.scss";
 const App = () => {
   return (
     <div className="App">
-      <Header />
       <NavBar />
       <Switch>
         <Route path="/MissionControl" component={MissionControl} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import SocketStatus from "../../components/socket-status/socket-status.component";
 import DynamicDriverList from "../../components/dynamic-driverlist/dynamic-driverlist.component";
@@ -6,25 +6,37 @@ import MapContainer from "../../components/map-container/map-container.component
 import StoreList from "../../components/store-list/store-list.component";
 
 import "./missioncontrol.styles.scss";
+
 import { connect } from "react-redux";
-/*
-Position's state changes drivers position state
-during socket inialization 
-*/
 
 const MissionControl = ({ socket }) => {
+  const [isexpanded, setisexpanded] = useState(false);
+  console.log(isexpanded);
   return (
-    <div>
-      <div className="map">
+    <div className="misson-control-container">
+      <div className="map-driver-container">
         <MapContainer />
-        {socket ? (
-          <div className="socket-dynamicdrivers">
-            <SocketStatus />
-            <DynamicDriverList />
-          </div>
-        ) : (
-          <StoreList />
-        )}
+
+        <div>
+          {socket ? (
+            <div
+              className={
+                isexpanded ? "side-bar-expanded " : "side-bar-container"
+              }
+            >
+              {" "}
+              <SocketStatus />
+              <DynamicDriverList />
+              <div onClick={() => setisexpanded(!isexpanded)} className="emoji">
+                🔻
+              </div>
+            </div>
+          ) : (
+            <div className="side-bar-container">
+              <StoreList />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

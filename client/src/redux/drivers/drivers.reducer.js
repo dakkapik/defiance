@@ -17,41 +17,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
     case DriversActionTypes.ADD_ACTIVE_DRIVER:
       //what we are putting in the state
       const unquie_id_only = [];
-      /*
-      **Objective show circle status***
 
-      It would make sense to make request to the server for whoever
-      lies within that room maybe the user would have an array of stores in their
-      object
-
-      Take for instance this  felipe object 
-
-      {
-      employeeId:6666,
-      Name:'felipe',
-      store:['Royal Palms']
-      }
-
-      Thus when the client does  /api/users/   pass in params {store:'royal palm'}
-      ......
-      it would return all the users that are associated with royal palms
-      and maybe if they work at two stores? which i don't think it be possible lol
-
-      
-      ....
-      Anyways...
-
-      Once all the users are retreived with the their associated stores
-      then we can compare it with the socket.on('current-users')
-
-      and toggle who is online and who is offline...
-
-
-      ***important****
-      this would require the user for reactNative to update /api/users/ object 
-      and add a new key in there with their associated store
-
-      */
       if (state.currentDrivers) {
         const array = [...state.currentDrivers, ...action.payload];
         const map = new Map();
@@ -86,7 +52,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
       }
       //only begin when there is at least one set inside unquie_id_only
       if (unquie_id_only.length) {
-        console.log(action.payload);
+        //iterate through unquie_id_only  and set drivers online or offline
         for (let index_driver in unquie_id_only) {
           //if they are 0 people online put them all offline!
           if (action.payload.length === 0) {
@@ -102,12 +68,10 @@ const driverReducer = (state = INITIAL_STATE, action) => {
               unquie_id_only[index_driver].employeeId ===
               action.payload[index_online].employeeId
             ) {
-              console.log(unquie_id_only[index_driver].firstName, "online");
               unquie_id_only[index_driver].isActive = true;
               break;
             } else {
               unquie_id_only[index_driver].isActive = false;
-              console.log(unquie_id_only[index_driver].firstName, "offline");
             }
           }
         }

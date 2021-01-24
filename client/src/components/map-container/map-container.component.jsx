@@ -3,6 +3,9 @@ import React from "react";
 //useEffect
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { connect } from "react-redux";
+
+import "./map-container.styles.scss";
+
 const containerStyle = {
   width: "100%",
   height: "100%",
@@ -10,29 +13,31 @@ const containerStyle = {
 
 const MapContainer = ({ store, ActiveMovingDriver }) => {
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={store.location}
-        zoom={15}
-      >
-        {ActiveMovingDriver.map((element, index) => (
-          <div key={index}>
-            {element.latitude ? (
-              <Marker
-                key={element.employeeId}
-                label={element.firstName}
-                position={{
-                  lat: element.latitude,
-                  lng: element.longitude,
-                }}
-              />
-            ) : null}
-          </div>
-        ))}
-        {/* {driverMarkers ? driverMarkers : null} */}
-      </GoogleMap>
-    </LoadScript>
+    <div className="googlemap">
+      <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={store.location}
+          zoom={15}
+        >
+          {ActiveMovingDriver.map((element, index) => (
+            <div key={index}>
+              {element.latitude ? (
+                <Marker
+                  key={element.employeeId}
+                  label={element.firstName}
+                  position={{
+                    lat: element.latitude,
+                    lng: element.longitude,
+                  }}
+                />
+              ) : null}
+            </div>
+          ))}
+          {/* {driverMarkers ? driverMarkers : null} */}
+        </GoogleMap>
+      </LoadScript>
+    </div>
   );
 };
 

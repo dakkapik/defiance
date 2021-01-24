@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 
 const DynamicDriverList = ({ currentDrivers }) => {
   return (
-    <div className="side-bar">
+    <div className="drivers-container">
       {currentDrivers ? (
-        <div>
+        <div className="drivers-flex">
           {currentDrivers.map((element, index) => (
             <DynamicDriver key={index} userinfo={element} />
           ))}
