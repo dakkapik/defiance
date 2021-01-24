@@ -1,4 +1,4 @@
-const socket = io('https://defiance.herokuapp.com')
+const socket = io('https://arcane-lowlands-16486.herokuapp.com')
 const title = document.getElementById('drivers-container-title')
 const driversContainer = document.getElementById('drivers-container')
 const storeSelect = document.getElementById('store-select')
@@ -10,7 +10,7 @@ const storeButton = document.getElementById('store-button')
 
 socket.emit('new-user', {number: "store", role: 'MS'})
 const getStores = async () => {
-    const stores = await fetch('http://defiance.herokuapp.com/api/stores')
+    const stores = await fetch('https://arcane-lowlands-16486.herokuapp.com/api/stores')
     .then(response=>{
         if(!response.status == 200){
             return response.json()
@@ -30,7 +30,7 @@ const getStores = async () => {
 
 const getActiveDrivers = async () => {
     const activeDrivers = []
-    const drivers = await fetch('https://defiance.herokuapp.com/api/users')
+    const drivers = await fetch('https://arcane-lowlands-16486.herokuapp.com/api/users')
     .then(response=>{
         if (!response.status == 200){
             return response.json()
@@ -54,7 +54,7 @@ const getActiveDrivers = async () => {
 
 const getActiveOrders = async () => {
     const activeOrders = []
-    const orders = await fetch('https://defiance.herokuapp.com/api/orders')
+    const orders = await fetch('https://arcane-lowlands-16486.herokuapp.com/api/orders')
     .then(response=>{
         if (!response.status == 200){
             return response.json()  
