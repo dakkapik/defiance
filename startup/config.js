@@ -1,7 +1,5 @@
-const config = require("config");
-
 module.exports = function () {
-    if (!config.get("db")) {
+    if (!process.env.db_pswrd) {
         throw new Error("Fatal error: no database...")
     }
 }

@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const config = require("config");
 const logger = require("../middleware/logger");
 
 module.exports = function () {
-  const db = config.get("db");
+  const db = `mongodb+srv://${process.env.db_user}:${process.env.db_pswrd}@${process.env.db_cluster}.dab6a.mongodb.net/${process.env.db_name}?retryWrites=true&w=majority`;
   mongoose
     .connect(db, {
       useUnifiedTopology: true,
@@ -11,5 +10,5 @@ module.exports = function () {
       useFindAndModify: false,
       useCreateIndex: true,
     })
-    .then(() => logger.log("info", `connected to ${db}`));
+    .then(() => logger.log("info", `connected to ${process.env.db_name}`));
 };
