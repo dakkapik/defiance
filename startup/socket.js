@@ -6,7 +6,7 @@ module.exports = async function (io) {
     console.log(socket.id);
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-
+      // no 2 mission control can connects to the same store 
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {
