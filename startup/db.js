@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const config = require("config");
 const logger = require("../middleware/logger");
 
 module.exports = function () {
@@ -12,5 +11,5 @@ module.exports = function () {
       useFindAndModify: false,
       useCreateIndex: true,
     })
-    .then(() => logger.log("info", `connected to db: ${config.get('db_name')}`));
+    .then(() => logger.log("info", `connected to db: ${process.env.db_name}`));
 };
