@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Dakka Map</title>
+  <link rel="stylesheet" type="text/css" href="/style/style.css" />
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXpwzqh9wNL7cLYBJ2_DUunWkNluiSJNI&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
+    
+  <script src="/js/directions.js"></script>
+</head>
+
+<body>
+  <div id="map"></div>
+  <div id="right-panel">
+    <div>
+      <b>Start:</b>
+      <select id="start">
+        <option value="26.260497514691856, -80.26398090860468">Royal Palm</option>
+        <option value="26.28667585812057, -80.1998165377281">Coconut Creek</option>
+        <option value="26.298345125312217, -80.27677913207482">Heron Bay</option>
+        <option value="26.028647, -80.371054">Pembroke Pines</option>
+      </select>
+      <br />
+      <b>Waypoints:</b> <br />
+      <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br />
+      <select multiple id="waypoints">
+        <option value="10121 nw 23rd st">route 1.1</option>
+        <option value="2382-2300 nw 94th ave">route 1.2</option>
+        <option value="10911 nw 24th st">route 2.1</option>
+        <option value="2162 nw 116th terr">route 2.2</option>
+      </select>
+      <br />
+      <b>End:</b>
+      <select id="end">
+        <option value="10017 nw 20th st">route 1 end</option>
+        <option value="2099 classic dr">route 2 end</option>
+      </select>
+      <br />
+      <input type="submit" id="submit" />
+    </div>
+    <div id="directions-panel"></div>
+  </div>
+</body>
+
+</html>
