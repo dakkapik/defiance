@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 module.exports = (server) => {describe('ORDERS API', () => {
     
     beforeEach((done)=>{
-        Order.deleteMany({}, (err)=>{done()})
+        Order.deleteMany({}, (err)=>{done();})
     });
 
     after((done)=>{
