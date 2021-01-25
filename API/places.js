@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const config = require("config");
 const fs = require("fs");
 const axios = require("axios");
 
@@ -30,7 +29,7 @@ router.post("/", async(req, res)=>{
 
     const gMapsEndpoint = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
     const query = req.body.address;
-    const key = config.get("google_maps_api");
+    const key = process.env.google_maps_api;
     const storeLocation = "26.260622760871847,-80.26401677548698";
     const radius = "10000";
 

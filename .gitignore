@@ -3,8 +3,7 @@
 /coverage
 /.env
 /.nyc_output
-/.env
-/config
+config
 
 client/.eslintcache
 .env

@@ -3,7 +3,6 @@ const router = express.Router();
 const http = require("http");
 const https = require("https");
 const axios = require("axios");
-const config = require("config");
 const fs = require("fs")
 const { Client, TravelMode } = require("@googlemaps/google-maps-services-js")
 const Loader = require("@googlemaps/js-api-loader");
@@ -17,9 +16,9 @@ router.get("/:origin/:destination/:waypoints", async (req, res)=>{
 
     let query
     if(!req.params.waypoints){
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${config.get("google_maps_api")}`)
+        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${process.env.google_maps_api}`)
     }else{
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoints}&key=${config.get("google_maps_api")}`)
+        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoints}&key=${process.env.google_maps_api}`)
     }
 
     console.log(query)
@@ -38,7 +37,7 @@ router.post("/", async (req, res)=>{
     let query
     if(req.body.waypoints && req.body.waypoints.lenght === 1){
         const waypoint = req.body.waypoints
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoint}&key=${config.get("google_maps_api")}`);
+        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoint}&key=${process.env.google_maps_api}`);
     }else if(req.body.waypoints && req.body.waypoints.length > 1){
 
         let waypoints = req.body.waypoints[0].replace(/ /g,"+");
@@ -47,11 +46,11 @@ router.post("/", async (req, res)=>{
             waypoints += ("|" + req.body.waypoints[i].replace(/ /g,"+"))
         }
 
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoints}&mode=driving&key=${config.get("google_maps_api")}`);
+        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoints}&mode=driving&key=${process.env.google_maps_api}`);
         
         
     }else if(!req.body.waypoints){
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${config.get("google_maps_api")}`);
+        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${process.env.google_maps_api}`);
     }
 
     axios.get(query)

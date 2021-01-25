@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const env = require("dotenv")
 
-if (process.env.NODE_ENV !== "prod") require("dotenv").config();
+if (process.env.NODE_ENV !== "prod") env.config();
 
 const logger = require("./middleware/logger");
 
