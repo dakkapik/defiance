@@ -1,48 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
-import SocketStatus from "../../components/socket-status/socket-status.component";
-import DynamicDriverList from "../../components/dynamic-driverlist/dynamic-driverlist.component";
-import MapContainer from "../../components/map-container/map-container.component";
-import StoreList from "../../components/store-list/store-list.component";
+import MapSideBar from "../../components/map-sidebar/map-sidebar.component";
 
 import "./missioncontrol.styles.scss";
 
-import { connect } from "react-redux";
-
-const MissionControl = ({ socket }) => {
-  const [isexpanded, setisexpanded] = useState(false);
-  console.log(isexpanded);
+const MissionControl = () => {
   return (
-    <div className="misson-control-container">
-      <div className="map-driver-container">
-        <MapContainer />
-
-        <div>
-          {socket ? (
-            <div
-              className={
-                isexpanded ? "side-bar-expanded " : "side-bar-container"
-              }
-            >
-              {" "}
-              <SocketStatus />
-              <DynamicDriverList />
-              <div onClick={() => setisexpanded(!isexpanded)} className="emoji">
-                🔻
-              </div>
-            </div>
-          ) : (
-            <div className="side-bar-container">
-              <StoreList />
-            </div>
-          )}
-        </div>
-      </div>
+    <div className="mission-control">
+      <MapSideBar />
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  socket: state.drivers.socket,
-});
-export default connect(mapStateToProps, null)(MissionControl);
+export default MissionControl;

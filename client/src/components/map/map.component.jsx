@@ -4,14 +4,14 @@ import React from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { connect } from "react-redux";
 
-import "./map-container.styles.scss";
+import "./map.styles.scss";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
 
-const MapContainer = ({ store, ActiveMovingDriver }) => {
+const Map = ({ store, ActiveMovingDriver }) => {
   return (
     <div className="googlemap">
       <LoadScript googleMapsApiKey={process.env.REACT_APP_google_map_api}>
@@ -46,4 +46,4 @@ const mapStateToProps = (state) => ({
   ActiveMovingDriver: state.drivers.ActiveMovingDriver,
 });
 
-export default connect(mapStateToProps, null)(MapContainer);
+export default connect(mapStateToProps, null)(Map);

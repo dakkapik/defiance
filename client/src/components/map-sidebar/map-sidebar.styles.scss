@@ -1,0 +1,98 @@
+.map-side-container {
+  position: relative;
+}
+
+.emoji {
+  position: absolute;
+
+  height: 30px;
+  width: 30px;
+  top: 45%;
+  right: 14em;
+  transition: right 1s;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  cursor: pointer;
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
+}
+
+.side-bar {
+  width: 15em;
+  height: 95vh;
+  color: white;
+  background-color: #2f3136;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: auto;
+  transition: width 1s;
+  // for big screen
+  //   @media screen and (min-width: 2000px) {
+  //     width: 38vh;
+  //   }
+  //for small screen
+  @media screen and (max-width: 900px) {
+    position: relative;
+    transition: unset;
+    width: unset;
+    height: fit-content;
+  }
+}
+
+.emoji-expanded {
+  cursor: pointer;
+  position: absolute;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  height: 30px;
+  width: 30px;
+  top: 45%;
+  right: 59em;
+  transition: right 1s;
+  @media screen and (min-width: 1200px) {
+    right: 79.5%;
+  }
+  @media screen and (max-width: 1200px) {
+    right: 59em;
+  }
+
+  @media screen and (max-width: 1150px) {
+    right: 54em;
+  }
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+}
+.side-bar-expanded {
+  width: 60em;
+  transition: width 1s;
+  height: 95vh;
+  color: white;
+  background-color: #2f3136;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: auto;
+  // for big screen
+  //   @media screen and (min-width: 2000px) {
+  //     width: 74%;
+  //   }
+  //for small screen
+  @media screen and (min-width: 1200px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 1200px) {
+    width: 60em;
+  }
+  @media screen and (max-width: 1150px) {
+    width: 55em;
+  }
+  @media screen and (max-width: 1000px) {
+    position: relative;
+
+    width: unset;
+    height: fit-content;
+  }
+}
