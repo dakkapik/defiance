@@ -13,6 +13,7 @@ const callApiStores = () => {
 export function* SetStores() {
   try {
     const stores = yield call(callApiStores);
+
     yield put(PutStores(stores));
   } catch (error) {
     console.log("Request to storeApi Failed!");

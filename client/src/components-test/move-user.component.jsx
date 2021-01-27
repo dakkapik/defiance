@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
-
+/*
+Test component that takes @params  id 
+Description: Simulates a driver moving
+*/
 const SimUserMove = ({ id }) => {
   const [socket, setSocket] = useState();
   const [connected, setConnected] = useState(true);
@@ -18,7 +21,7 @@ const SimUserMove = ({ id }) => {
     },
     timestamp: 1610579477507.111,
   });
-  // to get prevstate
+  // to get prevstate, see line 58 to explain why we get prevposition
   function usePrevious(value) {
     // The ref object is a generic container whose current property is mutable ...
     // ... and can hold any value, similar to an instance property on a class
@@ -32,10 +35,10 @@ const SimUserMove = ({ id }) => {
     // Return previous value (happens before update in useEffect above)
     return ref.current;
   }
-
+  //see line 58 to explain why we get prevposition
   const prevPosition = usePrevious(position);
   useEffect(() => {
-    // i just want a socket to be defined then do everything
+    // If a socket is defined  then emit to the server
     if (socket) {
       socket.on("connect", () => {
         // i just want one user
@@ -51,8 +54,13 @@ const SimUserMove = ({ id }) => {
         socket.emit("position", position, id, "Royal Palm");
       });
     }
-    // i just want it so if a user exist and the position are not the same
-    // to emit (:
+    /*
+    We want this useEffect to trigger when a position is changed
+    Also we dont want to recreate another socket to create a user
+    So this conditional statement will deliever that purpose
+    if a user exist  and a position is changed 
+    then do the following... emit a position...
+    */
     if (userexist === false && prevPosition !== position) {
       socket.emit("position", position, id, "Royal Palm");
     }
@@ -61,14 +69,17 @@ const SimUserMove = ({ id }) => {
   }, [socket, userexist, position, prevPosition, id]);
 
   const newuser = () => {
-    //i just want it so it doesn't create a new socket
+    //So it doesn't create a new socket
     if (connected) {
       const socket = io(process.env.REACT_APP_endpoint);
       setSocket(socket);
       setConnected(false);
     }
-    //position.coords.latitude + 0.1
-    // i just want it so if you hit the button and a user exist that it updates a position
+
+    //  if a user exist
+    //  then set the position only when the button is clicked
+    //  this conditionall statement is decieving but you can think of it that
+    //  way (:
     if (userexist === false) {
       setPosition({
         coords: {

@@ -9,16 +9,21 @@ const Data = {
   columns: {
     "column-1": {
       id: "column-1",
-      title: "To Do",
+      title: "Orders",
       taskIds: ["task-1", "task-2", "task-3", "task-4"],
     },
-    "column-2": {
-      id: "column-2",
-      title: "In progress",
+    8954: {
+      id: "8954",
+      title: "Driver 8954",
+      taskIds: [],
+    },
+    2342: {
+      id: "2342",
+      title: "Driver 2342",
       taskIds: [],
     },
   },
 
-  columnOrder: ["column-1", "column-2"],
+  columnOrder: ["column-1", "8954", "2342"],
 };
 export default Data;

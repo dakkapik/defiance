@@ -7,6 +7,7 @@ const StoreList = ({ stores, triggerStores }) => {
   useEffect(() => {
     triggerStores();
   }, [triggerStores]);
+
   return (
     <div className="store-list">
       {stores.map((storeinfo, index) => (
