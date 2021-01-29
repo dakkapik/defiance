@@ -14,3 +14,8 @@ export const Container = styled.div`
   display: flex;
   animation: ${animationName} ease 3s;
 `;
+
+export const ContainerDriver = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
