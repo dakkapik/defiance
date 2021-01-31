@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-
 const Container = styled.div`
   border: 1px solid lightgrey;
+  margin: auto;
+
   border-radius: 2px;
   padding: 8px;
   margin-bottom: 8px;
+  text-align: center;
+  /* width: fit-content; */
 `;
 
 const Task = ({ task, index }) => {

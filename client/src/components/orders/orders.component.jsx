@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import Data from "./data.js";
 
 import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
-import { Container, ContainerDriver } from "./orders.styles";
+import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
 
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "../column/column.component";
+import Orderdata from "./order";
 
 /*
 We will use styled components for this to changed dynamic styling with 
@@ -111,6 +112,29 @@ const Orders = ({ isexpanded }) => {
     //source is where draggable object started at
     //destination is where the draggable object finished at
     const { destination, source, draggableId } = result;
+    console.log(
+      "belonged at column",
+      source.droppableId,
+      " ",
+      source.droppableId === "column-1"
+    );
+    console.log(
+      "dropped at column",
+      destination.droppableId,
+      " ",
+      destination.droppableId !== "column-1"
+    );
+
+    // if (
+    //   (source.droppableId === "column-1" ||
+    //     source.droppableId !== "column-1") &&
+    //   destination.droppableId !== "column-1"
+    // ) {
+    //   alert(
+    //     `Are you sure you want to give order ${draggableId} to driver ${destination.droppableId}`
+    //   );
+
+    // }
     //if the draggable object went out of bounds we don't do anything
     if (!destination) {
       return;
@@ -126,6 +150,7 @@ const Orders = ({ isexpanded }) => {
 
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
+
     // If a draggable object remained in the first column
     // we presist the value within the first column
     if (start === finish) {
@@ -137,20 +162,22 @@ const Orders = ({ isexpanded }) => {
         start
       );
       return;
+    } else {
+      //when a task moves to a different column
+      presistTaskAllColumns(
+        start.taskIds,
+        finish.taskIds,
+        source,
+        destination,
+        draggableId,
+        start,
+        finish
+      );
     }
-    //when a task moves to a different column
-    presistTaskAllColumns(
-      start.taskIds,
-      finish.taskIds,
-      source,
-      destination,
-      draggableId,
-      start,
-      finish
-    );
   };
   //Array of html elements
   let drivers = [];
+
   return (
     <div>
       {isexpanded ? (
@@ -170,7 +197,11 @@ const Orders = ({ isexpanded }) => {
               );
 
               if (column.id === "column-1") {
-                return <Column key={column.id} column={column} tasks={tasks} />;
+                return (
+                  <ContainerOrder key={index}>
+                    <Column key={column.id} column={column} tasks={tasks} />
+                  </ContainerOrder>
+                );
               } else {
                 drivers.push(
                   <Column key={column.id} column={column} tasks={tasks} />
