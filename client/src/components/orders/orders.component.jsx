@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Data from "./data.js";
-
+import { connect } from "react-redux";
 import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
 import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
 
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "../column/column.component";
-import Orderdata from "./order";
+// import Orderdata from "./order";
 
 /*
 We will use styled components for this to changed dynamic styling with 
@@ -20,8 +20,62 @@ is a boolean prop value from  map-sidebar component
 which is the dynamic styling when the arrow is clicke
 */
 
-const Orders = ({ isexpanded }) => {
+const Orders = ({ isexpanded, currentDrivers }) => {
   const [data, setData] = useState(Data);
+  const [dragOrders, setdragOrders] = useState();
+  const [apiorders, setapiOrders] = useState([]);
+  //get the data and set it
+  useEffect(() => {
+    axios.get("/api/orders").then((res) => {
+      setapiOrders(res.data);
+    });
+  }, []);
+  //Parse the data to properly display it in drag and drop column
+  useEffect(() => {
+    let ParseOrders = {
+      Orders: {},
+      columns: {
+        "column-1": {
+          id: "column-1",
+          title: "Orders",
+          OrderIds: [],
+        },
+      },
+      columnOrder: ["column-1"],
+    };
+    let cloneapiOrder = [...apiorders];
+    //Big O of O(n)
+    cloneapiOrder.map((order, index) => {
+      //create a newObject without the key ordernumber
+      let { orderNumber, ...WithoutorderNumber } = order;
+      // put orderNumber back in the object however rename it as
+      // id
+      WithoutorderNumber["id"] = orderNumber;
+
+      ParseOrders.Orders[orderNumber] = WithoutorderNumber;
+    });
+
+    //because currentDrivers starts off as undefined
+    if (currentDrivers) {
+      currentDrivers.map((driver, index) => {
+        let { employeeId, ...WithoutemployeeId } = driver;
+        WithoutemployeeId["id"] = employeeId;
+        ParseOrders.columns[employeeId] = WithoutemployeeId;
+        const columnindex = ParseOrders.columnOrder.indexOf(employeeId);
+        if (columnindex) {
+          ParseOrders.columnOrder.push(employeeId);
+        }
+      });
+    }
+  }, [apiorders, currentDrivers]);
+
+  // console.log(dragOrders);
+
+  /*
+
+   
+    
+  */
 
   const presistTaskFirstColumn = (
     startTaskId,
@@ -112,18 +166,18 @@ const Orders = ({ isexpanded }) => {
     //source is where draggable object started at
     //destination is where the draggable object finished at
     const { destination, source, draggableId } = result;
-    console.log(
-      "belonged at column",
-      source.droppableId,
-      " ",
-      source.droppableId === "column-1"
-    );
-    console.log(
-      "dropped at column",
-      destination.droppableId,
-      " ",
-      destination.droppableId !== "column-1"
-    );
+    // console.log(
+    //   "belonged at column",
+    //   source.droppableId,
+    //   " ",
+    //   source.droppableId === "column-1"
+    // );
+    // console.log(
+    //   "dropped at column",
+    //   destination.droppableId,
+    //   " ",
+    //   destination.droppableId !== "column-1"
+    // );
 
     // if (
     //   (source.droppableId === "column-1" ||
@@ -227,4 +281,8 @@ const Orders = ({ isexpanded }) => {
   );
 };
 
-export default Orders;
+const mapStateToProps = (state) => ({
+  currentDrivers: state.drivers.currentDrivers,
+});
+
+export default connect(mapStateToProps, null)(Orders);

@@ -58,11 +58,20 @@ let ParseOrders = {
       OrderIds: [],
     },
   },
-  columnOrder: [],
+  columnOrder: ["column-1"],
 };
+for (const order_index in Orderdata) {
+  let orderId = Orderdata[order_index].orderNumber;
+  let orderParse = {};
 
+  orderParse[orderId] = Orderdata[order_index];
+  //Renaming orderNumber to id
+  delete Object.assign(orderParse[orderId], {
+    id: orderParse[orderId]["orderNumber"],
+  })["orderNumber"];
+  ParseOrders.Orders[orderId] = orderParse[orderId];
+  ParseOrders.columns["column-1"].OrderIds.push(orderId);
+}
 console.log(ParseOrders);
-
-// Orderdata.map((e, i) => console.log(e));
 
 export default Orderdata;

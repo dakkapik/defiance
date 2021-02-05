@@ -21,16 +21,36 @@ const driverReducer = (state = INITIAL_STATE, action) => {
       if (state.currentDrivers) {
         const array = [...state.currentDrivers, ...action.payload];
         const map = new Map();
-        //You can get unquie object in many different ways
-        // but i decided to get unquie id by EmployeeId
-        /*
-        here's how it works
-        Example 
-        Input
-        [{id: 32}, {id:32}, {id:2}]
 
-        Output 
-         [{id: 32} {id:2}]
+        /*
+        You can get unquie object in many different ways
+        but i decided to get unquie id by EmployeeId
+        The reason being is because there are many different ways to get a set
+        a set such as this here's an example
+        
+        let obj = [{id:32, employeeId:2},{id:32,employeeId:2}, {id:6, employeeId:10}]
+        
+        the set of this by using the built in method Set(obj)
+
+        would give [{id:32, employeeId:2} {id:6, employeeId:10}]
+        
+
+        This is a problem and the reason being is because we want to modify
+        isActive within the object to true or false
+        and if an object with isactive is false
+        The set function would just be like ok i'm just gonna add a new Object
+        with isActive false like this 
+
+        Here's an example 
+
+        let obj = [{id:32, isactive:true}, {id:32, isactive:false}]
+
+        so say  line 71 executed the code below here that would turn isactive to true or false
+        it would literally just add another object with  false
+
+        so with this new map functionality we will set with just set with just the
+        ID!
+      
         */
         for (const item of array) {
           //unquie by id only
