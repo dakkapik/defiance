@@ -18,6 +18,7 @@ const useStyles = makeStyles({
 
 const NavBar = ({ history }) => {
   const classes = useStyles();
+
   const [value, setValue] = React.useState(1);
 
   const handleChange = (event, newValue) => {

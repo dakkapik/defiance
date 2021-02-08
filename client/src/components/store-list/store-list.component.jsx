@@ -1,33 +1,27 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import StoreItem from "../store-item/store-item.component";
+import { connect } from "react-redux";
+import { triggerStores } from "../../redux/stores/stores.action";
 import "./store-list.styles.scss";
-const StoreList = ({ handleConnect }) => {
-  const [stores, setStores] = useState([]);
+const StoreList = ({ stores, triggerStores }) => {
   useEffect(() => {
-    const source = axios.CancelToken.source();
-    axios
-      .get("/api/stores", {
-        cancelToken: source.token,
-      })
-      .then((res) => {
-        setStores(res.data);
-      });
-    return () => {
-      source.cancel("Component got unmounted");
-    };
-  }, []);
+    triggerStores();
+  }, [triggerStores]);
+
   return (
     <div className="store-list">
       {stores.map((storeinfo, index) => (
-        <StoreItem
-          key={storeinfo._id}
-          storeInfo={storeinfo}
-          handleConnect={handleConnect}
-        />
+        <StoreItem key={storeinfo._id} storeInfo={storeinfo} />
       ))}
     </div>
   );
 };
 
-export default StoreList;
+const mapStateToProps = (state) => ({
+  stores: state.stores.stores,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  triggerStores: () => dispatch(triggerStores()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(StoreList);

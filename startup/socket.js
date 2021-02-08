@@ -3,18 +3,19 @@ module.exports = async function (io) {
   const rooms = {};
 
   io.on("connection", (socket) => {
-    console.log(socket.id);
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-
+      // console.log(users[socket.id]);
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {
             if (user.ms) {
               socket.join(user.room);
+
               socket
                 .to(user.room)
                 .broadcast.emit("current-users", rooms[user.room]);
+
               console.log(`MS: ${user.id} reconnected room ${user.room}`);
             } else {
               socket.join(user.room);
@@ -57,17 +58,16 @@ module.exports = async function (io) {
     });
 
     socket.on("position", (position, id, store) => {
-      socket.to(store).emit("d-position", position, id);
+      console.log(position, " ", id, " ", store);
+      socket.to(store).emit("d-position", position, id, store);
     });
 
     socket.on("disconnect", (reason) => {
       console.log(`user: ${users[socket.id]} disconnected, ${reason}`);
-
+      socket.broadcast.emit("disconnected-users", users[socket.id]);
       delete users[socket.id];
-
       getUserRooms(socket).forEach((room) => {
         delete rooms[room].users[socket.id];
-        socket.broadcast.emit("current-users", rooms[room]);
       });
     });
   });
