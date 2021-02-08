@@ -11,7 +11,11 @@ import { eventChannel } from "redux-saga";
 import DriversActionTypes from "./drivers.types";
 import io from "socket.io-client";
 import axios from "axios";
-import { AddActiveDriver, SetActiveDriverPosition } from "./drivers.action";
+import {
+  AddActiveDriver,
+  RemoveActiveDriver,
+  SetActiveDriverPosition,
+} from "./drivers.action";
 
 export function disconnect(socket) {
   socket.disconnect();
@@ -56,7 +60,9 @@ function subscribe(socket) {
 
       emit(SetActiveDriverPosition(position));
     });
-
+    socket.on("disconnected-users", (data) => {
+      emit(RemoveActiveDriver(data));
+    });
     socket.on("disconnect", (e) => {
       console.log(e);
     });

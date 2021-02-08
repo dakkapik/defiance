@@ -11,7 +11,7 @@ React Beautiful DND
 const Column = ({ column, tasks }) => {
   return (
     <Container>
-      <Title>{column.title}</Title>
+      <Title>{column.id === "column-1" ? "Orders" : column.firstName}</Title>
       {/* 
         <Droppable /> components can be dropped on by a <Draggable />.
          They also contain <Draggable />s. A <Draggable /> 

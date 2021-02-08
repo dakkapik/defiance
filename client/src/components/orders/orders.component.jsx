@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Data from "./data.js";
+
 import { connect } from "react-redux";
 import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
 import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
@@ -20,62 +20,132 @@ is a boolean prop value from  map-sidebar component
 which is the dynamic styling when the arrow is clicke
 */
 
-const Orders = ({ isexpanded, currentDrivers }) => {
-  const [data, setData] = useState(Data);
-  const [dragOrders, setdragOrders] = useState();
+const Orders = ({
+  isexpanded,
+  justadded,
+  disconnectedDriver,
+  disconnectTrigger,
+}) => {
   const [apiorders, setapiOrders] = useState([]);
-  //get the data and set it
+
+  const [dragdropdata, setDragDropData] = useState({
+    orders: {},
+    columns: {
+      "column-1": {
+        id: "column-1",
+        title: "Orders",
+        orderIds: [],
+      },
+    },
+    columnOrder: ["column-1"],
+  });
+
   useEffect(() => {
     axios.get("/api/orders").then((res) => {
       setapiOrders(res.data);
     });
   }, []);
-  //Parse the data to properly display it in drag and drop column
+  //set Orders within column 1
   useEffect(() => {
+    // console.log("Order UseEffect has been called");
     let ParseOrders = {
-      Orders: {},
+      orders: {},
       columns: {
         "column-1": {
           id: "column-1",
           title: "Orders",
-          OrderIds: [],
+          orderIds: [],
         },
       },
       columnOrder: ["column-1"],
     };
+    // columnOrder string
+    // order id has to be a string
+    // column-1 taskIds has to be strings as well
     let cloneapiOrder = [...apiorders];
-    //Big O of O(n)
-    cloneapiOrder.map((order, index) => {
+
+    cloneapiOrder.forEach((order, index) => {
       //create a newObject without the key ordernumber
       let { orderNumber, ...WithoutorderNumber } = order;
       // put orderNumber back in the object however rename it as
       // id
-      WithoutorderNumber["id"] = orderNumber;
+      //also convert id to string
+      WithoutorderNumber["id"] = orderNumber.toString();
 
-      ParseOrders.Orders[orderNumber] = WithoutorderNumber;
+      ParseOrders.orders[orderNumber] = WithoutorderNumber;
+      //push data into column 1 orderIds
+      ParseOrders.columns["column-1"].orderIds.push(orderNumber.toString());
     });
 
-    //because currentDrivers starts off as undefined
-    if (currentDrivers) {
-      currentDrivers.map((driver, index) => {
-        let { employeeId, ...WithoutemployeeId } = driver;
-        WithoutemployeeId["id"] = employeeId;
-        ParseOrders.columns[employeeId] = WithoutemployeeId;
-        const columnindex = ParseOrders.columnOrder.indexOf(employeeId);
-        if (columnindex) {
-          ParseOrders.columnOrder.push(employeeId);
+    setDragDropData(ParseOrders);
+  }, [apiorders]);
+  //preserve Orders when Users is added only
+  useEffect(() => {
+    console.log("ADD useeffect");
+    if (justadded && "employeeId" in justadded) {
+      let NewcolumnDriver = {};
+      let { employeeId, ...Replace_Key_EmployeeId } = justadded;
+      Replace_Key_EmployeeId["id"] = employeeId.toString();
+      Replace_Key_EmployeeId["orderIds"] = [];
+      NewcolumnDriver[employeeId.toString()] = Replace_Key_EmployeeId;
+
+      setDragDropData((dragdropdata) => {
+        return {
+          orders: { ...dragdropdata.orders },
+          columns: { ...dragdropdata.columns, ...NewcolumnDriver },
+          columnOrder: [...dragdropdata.columnOrder, employeeId.toString()],
+        };
+      });
+    }
+  }, [justadded]);
+  //preserve column when user is disconnected
+  useEffect(() => {
+    console.log("REMOVE useeffect");
+    if (disconnectedDriver) {
+      setDragDropData((dragdropdata) => {
+        const employeeId = disconnectedDriver.toString();
+
+        let Column_1 = {};
+        const {
+          [`${employeeId}`]: Disconnected_Driver_Info,
+          "column-1": { orderIds, ...restoring_column_1 },
+          ...Objects_Without_Driver
+        } = dragdropdata.columns;
+        let { columnOrder } = dragdropdata;
+
+        // Try catch because when user connects and disconnects
+        // really quickly orderIds will go undefined
+        try {
+          let Restore_Ids_To_Column1 = orderIds.concat(
+            Disconnected_Driver_Info.orderIds
+          );
+
+          restoring_column_1["orderIds"] = Restore_Ids_To_Column1;
+
+          Column_1["column-1"] = restoring_column_1;
+          columnOrder = columnOrder.filter((e) => e !== employeeId);
+          //new columns
+          console.log({ ...Column_1, ...Objects_Without_Driver });
+          //new columnOrders
+
+          return {
+            orders: { ...dragdropdata.orders },
+            columns: { ...Column_1, ...Objects_Without_Driver },
+            columnOrder: columnOrder,
+          };
+        } catch (err) {
+          console.log(
+            "Etheir the App restarted or multiple users went offline and online really quickly"
+          );
+          return {
+            orders: { ...dragdropdata.orders },
+            columns: { ...dragdropdata.columns },
+            columnOrder: [...dragdropdata.columnOrder],
+          };
         }
       });
     }
-  }, [apiorders, currentDrivers]);
-
-  // console.log(dragOrders);
-
-  /*
-
-   
-    
-  */
+  }, [disconnectedDriver, disconnectTrigger]);
 
   const presistTaskFirstColumn = (
     startTaskId,
@@ -90,16 +160,16 @@ const Orders = ({ isexpanded, currentDrivers }) => {
     newTaskIds.splice(destination.index, 0, draggableId);
     const newColumn = {
       ...start,
-      taskIds: newTaskIds,
+      orderIds: newTaskIds,
     };
     const newState = {
-      ...data,
+      ...dragdropdata,
       columns: {
-        ...data.columns,
+        ...dragdropdata.columns,
         [newColumn.id]: newColumn,
       },
     };
-    setData(newState);
+    setDragDropData(newState);
     return;
   };
   const presistTaskAllColumns = (
@@ -116,23 +186,23 @@ const Orders = ({ isexpanded, currentDrivers }) => {
     startTaskIds.splice(source.index, 1);
     const newStart = {
       ...start,
-      taskIds: startTaskIds,
+      orderIds: startTaskIds,
     };
     const finishTaskIds = Array.from(finishTaskId);
     finishTaskIds.splice(destination.index, 0, draggableId);
     const newFinish = {
       ...finish,
-      taskIds: finishTaskIds,
+      orderIds: finishTaskIds,
     };
     const newState = {
-      ...data,
+      ...dragdropdata,
       columns: {
-        ...data.columns,
+        ...dragdropdata.columns,
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
       },
     };
-    setData(newState);
+    setDragDropData(newState);
   };
 
   const onDragEnd = (result) => {
@@ -202,14 +272,14 @@ const Orders = ({ isexpanded, currentDrivers }) => {
       return;
     }
 
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
+    const start = dragdropdata.columns[source.droppableId];
+    const finish = dragdropdata.columns[destination.droppableId];
 
     // If a draggable object remained in the first column
     // we presist the value within the first column
     if (start === finish) {
       presistTaskFirstColumn(
-        start.taskIds,
+        start.orderIds,
         source,
         destination,
         draggableId,
@@ -219,8 +289,8 @@ const Orders = ({ isexpanded, currentDrivers }) => {
     } else {
       //when a task moves to a different column
       presistTaskAllColumns(
-        start.taskIds,
-        finish.taskIds,
+        start.orderIds,
+        finish.orderIds,
         source,
         destination,
         draggableId,
@@ -244,10 +314,11 @@ const Orders = ({ isexpanded, currentDrivers }) => {
             to synchronously apply changes that has resulted from the drag
           */}
           <DragDropContext onDragEnd={onDragEnd}>
-            {data.columnOrder.map((columnId, index) => {
-              const column = data.columns[columnId];
-              const tasks = column.taskIds.map(
-                (taskIds) => data.tasks[taskIds]
+            {dragdropdata.columnOrder.map((columnId, index) => {
+              const column = dragdropdata.columns[columnId];
+              // console.log("error", column.orderIds);
+              const tasks = column.orderIds.map(
+                (orderIds) => dragdropdata.orders[orderIds]
               );
 
               if (column.id === "column-1") {
@@ -263,7 +334,7 @@ const Orders = ({ isexpanded, currentDrivers }) => {
               }
               //At the final iteration we want to display the driver in a containerized
               // div
-              if (data.columnOrder.length - 1 === index) {
+              if (dragdropdata.columnOrder.length - 1 === index) {
                 return (
                   <ContainerDriver key={index}>
                     {drivers.map((e, i) => e)}
@@ -283,6 +354,9 @@ const Orders = ({ isexpanded, currentDrivers }) => {
 
 const mapStateToProps = (state) => ({
   currentDrivers: state.drivers.currentDrivers,
+  justadded: state.drivers.justadded,
+  disconnectedDriver: state.drivers.disconnectedDriver,
+  disconnectTrigger: state.drivers.disconnectTrigger,
 });
 
 export default connect(mapStateToProps, null)(Orders);

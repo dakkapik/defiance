@@ -64,12 +64,10 @@ module.exports = async function (io) {
 
     socket.on("disconnect", (reason) => {
       console.log(`user: ${users[socket.id]} disconnected, ${reason}`);
-
+      socket.broadcast.emit("disconnected-users", users[socket.id]);
       delete users[socket.id];
-
       getUserRooms(socket).forEach((room) => {
         delete rooms[room].users[socket.id];
-        socket.broadcast.emit("current-users", rooms[room]);
       });
     });
   });

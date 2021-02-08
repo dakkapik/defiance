@@ -29,7 +29,9 @@ const Task = ({ task, index }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          {task.content}
+          <div> id : {task.id}</div>
+          <div> Address : {task.address}</div>
+          <div> Time : {task.time}</div>
         </Container>
       )}
     </Draggable>

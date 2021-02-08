@@ -9,7 +9,7 @@ const DynamicDriver = ({
     <div className="sidecard">
       <div className="sidecard__avatar__container">
         <img alt="mock" className="sidecard__avatar" src={MockImage} />
-        <DiscordCircle lightSwitch={isActive} />
+        <DiscordCircle lightSwitch={!isActive} />
       </div>
 
       <div className="sidecard__content">

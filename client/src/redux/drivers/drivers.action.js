@@ -14,6 +14,11 @@ export const AddActiveDriver = (driver) => ({
   payload: driver,
 });
 
+export const RemoveActiveDriver = (driver) => ({
+  type: DriversActionTypes.REMOVE_ACTIVE_DRIVER,
+  payload: driver,
+});
+
 export const SetActiveDriverPosition = (position) => ({
   type: DriversActionTypes.SET_ACTIVE_DRIVER_POSITION,
   payload: position,
