@@ -16,8 +16,10 @@ require("./startup/config")();
 
 const port = process.env.PORT || config.get("app.port")
 
-server.listen(port, () =>
-  logger.log("info", "server listening on port " + port)
+server.listen(port, () =>{
+  logger.log("info", "server mode: " + process.env.NODE_ENV)
+  logger.log("info", "listening on port: " + port)
+}
 );
 
 module.exports = server;
