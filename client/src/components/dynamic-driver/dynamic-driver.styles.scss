@@ -9,7 +9,7 @@
   height: 52px;
   padding: 0 8px;
   margin-bottom: 10px;
-  margin-left: 5px;
+  margin-left: 25px;
 
   &__avatar {
     border-radius: 100px;
@@ -36,6 +36,7 @@
     overflow: hidden;
 
     &__name {
+      font-size: 16px;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;

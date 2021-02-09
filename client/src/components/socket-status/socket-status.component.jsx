@@ -1,83 +1,43 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import React from "react";
+
 import "./socket-status.styles.scss";
 import Button from "@material-ui/core/Button";
-import { toggleDriversSocket } from "../../redux/drivers/drivers.action";
+import {
+  DriverSocketOff,
+  ClearActiveDriver,
+} from "../../redux/drivers/drivers.action";
+import { GenerateUser } from "../../components-test/generateuser.component";
+// import MoveUser from "../../components-test/move-user.component";
 import { connect } from "react-redux";
-const SocketStatus = ({
-  setPosition,
-  store,
-  handleConnect,
-  toggleDriversSocket,
-}) => {
-  const [socket, setSocket] = useState();
-  console.log(socket);
-  useEffect(() => {
-    const socket = io(process.env.REACT_APP_endpoint);
-    setSocket(socket);
 
-    socket.on("connect", () => {
-      console.log("CONNECT REGISTERED");
-      socket.emit("new-user", {
-        id: "mission-control",
-        room: "Royal Palm",
-        ms: true,
-      });
-      //on disconnect update from logged in drivers
-    });
-
-    //drivers come from here
-    socket.on("current-users", (data) => {
-      console.log(data);
-      const drivers = [];
-
-      Object.values(data.users).forEach((id) => {
-        drivers.push({ id });
-      });
-      console.log("active");
-    });
-
-    //on disconnect update
-
-    socket.on("d-position", (position, id) => {
-      setPosition({ id, position });
-
-      // add on transmition stop event
-    });
-
-    return () => {
-      console.log("socket disconnected");
-      socket.disconnect();
-    };
-  }, [store, setPosition]);
-
+const SocketStatus = ({ DriverSocketOff, ClearActiveDriver }) => {
   return (
-    <div className="socket-status">
+    <div className="socket-controller">
       <Button
+        style={{}}
         variant="outlined"
         color="inherit"
-        onClick={() => toggleDriversSocket(false)}
+        onClick={() => {
+          DriverSocketOff(false);
+          ClearActiveDriver();
+        }}
       >
-        DISCONNECT
+        Disconnect
       </Button>
 
-      <Button
-        variant="outlined"
-        color="inherit"
-        onClick={() => handleMessage(socket, store.name)}
-      >
-        Message
-      </Button>
+      <GenerateUser id={8954} />
+      <GenerateUser id={2342} />
+      <GenerateUser id={4545} />
+      <GenerateUser id={3533} />
+      {/* <MoveUser id={4545} />
+      <MoveUser id={5679} /> */}
     </div>
   );
-
-  function handleMessage(socket, store) {
-    socket.send("Royal");
-  }
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDriversSocket: (bool) => dispatch(toggleDriversSocket(bool)),
+  DriverSocketOff: (bool) => dispatch(DriverSocketOff(bool)),
+  ClearActiveDriver: () => dispatch(ClearActiveDriver()),
 });
 
 export default connect(null, mapDispatchToProps)(SocketStatus);

@@ -1,8 +1,8 @@
-.socket-status {
-  text-align: center;
-  padding-top: 10px;
-  margin: auto;
+.socket-controller {
   display: flex;
-  justify-content: space-around;
+  padding-top: 10px;
   padding-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
 }
