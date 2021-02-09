@@ -11,12 +11,16 @@
     "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "mocha --recursive --parallel",
     "testLocal": "set NODE_ENV=test_local&& mocha --recursive --parallel --watch",
-    "coverage": "nyc report --reporter=html"
+    "coverageSetUp": "nyc mocha --recursive --parallel",
+    "coverage": "nyc report --reporter=text"
   },
   "engines": {
     "node": "12.18.2"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.1.15",
+    "@googlemaps/js-api-loader": "^1.11.1",
+    "axios": "^0.21.1",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "create-react-app": "^4.0.1",

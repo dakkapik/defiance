@@ -5,7 +5,10 @@ module.exports = async function (io) {
   io.on("connection", (socket) => {
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-      // console.log(users[socket.id]);
+
+      // no 2 mission control can connects to the same store 
+      // partition on functions and refactor if statements
+
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {

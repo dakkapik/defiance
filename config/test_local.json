@@ -1,4 +1,14 @@
 {
-    "db_name":"local_db",
-    "db":"mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false"
+    "app":{
+        "port":3001
+    },
+    "db":{
+        "prefix":"mongodb",
+        "host":"localhost",
+        "port":27017,
+        "user": null,
+        "cluster": null,
+        "name": null,
+        "suffix":"?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false"
+    }
 }

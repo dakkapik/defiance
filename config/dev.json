@@ -1,4 +1,14 @@
 {
-    "db_name":"defiance_dev",
-    "db": "mongodb+srv://defiance_dev:BulwarkOfDeliverance@cluster0.dab6a.mongodb.net/defiance_dev?retryWrites=true&w=majority"
+    "app":{
+        "port":3000
+    },
+    "db":{
+        "prefix":"mongodb+srv",
+        "host":null,
+        "port":null,
+        "user":"defiance_dev",
+        "cluster":"cluster0.dab6a.mongodb.net",
+        "name":"defiance_dev",
+        "suffix":"?retryWrites=true&w=majority"
+    }
 }
