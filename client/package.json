@@ -40,7 +40,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "coverage": "react-scripts test --coverage --watchAll"
+    "coverage": "npm test -- --coverage --watchAll=false"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "lines": 50
+      }
+    }
   },
   "eslintConfig": {
     "extends": [

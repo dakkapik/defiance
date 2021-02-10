@@ -2,7 +2,16 @@
   position: relative;
 }
 
-.emoji {
+.disconnect-container {
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+}
+
+.arrow {
   position: absolute;
 
   height: 30px;
@@ -42,7 +51,7 @@
   }
 }
 
-.emoji-expanded {
+.arrow-expanded {
   cursor: pointer;
   position: absolute;
   -webkit-transform: scaleX(-1);
