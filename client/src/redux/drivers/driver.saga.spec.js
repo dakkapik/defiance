@@ -6,7 +6,7 @@ import {
   Read_Emit_Or_Write_Emit,
   socketbug,
 } from "./drivers.saga";
-
+import { createMockTask } from "@redux-saga/testing-utils";
 import io from "socket.io-client";
 import MockedSocket from "socket.io-mock";
 
@@ -28,6 +28,7 @@ describe("DriverSocketFlow failed REASON:\n", () => {
   const generator = DriverSocketFlow(mockGeneratorPayload);
 
   test("Checking if DriverSocketFlow was called with it's methods and disconnected gracefully", () => {
+    const mockTask = createMockTask();
     expect(generator.next(socket).value).toEqual(
       call(connect, mockGeneratorPayload.payload.name)
     );
@@ -43,7 +44,11 @@ describe("DriverSocketFlow failed REASON:\n", () => {
     );
     expect(generator.next(socket).value).toEqual(call(disconnect, socket));
     expect(generator.next(socket).value).toEqual(call(disconnect, socket));
-    // console.log(generator.next().value);
+    // expect(generator.next().value).toEqual(
+    //   fork(Read_Emit_Or_Write_Emit, socket)
+    // );
+    // console.log(generator.next({ type: "LOGOUT" }).cancel(createMockTask()));
+
     // console.log(fork(Read_Emit_Or_Write_Emit, socket));
     // expect().toEqual(
     //   cancel(fork(Read_Emit_Or_Write_Emit, socket))
