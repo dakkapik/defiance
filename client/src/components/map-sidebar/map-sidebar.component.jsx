@@ -8,7 +8,7 @@ import {
   ClearActiveDriver,
 } from "../../redux/drivers/drivers.action";
 import { GenerateUser } from "../../components-test/generateuser.component";
-import SimUserMove from "../../components-test/move-user.component";
+
 import Map from "../map/map.component";
 import StoreList from "../store-list/store-list.component";
 import arrow from "./arrow.png";
@@ -22,11 +22,13 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
       <Map />
 
       {socket ? (
+        //Render Orders and Disconnect button
         <div className="sidebar-container">
           <div className={isexpanded ? "side-bar-expanded " : "side-bar"}>
             <div className="disconnect-container">
               <GenerateUser id={3533} />
               <GenerateUser id={4545} />
+              <GenerateUser id={5679} />
 
               <Button
                 variant="outlined"
@@ -38,10 +40,6 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
               >
                 Disconnect
               </Button>
-              {/* 
-              <MoveUser id={4545} />
-                 */}
-              <SimUserMove id={5679} />
             </div>
             <Orders isexpanded={isexpanded} />
           </div>
@@ -53,6 +51,7 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
           />
         </div>
       ) : (
+        //Render Stores
         <div className="side-bar">
           <StoreList />
         </div>

@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   justadded: undefined,
   disconnectedDriver: undefined,
   disconnectTrigger: false,
-  historydriver: [],
+  // historydriver: [],
   position: {},
   socket: false,
 };
@@ -27,35 +27,35 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           justadded = action.payload[action.payload.length - 1];
         }
       }
+      // Code for recording drivers throughout the day
+      // const unquie_id_only = [];
+      // if (state.historydriver) {
+      //   const array = [...state.historydriver, ...action.payload];
+      //   const map = new Map();
 
-      const unquie_id_only = [];
-      if (state.historydriver) {
-        const array = [...state.historydriver, ...action.payload];
-        const map = new Map();
-
-        for (const item of array) {
-          //unquie by id only
-          if (!map.has(item.employeeId)) {
-            map.set(item.employeeId, true); // set any value to Map
-            if (item.employeeId) {
-              unquie_id_only.push({
-                employeeId: item.employeeId,
-                firstName: item.firstName,
-                lastName: item.lastName,
-                isActive: item.isActive,
-                isAdmin: item.isAdmin,
-                __v: item.__v,
-                _id: item._id,
-              });
-            }
-          }
-        }
-      }
+      //   for (const item of array) {
+      //     //unquie by id only
+      //     if (!map.has(item.employeeId)) {
+      //       map.set(item.employeeId, true); // set any value to Map
+      //       if (item.employeeId) {
+      //         unquie_id_only.push({
+      //           employeeId: item.employeeId,
+      //           firstName: item.firstName,
+      //           lastName: item.lastName,
+      //           isActive: item.isActive,
+      //           isAdmin: item.isAdmin,
+      //           __v: item.__v,
+      //           _id: item._id,
+      //         });
+      //       }
+      //     }
+      //   }
+      // }
 
       return {
         ...state,
         currentDrivers: action.payload,
-        historydriver: unquie_id_only,
+        // historydriver: unquie_id_only,
         justadded: justadded,
       };
 

@@ -1,4 +1,4 @@
-import { call, take, fork } from "redux-saga/effects";
+import { call, take, fork, cancel } from "redux-saga/effects";
 import {
   DriverSocketFlow,
   connect,
@@ -43,5 +43,10 @@ describe("DriverSocketFlow failed REASON:\n", () => {
     );
     expect(generator.next(socket).value).toEqual(call(disconnect, socket));
     expect(generator.next(socket).value).toEqual(call(disconnect, socket));
+    // console.log(generator.next().value);
+    // console.log(fork(Read_Emit_Or_Write_Emit, socket));
+    // expect().toEqual(
+    //   cancel(fork(Read_Emit_Or_Write_Emit, socket))
+    // );
   });
 });
