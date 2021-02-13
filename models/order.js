@@ -81,3 +81,4 @@ const Order = new mongoose.model("Orders", orderSchema);
 
 module.exports.Order = Order;
 module.exports.validateOrder = validateOrder;
+module.exports.orderSchema = orderSchema;

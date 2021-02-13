@@ -10,11 +10,11 @@ module.exports = function () {
       useFindAndModify: false,
       useCreateIndex: true,
     })
-    .then(() => logger.log("info", `connected to db: ${config.get("db.name")}`));
+    .then(() => logger.log("info", `database: ${config.get("db.name") || config.get("db.host")}`));
 };
 
 function dbConstructor (){
-  const { prefix, host, port, user, cluster, name, suffix } = config.get("db");
+  const { prefix, host, port, user, cluster, name, suffix, pswrd} = config.get("db");
   const connectionString = [];
   if(prefix){
     connectionString.push(prefix + "://");
@@ -31,6 +31,9 @@ function dbConstructor (){
   if(process.env.db_pswrd){
     connectionString.push(process.env.db_pswrd + "@")
   };
+  if(pswrd){
+    connectionString.push(pswrd + "@")
+  }
   if(cluster){  
     connectionString.push(cluster + "/")
   };

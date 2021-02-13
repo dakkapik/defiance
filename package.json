@@ -1,18 +1,19 @@
 {
   "name": "defiance",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "driver tracking server",
   "main": "server.js",
   "author": "F&R TEC",
   "license": "ISC",
   "scripts": {
     "start": "node server.js",
-    "dev": "set NODE_ENV=dev&& node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "test": "mocha --recursive --parallel",
-    "testLocal": "set NODE_ENV=test_local&& mocha --recursive --parallel --watch",
-    "coverageSetUp": "nyc mocha --recursive --parallel",
-    "coverage": "nyc report --reporter=text"
+    "test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/**' -e -t=5000",
+    "test_w": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/**' -w",
+    "unit_test": "cross-env NODE_ENV=test_local nyc -r=html -r=text mocha './test/unit/**' -e",
+    "int_test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/integration/**' -e -t=5000",
+    "unit_test_w": "cross-env NODE_ENV=test_local nyc -r=text mocha './test/unit/**' -w",
+    "int_test_w": "cross-env NODE_ENV=test nyc -r=text mocha './test/integration/**' -w"
   },
   "engines": {
     "node": "12.18.2"
@@ -33,13 +34,15 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.27",
     "morgan": "^1.10.0",
-    "socket.io": "^3.0.4",
+    "socket.io": "^3.1.1",
+    "socket.io-client": "^3.1.1",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.0",
     "chai-http": "^4.3.0",
+    "cross-env": "^7.0.3",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0"
   }

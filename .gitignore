@@ -1,6 +1,3 @@
 /node_modules
 /public
-/coverage
-/.env
-/.nyc_output
 /.env
