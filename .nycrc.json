@@ -1,5 +1,5 @@
 {
     "check-coverage": true,
-    "branches": 5,
+    "branches": 4,
     "lines": 28
 }
