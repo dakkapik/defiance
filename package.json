@@ -8,10 +8,10 @@
   "scripts": {
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/**' -e -t=5000",
+    "test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/**' -t=5000",
     "test_w": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/**' -w",
-    "unit_test": "cross-env NODE_ENV=test_local nyc -r=html -r=text mocha './test/unit/**' -e",
-    "int_test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/integration/**' -e -t=5000",
+    "unit_test": "cross-env NODE_ENV=test_local nyc -r=html -r=text mocha './test/unit/**' --exit",
+    "int_test": "cross-env NODE_ENV=test nyc -r=html -r=text mocha './test/integration/**' --exit -t=5000",
     "unit_test_w": "cross-env NODE_ENV=test_local nyc -r=text mocha './test/unit/**' -w",
     "int_test_w": "cross-env NODE_ENV=test nyc -r=text mocha './test/integration/**' -w"
   },

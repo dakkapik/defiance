@@ -24,14 +24,21 @@ describe("Websocket server tests", function(){
 
     after(function(done) {
         if(server){
-            io.close(()=>{
-                console.log('CLOSING');
-            });
-            server.on('close', () => {
-                console.log('AFTER');
+            server.on("close",()=>{
+                console.log("AFTER");
                 done();
             });
+            
+            io.close(()=>{
+                server.close(()=>{
+                    console.log("CLOSING");
+                    server.unref();
+                    process.exit();
+                })
+            });
+            
         }
+
     });
 
     it("new-user connect", function(done){
@@ -41,9 +48,8 @@ describe("Websocket server tests", function(){
             wsClient.emit("new-user", {ms: true, room: "Royal Palm", id: "mission-control"});
         });
         wsClient.on("current-users",(users)=>{
-            expect(users).to.be(null)
+            expect(users).to.be.equal(null)
             done();
         });
-        done();
     });
 });

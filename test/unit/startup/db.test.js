@@ -1,1 +1,1 @@
-// const db = require("../../../startup/db");
+const db = require("../../../startup/db");

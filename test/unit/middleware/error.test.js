@@ -1,1 +1,1 @@
-// const error = require("../../../middleware/error");
+const error = require("../../../middleware/error");

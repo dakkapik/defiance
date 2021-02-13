@@ -1,1 +1,1 @@
-// const admin = require("../../../middleware/admin");
+const admin = require("../../../middleware/admin");

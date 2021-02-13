@@ -24,4 +24,4 @@ workflows:
   Test-Servers-and-Client:
     jobs:
       - server
-      - client
+      # - client

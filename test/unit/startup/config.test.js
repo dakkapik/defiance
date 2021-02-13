@@ -1,1 +1,1 @@
-// const config = require("../../../startup/config");
+const config = require("../../../startup/config");
