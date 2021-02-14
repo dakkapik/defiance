@@ -23,5 +23,5 @@ workflows:
   version: 2
   Test-Servers-and-Client:
     jobs:
-      # - server
+      - server
       - client
