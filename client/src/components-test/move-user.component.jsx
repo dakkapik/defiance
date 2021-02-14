@@ -97,12 +97,12 @@ const SimUserMove = ({ id }) => {
   };
   return (
     <Button
-      style={{ margin: 15 }}
+      style={{ fontSize: 9, padding: 2, marginLeft: "3vh", marginRight: "3vh" }}
       variant="outlined"
       color="inherit"
       onClick={() => newuser()}
     >
-      click twice
+      Move User {id}
     </Button>
   );
 };

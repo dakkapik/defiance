@@ -39,10 +39,19 @@ export const GenerateUser = ({ id }) => {
   };
   return (
     <Button
+      style={{
+        marginLeft: "3vh",
+        margin: 0,
+        marginRight: 10,
+        fontSize: 9,
+        padding: 2,
+      }}
       variant="outlined"
       color="inherit"
       onClick={() => newuser(id)}
-    >{`${id}`}</Button>
+    >
+      Generate User {`${id}`}
+    </Button>
   );
 };
 
