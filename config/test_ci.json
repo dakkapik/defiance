@@ -1,6 +1,6 @@
 {
     "app":{
-        "port":3002
+        "port":null
     },
     "db":{
         "prefix":"mongodb+srv",

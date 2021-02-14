@@ -5,7 +5,6 @@ module.exports = async function (io) {
   io.on("connection", (socket) => {
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-
       // no 2 mission control can connects to the same store 
       // partition on functions and refactor if statements
 
@@ -49,6 +48,7 @@ module.exports = async function (io) {
           rooms[user.room] = { users: {} };
           socket.join(user.room);
           console.log(`MS: ${user.id} joined room ${user.room}`);
+          socket.emit("current-users", rooms[user.rooms]);
         } else {
           socket.send("no store room has been created yet");
           // reply to client, store is not avalible or no store rooms have been created
