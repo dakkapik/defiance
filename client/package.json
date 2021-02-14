@@ -42,6 +42,24 @@
     "eject": "react-scripts eject",
     "coverage": "react-scripts test --coverage --watchAll"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "components-test"
+    ],
+    "coverageReporters": [
+      "html",
+      "text-summary"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "lines": 8
+      }
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

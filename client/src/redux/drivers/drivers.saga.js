@@ -17,10 +17,6 @@ import {
   SetActiveDriverPosition,
 } from "./drivers.action";
 
-export function disconnect(socket) {
-  socket.disconnect();
-}
-
 const getUser = (driverId) => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
@@ -84,20 +80,6 @@ export function* Read_Emit_Or_Write_Emit(socket) {
   yield fork(read, socket);
 }
 
-export function connect(storeName) {
-  const socket = io(process.env.REACT_APP_endpoint);
-
-  return new Promise((resolve, reject) => {
-    socket.on("connect", (data) => {
-      resolve(socket);
-      socket.emit("new-user", {
-        id: "mission-control",
-        room: storeName,
-        ms: true,
-      });
-    });
-  });
-}
 /*
   Socket Bug is for when mission control disconects and reconnects
   This will emit a new-user of undefined to the server
@@ -120,7 +102,23 @@ export function socketbug(storeName) {
   });
   return sockbug;
 }
+export function connect(storeName) {
+  const socket = io(process.env.REACT_APP_endpoint);
 
+  return new Promise((resolve, reject) => {
+    socket.on("connect", (data) => {
+      resolve(socket);
+      socket.emit("new-user", {
+        id: "mission-control",
+        room: storeName,
+        ms: true,
+      });
+    });
+  });
+}
+export function disconnect(socket) {
+  socket.disconnect();
+}
 /*
 DriverSocketFlow takes in a storeName
 for the functions to work properly

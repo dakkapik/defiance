@@ -6,10 +6,8 @@ import "./missioncontrol.styles.scss";
 
 const MissionControl = () => {
   return (
-
     <div className="mission-control">
       <MapSideBar />
-
     </div>
   );
 };
