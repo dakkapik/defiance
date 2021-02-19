@@ -6,8 +6,10 @@ const INITIAL_STATE = {
   justadded: undefined,
   disconnectedDriver: undefined,
   disconnectTrigger: false,
+
   // historydriver: [],
   position: {},
+  socketObject: {},
   socket: false,
 };
 
@@ -18,6 +20,10 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         ...state,
         socket: true,
       };
+    case DriversActionTypes.SET_GLOBAL_SOCKET:
+      return {
+        ...state,
+      };
     case DriversActionTypes.ADD_ACTIVE_DRIVER:
       let justadded = {};
       if (state.currentDrivers) {
@@ -27,35 +33,9 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           justadded = action.payload[action.payload.length - 1];
         }
       }
-      // Code for recording drivers throughout the day
-      // const unquie_id_only = [];
-      // if (state.historydriver) {
-      //   const array = [...state.historydriver, ...action.payload];
-      //   const map = new Map();
-
-      //   for (const item of array) {
-      //     //unquie by id only
-      //     if (!map.has(item.employeeId)) {
-      //       map.set(item.employeeId, true); // set any value to Map
-      //       if (item.employeeId) {
-      //         unquie_id_only.push({
-      //           employeeId: item.employeeId,
-      //           firstName: item.firstName,
-      //           lastName: item.lastName,
-      //           isActive: item.isActive,
-      //           isAdmin: item.isAdmin,
-      //           __v: item.__v,
-      //           _id: item._id,
-      //         });
-      //       }
-      //     }
-      //   }
-      // }
-
       return {
         ...state,
         currentDrivers: action.payload,
-        // historydriver: unquie_id_only,
         justadded: justadded,
       };
 

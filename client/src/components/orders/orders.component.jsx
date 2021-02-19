@@ -20,6 +20,11 @@ is a boolean prop value from  map-sidebar component
 which is the dynamic styling when the arrow is clicke
 */
 
+/*
+BUG SAY WE HAVE MULTIPLE DRIVERS CONNECTED ALREADY
+we reconnect again and there's only one driver );
+*/
+
 const Orders = ({
   isexpanded,
   justadded,
@@ -358,5 +363,8 @@ const mapStateToProps = (state) => ({
   disconnectedDriver: state.drivers.disconnectedDriver,
   disconnectTrigger: state.drivers.disconnectTrigger,
 });
+
+// Map dispatch to props  justadded and disconnected
+// we can pass drivers and socket
 
 export default connect(mapStateToProps, null)(Orders);

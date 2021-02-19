@@ -3,10 +3,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
 import Button from "@material-ui/core/Button";
-import {
-  DriverSocketOff,
-  ClearActiveDriver,
-} from "../../redux/drivers/drivers.action";
+import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
+import { SocketOff } from "../../redux/socket/socket.action";
 import { GenerateUser } from "../../components-test/generateuser.component";
 
 import Map from "../map/map.component";
@@ -14,12 +12,12 @@ import StoreList from "../store-list/store-list.component";
 import arrow from "./arrow.png";
 import Orders from "../orders/orders.component";
 
-const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
+const MapSideBar = ({ socket, SocketOff, ClearActiveDriver }) => {
   const [isexpanded, setisexpanded] = useState(false);
 
   return (
     <div className="map-side-container">
-      <Map />
+      {/* <Map /> */}
 
       {socket ? (
         //Render Orders and Disconnect button
@@ -34,7 +32,7 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
-                  DriverSocketOff(false);
+                  SocketOff(false);
                   ClearActiveDriver();
                 }}
               >
@@ -61,11 +59,11 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
 };
 
 const mapStateToProps = (state) => ({
-  socket: state.drivers.socket,
+  socket: state.socket.socketToggle,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  DriverSocketOff: (bool) => dispatch(DriverSocketOff(bool)),
+  SocketOff: (bool) => dispatch(SocketOff(bool)),
   ClearActiveDriver: () => dispatch(ClearActiveDriver()),
 });
 

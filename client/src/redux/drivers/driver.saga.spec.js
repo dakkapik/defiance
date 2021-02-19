@@ -1,7 +1,7 @@
 import { call, take, fork, cancel } from "redux-saga/effects";
 import {
   DriverSocketFlow,
-  connect,
+  Connect_To_Socket,
   disconnect,
   Read_Emit_Or_Write_Emit,
   socketbug,
@@ -29,7 +29,7 @@ describe("DriverSocketFlow generator function\n", () => {
 
   test("1. Connected to the socket successfully", () => {
     expect(generator.next(socket).value).toEqual(
-      call(connect, mockGeneratorPayload.payload.name)
+      call(Connect_To_Socket, mockGeneratorPayload.payload.name)
     );
     expect(generator.next(socket).value).toEqual(
       call(socketbug, mockGeneratorPayload.payload.name)
