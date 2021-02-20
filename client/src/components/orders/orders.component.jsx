@@ -23,6 +23,12 @@ which is the dynamic styling when the arrow is clicke
 /*
 BUG SAY WE HAVE MULTIPLE DRIVERS CONNECTED ALREADY
 we reconnect again and there's only one driver );
+
+BUG HAPPENS DURING TRANSPORT CLOSED ASWELL
+
+
+IMPLEMENTATION maybe within server.js we can add a funcitonality
+where we get one driver instead of the whole thing
 */
 
 const Orders = ({
