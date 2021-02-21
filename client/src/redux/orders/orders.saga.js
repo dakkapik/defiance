@@ -1,5 +1,5 @@
 import { takeLatest, put, all, call } from "redux-saga/effects";
-import DriversActionTypes from "../drivers/drivers.types";
+import SocketActionTypes from "../socket/socket.types";
 import OrdersActionTypes from "../orders/orders.types";
 import { fetchOrders } from "./orders.utils";
 import { OrderApiSuccess } from "./orders.action";
@@ -20,16 +20,10 @@ export function* callOrderApi() {
   }
 }
 
-export function* listenToOrders() {
-  yield takeLatest(OrdersActionTypes.ORDERS_SOCKET_ON, callOrderApi);
-}
-export function* addDragdropData() {
-  console.log("hello world");
+export function* listentoSocket() {
+  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, callOrderApi);
 }
 
-export function* listenToActiveDriver() {
-  yield takeLatest(DriversActionTypes.ADD_ACTIVE_DRIVER, addDragdropData);
-}
 export function* ordersSagas() {
-  yield all([call(listenToOrders)]);
+  yield all([call(listentoSocket)]);
 }
