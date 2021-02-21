@@ -5,13 +5,14 @@ module.exports = async function (io) {
   io.on("connection", (socket) => {
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-      // no 2 mission control can connects to the same store 
+      // no 2 mission control can connects to the same store
       // partition on functions and refactor if statements
-
+      console.log(user.id);
       if (Object.keys(rooms).length !== 0) {
         Object.keys(rooms).forEach((room) => {
           if (room === user.room) {
             if (user.ms) {
+              //for mission control
               socket.join(user.room);
 
               socket
@@ -20,6 +21,7 @@ module.exports = async function (io) {
 
               console.log(`MS: ${user.id} reconnected room ${user.room}`);
             } else {
+              //for users
               socket.join(user.room);
               rooms[user.room].users[socket.id] = user.id;
               socket

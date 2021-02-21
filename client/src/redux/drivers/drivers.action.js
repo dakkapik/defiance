@@ -25,11 +25,6 @@ export const SetActiveDriverPosition = (position) => ({
   payload: position,
 });
 
-export const toggleDriversSocket = (socketstatus) => ({
-  type: DriversActionTypes.TOGGLE_DRIVERS_SOCKET,
-  payload: socketstatus,
-});
-
 /*
 ***Initalizes *** 
 Socket boolean in reducer to true or false
@@ -38,9 +33,4 @@ Passes data to DriverSocketFlow_Store_Init
 export const DriverSocketFlow_Store_Init = (Store) => ({
   type: DriversActionTypes.DRIVERS_SOCKET_ON,
   payload: Store,
-});
-
-export const DriverSocketOff = (info) => ({
-  type: DriversActionTypes.DRIVERS_SOCKET_OFF,
-  payload: info,
 });
