@@ -1,10 +1,7 @@
 import { combineReducers } from "redux";
 //caching
 
-import {
-  createFilter,
-  createBlacklistFilter,
-} from "redux-persist-transform-filter";
+import { createFilter } from "redux-persist-transform-filter";
 
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";

@@ -57,9 +57,9 @@ export function* DriverSocketFlow() {
 
   */
 
-  const storeName = yield select(GetSocketStoreName);
-  //we need the storeName first to connect an undefined user to display all the drivers
-  const bug = yield call(socketbug, storeName);
+  // const storeName = yield select(GetSocketStoreName);
+  // //we need the storeName first to connect an undefined user to display all the drivers
+  // const bug = yield call(socketbug, storeName);
 
   /* 
 
@@ -93,7 +93,7 @@ export function* DriverSocketFlow() {
     */
 
     yield call(disconnect, socket);
-    yield call(disconnect, bug);
+    // yield call(disconnect, bug);
     // canceling the emitAction from the socket.on and pulling away from the while loop
     yield cancel(emitAction);
   }
