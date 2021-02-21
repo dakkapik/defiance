@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { connect } from "react-redux";
-import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
 import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
 
 import { DragDropContext } from "react-beautiful-dnd";
@@ -31,12 +30,7 @@ IMPLEMENTATION maybe within server.js we can add a funcitonality
 where we get one driver instead of the whole thing
 */
 
-const Orders = ({
-  isexpanded,
-  justadded,
-  disconnectedDriver,
-  disconnectTrigger,
-}) => {
+const Orders = ({ justadded, disconnectedDriver, disconnectTrigger }) => {
   const [apiorders, setapiOrders] = useState([]);
 
   const [dragdropdata, setDragDropData] = useState({
@@ -315,50 +309,46 @@ const Orders = ({
 
   return (
     <div>
-      {isexpanded ? (
-        <Container>
-          {/*DragDropContext is the responder top level application events 
+      <Container>
+        {/*DragDropContext is the responder top level application events 
             They are different life cycle such as onDragEnd, onDragStart etc...
 
             OnDragEnd is (required):
             A drag has ended. It is the responsibility of this responder 
             to synchronously apply changes that has resulted from the drag
           */}
-          <DragDropContext onDragEnd={onDragEnd}>
-            {dragdropdata.columnOrder.map((columnId, index) => {
-              const column = dragdropdata.columns[columnId];
-              // console.log("error", column.orderIds);
-              const tasks = column.orderIds.map(
-                (orderIds) => dragdropdata.orders[orderIds]
-              );
+        <DragDropContext onDragEnd={onDragEnd}>
+          {dragdropdata.columnOrder.map((columnId, index) => {
+            const column = dragdropdata.columns[columnId];
+            // console.log("error", column.orderIds);
+            const tasks = column.orderIds.map(
+              (orderIds) => dragdropdata.orders[orderIds]
+            );
 
-              if (column.id === "column-1") {
-                return (
-                  <ContainerOrder key={index}>
-                    <Column key={column.id} column={column} tasks={tasks} />
-                  </ContainerOrder>
-                );
-              } else {
-                drivers.push(
+            if (column.id === "column-1") {
+              return (
+                <ContainerOrder key={index}>
                   <Column key={column.id} column={column} tasks={tasks} />
-                );
-              }
-              //At the final iteration we want to display the driver in a containerized
-              // div
-              if (dragdropdata.columnOrder.length - 1 === index) {
-                return (
-                  <ContainerDriver key={index}>
-                    {drivers.map((e, i) => e)}
-                  </ContainerDriver>
-                );
-              }
-              return null; //placeholder
-            })}
-          </DragDropContext>
-        </Container>
-      ) : (
-        <DynamicDriverList />
-      )}
+                </ContainerOrder>
+              );
+            } else {
+              drivers.push(
+                <Column key={column.id} column={column} tasks={tasks} />
+              );
+            }
+            //At the final iteration we want to display the driver in a containerized
+            // div
+            if (dragdropdata.columnOrder.length - 1 === index) {
+              return (
+                <ContainerDriver key={index}>
+                  {drivers.map((e, i) => e)}
+                </ContainerDriver>
+              );
+            }
+            return null; //placeholder
+          })}
+        </DragDropContext>
+      </Container>
     </div>
   );
 };
