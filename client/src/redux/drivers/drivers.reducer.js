@@ -6,11 +6,7 @@ const INITIAL_STATE = {
   justadded: undefined,
   disconnectedDriver: undefined,
   disconnectTrigger: false,
-
-  // historydriver: [],
   position: {},
-  socketObject: {},
-  socket: false,
 };
 
 const driverReducer = (state = INITIAL_STATE, action) => {

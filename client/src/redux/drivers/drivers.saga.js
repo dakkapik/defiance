@@ -9,7 +9,7 @@ import {
   put,
 } from "redux-saga/effects";
 import SocketActionTypes from "../socket/socket.types";
-import { disconnect, socketDriverOn, socketbug } from "./drivers.utlis";
+import { disconnect, socketDriverOn } from "./drivers.utlis";
 
 /*
 
@@ -24,7 +24,7 @@ export function* driversSagas() {
 
 /* 
 
-We listen to when the manager clicks a on a store and commence the generator function
+We listen to when the manager clicks a on a store and commences the generator function
 DriverSocketFlow
 
 */
@@ -38,10 +38,8 @@ export function* ListenToSocket() {
 First We need to retrieve data from the socket reducer
 
 */
-//socket is an Object
-const GetSocket = (state) => state.socket.socket;
-//StoreName is a String
-const GetSocketStoreName = (state) => state.socket.socketStoreName.name;
+
+const GetSocket = (state) => state.socket.socket; //socket is an Object
 
 /* DriverSocketFlow deals with driver socket operations */
 
@@ -49,17 +47,6 @@ export function* DriverSocketFlow() {
   /* We can pull state from other reducers using redux saga library select method */
 
   const socket = yield select(GetSocket);
-
-  /* 
-
-   These two lines of code are for when the manager disconnects
-   and connects which will make all drivers appear
-
-  */
-
-  // const storeName = yield select(GetSocketStoreName);
-  // //we need the storeName first to connect an undefined user to display all the drivers
-  // const bug = yield call(socketbug, storeName);
 
   /* 
 
@@ -80,7 +67,7 @@ export function* DriverSocketFlow() {
     /* 
 
     The loop stops here when we listen to when the manager
-    is pressing the disconnect button aka socket disconnect action
+    is pressing the disconnect button aka listening to socket disconnect action
     
     */
 
@@ -93,13 +80,14 @@ export function* DriverSocketFlow() {
     */
 
     yield call(disconnect, socket);
-    // yield call(disconnect, bug);
+    // yield call(disconnect, spectator);
     // canceling the emitAction from the socket.on and pulling away from the while loop
     yield cancel(emitAction);
   }
 }
 
 export function* Read_Emit_Or_Write_Emit(socket) {
+  //Read from the socket
   yield fork(read, socket);
   /*
 
@@ -113,11 +101,11 @@ export function* Read_Emit_Or_Write_Emit(socket) {
 export function* read(socket) {
   /*
 
-  You can check all the socket.on in driver.utlis.js socketDriverOn function
+  You can check all the socket.on in driver.utlis.js.
+  Check the -> socketDriverOn function
   which needs the socket object
 
   */
-
   const channel = yield call(socketDriverOn, socket);
   while (true) {
     let action = yield take(channel);

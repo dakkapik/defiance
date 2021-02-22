@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import io from "socket.io-client";
 import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
 
-export const GenerateUser = ({ id }) => {
+const GenerateUser = ({ id, socketStoreName }) => {
   const [sockets, setSockets] = useState({});
-
   const newuser = (number) => {
     if (Object.keys(sockets).length === 0) {
       const socket = io(process.env.REACT_APP_endpoint);
@@ -14,7 +14,7 @@ export const GenerateUser = ({ id }) => {
       socket.on("connect", () => {
         socket.emit("new-user", {
           id: number,
-          room: "Royal Palm",
+          room: `${socketStoreName}`,
           MS: false,
         });
       });
@@ -30,7 +30,7 @@ export const GenerateUser = ({ id }) => {
         socket.on("connect", () => {
           socket.emit("new-user", {
             id: number,
-            room: "Royal Palm",
+            room: `${socketStoreName}`,
             MS: false,
           });
         });
@@ -55,4 +55,8 @@ export const GenerateUser = ({ id }) => {
   );
 };
 
-export default GenerateUser;
+const mapStateToProps = (state) => ({
+  socketStoreName: state.socket.socketStoreName.name,
+});
+
+export default connect(mapStateToProps, null)(GenerateUser);

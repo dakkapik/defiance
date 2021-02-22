@@ -1,44 +1,75 @@
+const { Order } = require("../models/order");
+
 module.exports = async function (io) {
+  const checkIfOrdersChanged = Order.watch();
+
   const users = {};
   const rooms = {};
-
+  let MSstoreNameConnection = "";
   io.on("connection", (socket) => {
-    socket.on("new-user", (user) => {
-      users[socket.id] = user.id;
-      // console.log(users[socket.id]);
-      if (Object.keys(rooms).length !== 0) {
-        Object.keys(rooms).forEach((room) => {
-          if (room === user.room) {
-            if (user.ms) {
-              socket.join(user.room);
+    //https://mongoosejs.com/docs/api.html#connection_Connection-watch
+    //i want to pass storeName to this obj
+    checkIfOrdersChanged.on("change", () => {
+      console.log("Collection changed");
 
-              socket
-                .to(user.room)
-                .broadcast.emit("current-users", rooms[user.room]);
-
-              console.log(`MS: ${user.id} reconnected room ${user.room}`);
-            } else {
-              socket.join(user.room);
-              rooms[user.room].users[socket.id] = user.id;
-              socket
-                .to(user.room)
-                .broadcast.emit("current-users", rooms[user.room]);
-              console.log(`user: ${user.id} connected room ${user.room}`);
-            }
-          } else {
-            console.log(`room ${user.room} not found`);
-
-            if (user.ms) {
-              console.log("creating room");
-              rooms[user.room] = { users: {} };
-              socket.join(user.room);
-              console.log(`MS: ${user.id} joined room ${user.room}`);
-            } else {
-              socket.send("store room not avalible");
-              //send to client store room not avalible
-            }
+      Order.find()
+        .sort("orderNumber")
+        .then((data) => {
+          if (data) {
+            console.log(MSstoreNameConnection);
+            console.log(data);
+            // socket.emit("orders", data);
           }
         });
+    });
+
+    socket.on("new-user", (user) => {
+      users[socket.id] = user.id;
+      MSstoreNameConnection = user.room;
+      //check where ms connected to
+      console.log(user.room);
+      // no 2 mission control can connects to the same store
+      // partition on functions and refactor if statements
+
+      if (Object.keys(rooms).length !== 0) {
+        //look at all rooms
+        console.log(rooms);
+
+        if (user.room in rooms) {
+          if (user.ms) {
+            socket.join(user.room);
+            console.log("USER.ROOM");
+            //to().broadcast isn't working....
+            socket.emit("current-users", Object.values(rooms[user.room].users));
+            console.log(`MS: ${user.id} reconnected room ${user.room}`);
+          } else {
+            socket.join(user.room);
+            rooms[user.room].users[socket.id] = user.id;
+            socket
+              .to(user.room)
+              .broadcast.emit(
+                "current-users",
+                Object.values(rooms[user.room].users)
+              );
+            console.log(`user: ${user.id} connected room ${user.room}`);
+          }
+        } else {
+          console.log(`${user.room} NOT FOUND! `);
+          if (user.ms) {
+            console.log("creating room");
+            rooms[user.room] = { users: {} };
+            socket.join(user.room);
+            console.log(`MS: ${user.id} joined room ${user.room}`);
+            console.log(
+              "ROOM NOT FOUND USER.ROOM ",
+              Object.values(rooms[user.room].users)
+            );
+            //to().broadcast isn't working....
+            socket.emit("current-users", Object.values(rooms[user.room].users));
+          } else {
+            socket.send("store room not avalible");
+          }
+        }
       } else {
         console.log("no rooms active");
         if (user.ms) {
@@ -46,6 +77,8 @@ module.exports = async function (io) {
           rooms[user.room] = { users: {} };
           socket.join(user.room);
           console.log(`MS: ${user.id} joined room ${user.room}`);
+          socket.emit("current-users", Object.values(rooms[user.room].users));
+          // socket.emit("current-users", rooms[user.rooms]);
         } else {
           socket.send("no store room has been created yet");
           // reply to client, store is not avalible or no store rooms have been created

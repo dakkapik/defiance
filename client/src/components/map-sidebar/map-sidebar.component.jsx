@@ -10,7 +10,7 @@ import {
 import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
 //Components
-import { GenerateUser } from "../../components-test/generateuser.component";
+import GenerateUser from "../../components-test/generateuser.component";
 import Button from "@material-ui/core/Button";
 import Map from "../map/map.component";
 import StoreList from "../store-list/store-list.component";
@@ -21,10 +21,10 @@ import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.componen
 /*
 MapSideBar functionality
 Renders: Map componenet always 
-Renders components conditionally based on buttons being clicked:
-StoreList
-Dynamic Driver
-Orders
+Renders components conditionally based on when the store buttons are clicked and the arrow button:
+StoreList: conditionally
+Dynamic Driver: conditionally
+Orders: conditionally
 */
 const MapSideBar = ({
   socket,

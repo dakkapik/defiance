@@ -1,19 +1,20 @@
-import { takeLatest, put, all, call } from "redux-saga/effects";
+import { takeLatest, put, all, call, select } from "redux-saga/effects";
 import SocketActionTypes from "../socket/socket.types";
 import { fetchOrders } from "./orders.utils";
-import { OrderApiSuccess } from "./orders.action";
-// const getSTATE_FROM_DRIVER_REDUCER = (state) => state.drivers.justadded;
+import { OrderApiSuccess, SetdragDropSuccess } from "./orders.action";
 
-// export function* RETREIVE_DATA_FROM_LISTENER() {
-//   const items = yield select(getSTATE_FROM_DRIVER_REDUCER);
-
-//   console.log("ADD ACTIVE DRIVER IN STORE SAGA", items);
-// }
+//we want to get orders
+const GetSocketStoreName = (state) => state.socket.socketStoreName.name; //socket is an Object
 
 export function* callOrderApi() {
+  const storename = yield select(GetSocketStoreName);
+
   try {
+    //Here we can pass StoreName
     const orders = yield call(fetchOrders);
-    yield put(OrderApiSuccess(orders));
+    const ordersAndStoreName = { orders: orders, storename: storename };
+    yield put(OrderApiSuccess(ordersAndStoreName));
+    yield put(SetdragDropSuccess(ordersAndStoreName));
   } catch (error) {
     console.log("Request to orderApi Failed!");
   }

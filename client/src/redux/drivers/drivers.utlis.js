@@ -1,6 +1,6 @@
 //function and bussiness logic go here
 import axios from "axios";
-import io from "socket.io-client";
+
 import { eventChannel } from "redux-saga";
 import {
   AddActiveDriver,
@@ -14,7 +14,7 @@ export function socketDriverOn(socket) {
       try {
         // data is an array of number of driver ids [12,13,14]
         // this data is being used for an api request to get the driver's Firstname, Lastname
-        const PromisesRequest = ConvertIds(Object.values(data.users));
+        const PromisesRequest = ConvertIds(data);
         // since it's an array of promises then after we requestd the data we put them into redux
         Promise.all(PromisesRequest).then((users) => {
           emit(AddActiveDriver(users));
@@ -60,21 +60,4 @@ export const ConvertIds = (UseridArray) => {
 };
 export function disconnect(socket) {
   socket.disconnect();
-}
-
-/*
-  Socket Bug is for when mission control disconects and reconnects
-  This will emit a new-user of undefined to the server
-  for the function 
-  to show the users that were connected
-*/
-export function socketbug(storeName, socket) {
-  const sockbug = io(process.env.REACT_APP_endpoint);
-  sockbug.on("connect", () => {
-    sockbug.emit("new-user", {
-      room: storeName,
-      MS: false,
-    });
-  });
-  return sockbug;
 }
