@@ -8,11 +8,13 @@ export const addDragDropToCollection = (
     (collection) => collection.storename === NewStoreName
   );
   // if the drag and drop is in the collection?
-  if (existingDragDrop) {
-    return dragdropcollection;
-  }
+  if (existingDragDrop) return dragdropcollection;
 
   return [...dragdropcollection, CreateNewDragDrop(NewOrders, NewStoreName)];
+};
+
+export const AddAllDriverDragDrop = (driver) => {
+  if (driver === null) return [];
 };
 
 export const getCurrentDragandDrop = (
@@ -23,11 +25,40 @@ export const getCurrentDragandDrop = (
     (collection) => collection.storename === NewStoreName
   );
   // if the drag and drop is in the collection?
-  if (existingDragDrop) {
-    return existingDragDrop;
-  }
+  if (existingDragDrop) return existingDragDrop;
 
   return CreateNewDragDrop(NewOrders, NewStoreName);
+};
+
+export const PresistOrderColumn = (
+  currentDragDropData,
+  //OnDragEndProperties
+  { destination, draggableId, source, start, startorderids }
+) => {
+  const newOrderIds = Array.from(startorderids);
+
+  newOrderIds.splice(source.index, 1);
+  newOrderIds.splice(destination.index, 0, draggableId);
+  const newColumn = {
+    ...start,
+    orderIds: newOrderIds,
+  };
+  const newDragDropData = {
+    ...currentDragDropData,
+    columns: {
+      ...currentDragDropData.columns,
+      [newColumn.id]: newColumn,
+    },
+  };
+  return newDragDropData;
+};
+
+export const SaveDragDropCollection = (dragdropcollection, NewDragDropData) => {
+  return dragdropcollection.map((dragdrop) =>
+    dragdrop.storename === NewDragDropData.storename
+      ? NewDragDropData
+      : dragdrop
+  );
 };
 
 export const CreateNewDragDrop = (NewOrders, NewStoreName) => {
@@ -56,40 +87,12 @@ export const CreateNewDragDrop = (NewOrders, NewStoreName) => {
   return newDragDropData;
 };
 
-export const PresistOrderColumn = (
-  currentDragDropData,
-  //OnDragEndProperties
-  { destination, draggableId, source, start, startorderids }
-) => {
-  const newOrderIds = Array.from(startorderids);
-
-  newOrderIds.splice(source.index, 1);
-  newOrderIds.splice(destination.index, 0, draggableId);
-  const newColumn = {
-    ...start,
-    orderIds: newOrderIds,
-  };
-  const newDragDropData = {
-    ...currentDragDropData,
-    columns: {
-      ...currentDragDropData.columns,
-      [newColumn.id]: newColumn,
-    },
-  };
-  return newDragDropData;
+export const initalizeDriverDragDrop = (dragdrop, AddDriver, RemoveDriver) => {
+  AddDriver.forEach((driver, index) => {
+    console.log(driver);
+    // dragdrop.columns[]
+  });
 };
-
-export const UpdateDragDropCollection = (
-  dragdropcollection,
-  NewDragDropData
-) => {
-  return dragdropcollection.map((dragdrop) =>
-    dragdrop.storename === NewDragDropData.storename
-      ? NewDragDropData
-      : dragdrop
-  );
-};
-
 export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();

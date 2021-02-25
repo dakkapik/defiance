@@ -12,6 +12,8 @@ export const OrderApiSuccess = (OrdersAndStore) => ({
   payload: OrdersAndStore,
 });
 
+// Drag And Drop Actions
+
 export const SetdragDropSuccess = (OrdersAndStore) => ({
   type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,
@@ -20,4 +22,13 @@ export const SetdragDropSuccess = (OrdersAndStore) => ({
 export const PresistOrderColumn = (onDragEndProperties) => ({
   type: OrdersActionTypes.PERSIST_ORDER_COLUMN,
   payload: onDragEndProperties,
+});
+export const PresistAllColumn = (onDragEndProperties) => ({
+  type: OrdersActionTypes.PERSIST_ORDER_COLUMN,
+  payload: onDragEndProperties,
+});
+
+export const InitDriverDragAndDrop = (driver) => ({
+  type: OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP,
+  payload: driver,
 });

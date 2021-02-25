@@ -11,15 +11,6 @@ const INITIAL_STATE = {
 
 const driverReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case DriversActionTypes.DRIVERS_SOCKET_ON:
-      return {
-        ...state,
-        socket: true,
-      };
-    case DriversActionTypes.SET_GLOBAL_SOCKET:
-      return {
-        ...state,
-      };
     case DriversActionTypes.ADD_ACTIVE_DRIVER:
       let justadded = {};
       if (state.currentDrivers) {
@@ -29,6 +20,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           justadded = action.payload[action.payload.length - 1];
         }
       }
+
       return {
         ...state,
         currentDrivers: action.payload,
@@ -83,11 +75,6 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         };
       }
 
-    case DriversActionTypes.DRIVERS_SOCKET_OFF:
-      return {
-        ...state,
-        socket: false,
-      };
     case DriversActionTypes.CLEAR_ACTIVE_DRIVER:
       return {
         ...state,

@@ -5,10 +5,13 @@ import { DragDropContext } from "react-beautiful-dnd";
 //styling
 import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
 //actions
-import { PresistOrderColumn } from "../../redux/orders/orders.action";
+import {
+  PresistOrderColumn,
+  PresistAllColumn,
+} from "../../redux/orders/orders.action";
 
 import Column from "../column/column.component";
-const Orders = ({ PresistOrderColumn, currentdragdrop }) => {
+const Orders = ({ PresistOrderColumn, PresistAllColumn, currentdragdrop }) => {
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     // if it went out of bounds we don't do anything etheir
@@ -100,6 +103,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   PresistOrderColumn: (onDragEndProperties) =>
     dispatch(PresistOrderColumn(onDragEndProperties)),
+  PresistAllColumn: (onDragEndProperties) =>
+    dispatch(PresistAllColumn(onDragEndProperties)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);

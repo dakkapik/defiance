@@ -3,14 +3,16 @@ import {
   addDragDropToCollection,
   getCurrentDragandDrop,
   PresistOrderColumn,
-  UpdateDragDropCollection,
+  SaveDragDropCollection,
+  initalizeDriverDragDrop,
 } from "./orders.utils";
-
+import { differenceBy } from "lodash";
 const INITIAL_STATE = {
   showorders: false,
   apiorders: {},
   dragdropcollection: [],
   currentdragdrop: {},
+  driverdragdrop: [],
 };
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
@@ -41,10 +43,36 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentdragdrop: NewDragDropData,
-        dragdropcollection: UpdateDragDropCollection(
+        dragdropcollection: SaveDragDropCollection(
           state.dragdropcollection,
           NewDragDropData
         ),
+      };
+    /*
+    When a manager connects to a store and disconnects and drivers are incoming and leaving
+    Initalize driver will update the drag and drop
+    */
+    case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
+      const AddDriver = differenceBy(
+        action.payload,
+        state.driverdragdrop,
+        "employeeId"
+      );
+      //if disconnect is hit  and drivers are going offline
+      const RemoveDriver = differenceBy(
+        state.driverdragdrop,
+        action.payload,
+        "employeeId"
+      );
+      const NewDragDrop = initalizeDriverDragDrop(
+        state.currentdragdrop,
+        AddDriver,
+        RemoveDriver
+      );
+      console.log(NewDragDrop);
+      return {
+        ...state,
+        driverdragdrop: action.payload,
       };
 
     case OrdersActionTypes.ORDERS_SOCKET_ON:

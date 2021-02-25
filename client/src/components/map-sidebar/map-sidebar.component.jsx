@@ -11,6 +11,7 @@ import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
 //Components
 import GenerateUser from "../../components-test/generateuser.component";
+// import SimUserMove from "../../components-test/move-user.component";
 import Button from "@material-ui/core/Button";
 import Map from "../map/map.component";
 import StoreList from "../store-list/store-list.component";
@@ -47,7 +48,7 @@ const MapSideBar = ({
               <GenerateUser id={3533} />
               <GenerateUser id={4545} />
               <GenerateUser id={5679} />
-
+              {/* <SimUserMove id={5556} /> */}
               <Button
                 variant="outlined"
                 color="inherit"

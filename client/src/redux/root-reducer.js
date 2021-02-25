@@ -9,6 +9,7 @@ import driverReducer from "./drivers/drivers.reducer";
 import storesReducer from "./stores/stores.reducer";
 import socketReducer from "./socket/socket.reducer";
 import ordersReducer from "./orders/orders.reducer";
+
 //Documentation- https://github.com/rt2zz/redux-persist#readme
 const cacheActiveMovingDriverONLY = createFilter("drivers", [
   "ActiveMovingDriver",
