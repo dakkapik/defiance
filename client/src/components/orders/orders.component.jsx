@@ -42,16 +42,15 @@ const Orders = ({ PresistOrderColumn, PresistAllColumn, currentdragdrop }) => {
       });
       return;
     } else {
-      //when a task moves to a different column
-      // presistTaskAllColumns(
-      //   start.orderIds,
-      //   finish.orderIds,
-      //   source,
-      //   destination,
-      //   draggableId,
-      //   start,
-      //   finish
-      // );
+      PresistAllColumn({
+        startorderids: start.orderIds,
+        finishorderids: finish.orderIds,
+        source: source,
+        destination: destination,
+        draggableId: draggableId,
+        start: start,
+        finish: finish,
+      });
     }
   };
   //Array of html elements

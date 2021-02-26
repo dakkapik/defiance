@@ -14,7 +14,8 @@ import {
 
 //StoreName
 const GetStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
-
+//get drivers
+const GetDriverFromReducer = (state) => state.drivers.currentDrivers;
 export function* callOrderApi() {
   const storename = yield select(GetStoreNameFromReducer);
 
@@ -22,21 +23,23 @@ export function* callOrderApi() {
     //Right Now it's not dynamic so we make api call to Royal Palms
     const orders = yield call(fetchOrders);
     //Bind orders and storename
-    const ordersAndStoreName = { orders: orders, storename: storename };
+    const ordersStoreName = {
+      orders: orders,
+      storename: storename,
+    };
     //
-    yield put(OrderApiSuccess(ordersAndStoreName));
-    yield put(SetdragDropSuccess(ordersAndStoreName));
+    yield put(OrderApiSuccess(ordersStoreName));
+    yield put(SetdragDropSuccess(ordersStoreName));
   } catch (error) {
     console.log("Request to orderApi Failed!");
   }
 }
 
-const GetDriverFromReducer = (state) => state.drivers.currentDrivers;
-
 //We want to add all the driver to drag and drop
 export function* InitalizeDriverDragAndDrop() {
   const driver = yield select(GetDriverFromReducer);
-  yield put(InitDriverDragAndDrop(driver));
+  const storename = yield select(GetStoreNameFromReducer);
+  yield put(InitDriverDragAndDrop({ driver: driver, storename: storename }));
 }
 
 //Start the order socket when a manager hits any store button

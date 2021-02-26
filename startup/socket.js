@@ -34,7 +34,9 @@ module.exports = async function (io) {
       if (Object.keys(rooms).length !== 0) {
         //look at all rooms
         console.log(rooms);
-
+        //HERE'S WHERE I FOUND THE ISSUE ON ROYALPALMS NOT FOUND OR COCONUTCREEK NOT FOUND
+        // so i replaced the forloop with  in which is  O(1)
+        // proof https://stackoverflow.com/a/19137197/2720256
         if (user.room in rooms) {
           if (user.ms) {
             socket.join(user.room);

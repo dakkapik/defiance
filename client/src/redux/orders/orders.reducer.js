@@ -5,6 +5,7 @@ import {
   PresistOrderColumn,
   SaveDragDropCollection,
   initalizeDriverDragDrop,
+  PresistAllColumns,
 } from "./orders.utils";
 import { differenceBy } from "lodash";
 const INITIAL_STATE = {
@@ -12,7 +13,6 @@ const INITIAL_STATE = {
   apiorders: {},
   dragdropcollection: [],
   currentdragdrop: {},
-  driverdragdrop: [],
 };
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
@@ -29,11 +29,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           action.payload
         ),
       };
-    case OrdersActionTypes.ORDER_API_SUCCESS:
-      return {
-        ...state,
-        apiorders: action.payload,
-      };
+
     case OrdersActionTypes.PERSIST_ORDER_COLUMN:
       const NewDragDropData = PresistOrderColumn(
         state.currentdragdrop,
@@ -42,39 +38,78 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
 
       return {
         ...state,
-        currentdragdrop: NewDragDropData,
+        currentdragdrop: { ...NewDragDropData },
         dragdropcollection: SaveDragDropCollection(
           state.dragdropcollection,
           NewDragDropData
         ),
       };
+    case OrdersActionTypes.PERSIST_ALL_COLUMN:
+      const NewDragAllDropData = PresistAllColumns(
+        state.currentdragdrop,
+        action.payload
+      );
+
+      return {
+        ...state,
+        currentdragdrop: { ...NewDragAllDropData },
+        dragdropcollection: SaveDragDropCollection(
+          state.dragdropcollection,
+          NewDragAllDropData
+        ),
+      };
     /*
-    When a manager connects to a store and disconnects and drivers are incoming and leaving
+    When a manager connects to a store and disconnects and the
+    drivers are incoming and leaving  in the background
     Initalize driver will update the drag and drop
     */
     case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
-      const AddDriver = differenceBy(
-        action.payload,
-        state.driverdragdrop,
+      //first find drag drop in collection
+      const currentDragDrop = state.dragdropcollection.find(
+        (collection) => collection.storename === action.payload.storename
+      );
+
+      if (currentDragDrop === undefined) return { ...state };
+
+      const newDriver = differenceBy(
+        action.payload.driver,
+        currentDragDrop.currentdriver,
         "employeeId"
       );
-      //if disconnect is hit  and drivers are going offline
+
       const RemoveDriver = differenceBy(
-        state.driverdragdrop,
-        action.payload,
+        currentDragDrop.currentdriver,
+        action.payload.driver,
         "employeeId"
       );
+      console.log("REMOVE DRIVER", RemoveDriver);
+
       const NewDragDrop = initalizeDriverDragDrop(
-        state.currentdragdrop,
-        AddDriver,
+        currentDragDrop,
+        newDriver,
         RemoveDriver
       );
-      console.log(NewDragDrop);
+
       return {
         ...state,
-        driverdragdrop: action.payload,
+
+        // if you don't specify a new Object then react components will not update
+        currentdragdrop: {
+          ...NewDragDrop,
+          currentdriver: [...action.payload.driver],
+        },
+        dragdropcollection: SaveDragDropCollection(state.dragdropcollection, {
+          ...NewDragDrop,
+          currentdriver: [...action.payload.driver],
+        }),
       };
 
+    case OrdersActionTypes.ORDER_API_SUCCESS:
+      return {
+        ...state,
+        apiorders: action.payload,
+      };
+    //UI UPDATES
     case OrdersActionTypes.ORDERS_SOCKET_ON:
       return {
         ...state,

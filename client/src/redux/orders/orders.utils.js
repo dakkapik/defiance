@@ -1,5 +1,13 @@
 import axios from "axios";
 
+/*
+ACTION TYPE FOR "ADD_DRAG_DROP_TO_COLLECTION"
+
+If a store exist within a draganddropcollection then we leave it as is
+otherwise if the manager clicks on a new store then 
+we generate a newDragAndDrop and add it to draganddrop collection
+
+*/
 export const addDragDropToCollection = (
   dragdropcollection,
   { orders: NewOrders, storename: NewStoreName }
@@ -12,11 +20,15 @@ export const addDragDropToCollection = (
 
   return [...dragdropcollection, CreateNewDragDrop(NewOrders, NewStoreName)];
 };
+/*
+ACTION TYPE FOR "ADD_DRAG_DROP_TO_COLLECTION"
 
-export const AddAllDriverDragDrop = (driver) => {
-  if (driver === null) return [];
-};
+We look for the current Draganddrop from a specific store
+by iterating through the Draganddropcollection.
+if we find it then we set the currentdragdrop
+Otherwise we create a newdragdrop and set it to the currentdragdrop
 
+*/
 export const getCurrentDragandDrop = (
   dragdropcollection,
   { orders: NewOrders, storename: NewStoreName }
@@ -30,6 +42,7 @@ export const getCurrentDragandDrop = (
   return CreateNewDragDrop(NewOrders, NewStoreName);
 };
 
+//ACTION TYPE FOR "PERSIST_ORDER_COLUMN"
 export const PresistOrderColumn = (
   currentDragDropData,
   //OnDragEndProperties
@@ -53,6 +66,44 @@ export const PresistOrderColumn = (
   return newDragDropData;
 };
 
+export const PresistAllColumns = (
+  currentDragDropData,
+  {
+    startorderids,
+    finishorderids,
+    source,
+    destination,
+    draggableId,
+    start,
+    finish,
+  }
+) => {
+  const Newstartorderids = Array.from(startorderids);
+  Newstartorderids.splice(source.index, 1);
+
+  const newStart = {
+    ...start,
+    orderIds: Newstartorderids,
+  };
+  const Newfinishorderids = Array.from(finishorderids);
+  Newfinishorderids.splice(destination.index, 0, draggableId);
+  const newFinish = {
+    ...finish,
+    orderIds: Newfinishorderids,
+  };
+  const newDragDropData = {
+    ...currentDragDropData,
+    columns: {
+      ...currentDragDropData.columns,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish,
+    },
+  };
+
+  return newDragDropData;
+};
+
+//ACTION TYPE FOR "PERSIST_ORDER_COLUMN"
 export const SaveDragDropCollection = (dragdropcollection, NewDragDropData) => {
   return dragdropcollection.map((dragdrop) =>
     dragdrop.storename === NewDragDropData.storename
@@ -61,6 +112,45 @@ export const SaveDragDropCollection = (dragdropcollection, NewDragDropData) => {
   );
 };
 
+//ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+export const initalizeDriverDragDrop = (dragdrop, NewDriver, RemoveDriver) => {
+  NewDriver.forEach(
+    ({ employeeId, ...the_rest_of_the_object_data_without_employeeid }) => {
+      dragdrop.columns[employeeId.toString()] = {
+        id: employeeId.toString(),
+        orderIds: [],
+        ...the_rest_of_the_object_data_without_employeeid,
+      };
+      dragdrop.columnOrder.push(employeeId.toString());
+    }
+  );
+  // columns.driverIds.orderids take and putem back in  column-1
+  // delete  columns.driverId key find and delete
+  // delete columnOrder find and delete
+  let restoreOrdersIds = []; //retore the ids back to the Order Column
+  let deletedriver = []; //update columnOrder
+  RemoveDriver.forEach(({ employeeId }) => {
+    restoreOrdersIds.push(dragdrop.columns[employeeId.toString()].orderIds);
+    deletedriver.push(employeeId.toString());
+    delete dragdrop.columns[employeeId.toString()];
+  });
+
+  if (deletedriver.length)
+    dragdrop.columnOrder = dragdrop.columnOrder.filter(
+      (x) => !deletedriver.includes(x)
+    );
+
+  let flattenRestoreOrderIds = [].concat.apply([], restoreOrdersIds);
+  if (restoreOrdersIds.length)
+    dragdrop.columns["column-1"].orderIds = [
+      ...dragdrop.columns["column-1"].orderIds,
+      ...flattenRestoreOrderIds,
+    ];
+
+  return dragdrop;
+};
+
+//This Parses the data that we feed it and turns it into a draganddrop
 export const CreateNewDragDrop = (NewOrders, NewStoreName) => {
   let newDragDropData = {
     storename: NewStoreName,
@@ -87,12 +177,6 @@ export const CreateNewDragDrop = (NewOrders, NewStoreName) => {
   return newDragDropData;
 };
 
-export const initalizeDriverDragDrop = (dragdrop, AddDriver, RemoveDriver) => {
-  AddDriver.forEach((driver, index) => {
-    console.log(driver);
-    // dragdrop.columns[]
-  });
-};
 export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();

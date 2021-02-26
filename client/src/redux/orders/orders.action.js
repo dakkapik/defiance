@@ -24,7 +24,7 @@ export const PresistOrderColumn = (onDragEndProperties) => ({
   payload: onDragEndProperties,
 });
 export const PresistAllColumn = (onDragEndProperties) => ({
-  type: OrdersActionTypes.PERSIST_ORDER_COLUMN,
+  type: OrdersActionTypes.PERSIST_ALL_COLUMN,
   payload: onDragEndProperties,
 });
 
