@@ -1,31 +1,57 @@
 const { Order } = require("../models/order");
 
 module.exports = async function (io) {
+  /*
+  For documentation on .watch() method go here
+  https://mongoosejs.com/docs/api.html#connection_Connection-watch
+  */
   const checkIfOrdersChanged = Order.watch();
 
   const users = {};
   const rooms = {};
-  let MSstoreNameConnection = "";
+
+  checkIfOrdersChanged.on("change", async (res) => {
+    console.log("Collection changed", res);
+
+    /* 
+    **** 
+     Task 1: /api/orders/royalPalms  <- not created yet.... nor coconut nor the others...
+
+    You don't have to send me all the order 
+    the client can just do /api/orders/royalPalms  <- not created yet....
+    on inital load
+     ***
+    */
+
+    /*
+    Task 2: 
+
+     If status changed   emit 1 object (for deletion)
+      
+     Write MONGO QUERY GOES HERE ...
+     const status_changed = await Order.findOne({ status: "completed" });
+    
+     Write socket code here
+     io.emit("delete-order", status_changed);
+
+    */
+
+    /*
+    Task 3:
+
+    If the order was added  emit 1 object (for adding)
+
+    MONGO QUERY GOES HERE ...
+
+    Write socket code here
+    io.emit("add-order", status_changed);
+    */
+  });
+
   io.on("connection", (socket) => {
-    //https://mongoosejs.com/docs/api.html#connection_Connection-watch
-    //i want to pass storeName to this obj
-    checkIfOrdersChanged.on("change", () => {
-      console.log("Collection changed");
-
-      Order.find()
-        .sort("orderNumber")
-        .then((data) => {
-          if (data) {
-            console.log(MSstoreNameConnection);
-            console.log(data);
-            // socket.emit("orders", data);
-          }
-        });
-    });
-
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
-      MSstoreNameConnection = user.room;
+
       //check where ms connected to
       console.log(user.room);
       // no 2 mission control can connects to the same store
@@ -34,14 +60,15 @@ module.exports = async function (io) {
       if (Object.keys(rooms).length !== 0) {
         //look at all rooms
         console.log(rooms);
-        //HERE'S WHERE I FOUND THE ISSUE ON ROYALPALMS NOT FOUND OR COCONUTCREEK NOT FOUND
-        // so i replaced the forloop with  in which is  O(1)
+        // HERE'S WHERE I FOUND THE ISSUE ON ROYALPALMS NOT FOUND OR COCONUTCREEK NOT FOUND
+        // so i replaced the forloop with the keyword In which is  O(1)
         // proof https://stackoverflow.com/a/19137197/2720256
         if (user.room in rooms) {
           if (user.ms) {
             socket.join(user.room);
             console.log("USER.ROOM");
             //to().broadcast isn't working....
+
             socket.emit("current-users", Object.values(rooms[user.room].users));
             console.log(`MS: ${user.id} reconnected room ${user.room}`);
           } else {
