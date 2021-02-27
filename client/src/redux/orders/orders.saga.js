@@ -10,6 +10,7 @@ import {
   OrderApiSuccess,
   SetdragDropSuccess,
   InitDriverDragAndDrop,
+  RemoveDriverDragDrop,
 } from "./orders.action";
 
 //StoreName
@@ -41,11 +42,21 @@ export function* InitalizeDriverDragAndDrop() {
   const storename = yield select(GetStoreNameFromReducer);
   yield put(InitDriverDragAndDrop({ driver: driver, storename: storename }));
 }
+//get drivers
+const GetRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;
+export function* RemoveDriverDragAndDrop() {
+  const RemoveDriver = yield select(GetRemovedDriverFromReducer);
+  const drivers = yield select(GetDriverFromReducer);
+  yield put(
+    RemoveDriverDragDrop({ currentdrivers: drivers, remove: RemoveDriver })
+  );
+}
 
 //Start the order socket when a manager hits any store button
 export function* listentoSocket() {
   yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, callOrderApi);
 }
+
 // Listen to when a driver is connecting
 export function* listentoAddActiveDriver() {
   yield takeLatest(
@@ -53,7 +64,18 @@ export function* listentoAddActiveDriver() {
     InitalizeDriverDragAndDrop
   );
 }
-
+// Listen to when a driver is disconnecting
+export function* listentoRemoveDriver() {
+  yield takeLatest(
+    DriversActionTypes.REMOVE_ACTIVE_DRIVER,
+    RemoveDriverDragAndDrop
+  );
+}
+//Begin with a listener here
 export function* ordersSagas() {
-  yield all([call(listentoSocket), call(listentoAddActiveDriver)]);
+  yield all([
+    call(listentoSocket),
+    call(listentoAddActiveDriver),
+    call(listentoRemoveDriver),
+  ]);
 }

@@ -17,6 +17,7 @@ module.exports = async function (io) {
     **** 
      Task 1: /api/orders/royalPalms  <- not created yet.... nor coconut nor the others...
 
+    Note:
     You don't have to send me all the order 
     the client can just do /api/orders/royalPalms  <- not created yet....
     on inital load

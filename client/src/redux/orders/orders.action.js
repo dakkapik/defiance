@@ -28,7 +28,12 @@ export const PresistAllColumn = (onDragEndProperties) => ({
   payload: onDragEndProperties,
 });
 
-export const InitDriverDragAndDrop = (driver) => ({
+export const InitDriverDragAndDrop = (driversAndstore) => ({
   type: OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP,
-  payload: driver,
+  payload: driversAndstore,
+});
+
+export const RemoveDriverDragDrop = (driversAndremoveDriver) => ({
+  type: OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP,
+  payload: driversAndremoveDriver,
 });

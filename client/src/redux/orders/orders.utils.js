@@ -124,29 +124,44 @@ export const initalizeDriverDragDrop = (dragdrop, NewDriver, RemoveDriver) => {
       dragdrop.columnOrder.push(employeeId.toString());
     }
   );
-  // columns.driverIds.orderids take and putem back in  column-1
-  // delete  columns.driverId key find and delete
-  // delete columnOrder find and delete
+
   let restoreOrdersIds = []; //retore the ids back to the Order Column
-  let deletedriver = []; //update columnOrder
+  let deletedriver = []; //update the order column
+
   RemoveDriver.forEach(({ employeeId }) => {
-    restoreOrdersIds.push(dragdrop.columns[employeeId.toString()].orderIds);
     deletedriver.push(employeeId.toString());
+    restoreOrdersIds.push(dragdrop.columns[employeeId.toString()].orderIds);
     delete dragdrop.columns[employeeId.toString()];
   });
 
-  if (deletedriver.length)
+  if (deletedriver.length) {
     dragdrop.columnOrder = dragdrop.columnOrder.filter(
       (x) => !deletedriver.includes(x)
     );
-
-  let flattenRestoreOrderIds = [].concat.apply([], restoreOrdersIds);
-  if (restoreOrdersIds.length)
+    //because restoreOrderIds is collections of arrays
+    let flattenRestoreOrderIds = [].concat.apply([], restoreOrdersIds);
     dragdrop.columns["column-1"].orderIds = [
       ...dragdrop.columns["column-1"].orderIds,
       ...flattenRestoreOrderIds,
     ];
+  }
 
+  return dragdrop;
+};
+export const RemoveDriverFromDragAndDrop = (
+  dragdrop,
+  //remove(int)
+  { currentdrivers, remove }
+) => {
+  dragdrop.currentdriver = currentdrivers;
+  dragdrop.columnOrder = dragdrop.columnOrder.filter(
+    (item) => item !== remove.toString()
+  );
+  let restoreOrder = dragdrop.columns[remove.toString()].orderIds; //grab the removed driver orderids
+  dragdrop.columns["column-1"].orderIds = dragdrop.columns[
+    "column-1"
+  ].orderIds.concat(restoreOrder);
+  delete dragdrop.columns[remove.toString()];
   return dragdrop;
 };
 

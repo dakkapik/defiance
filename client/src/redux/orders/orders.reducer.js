@@ -6,6 +6,7 @@ import {
   SaveDragDropCollection,
   initalizeDriverDragDrop,
   PresistAllColumns,
+  RemoveDriverFromDragAndDrop,
 } from "./orders.utils";
 import { differenceBy } from "lodash";
 const INITIAL_STATE = {
@@ -82,7 +83,6 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         action.payload.driver,
         "employeeId"
       );
-      console.log("REMOVE DRIVER", RemoveDriver);
 
       const NewDragDrop = initalizeDriverDragDrop(
         currentDragDrop,
@@ -103,7 +103,21 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           currentdriver: [...action.payload.driver],
         }),
       };
+    case OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP:
+      const NewDriver = RemoveDriverFromDragAndDrop(
+        state.currentdragdrop,
+        action.payload
+      );
 
+      return {
+        ...state,
+        currentdragdrop: { ...NewDriver },
+        dragdropcollection: SaveDragDropCollection(state.dragdropcollection, {
+          ...NewDriver,
+        }),
+      };
+
+    //API UPDATES
     case OrdersActionTypes.ORDER_API_SUCCESS:
       return {
         ...state,
