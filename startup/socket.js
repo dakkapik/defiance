@@ -12,49 +12,12 @@ module.exports = async function (io) {
 
   checkIfOrdersChanged.on("change", async (res) => {
     console.log("Collection changed", res);
-
-    /* 
-    **** 
-     Task 1: /api/orders/royalPalms  <- not created yet.... nor coconut nor the others...
-
-    Note:
-    You don't have to send me all the order 
-    the client can just do /api/orders/royalPalms  <- not created yet....
-    on inital load
-     ***
-    */
-
-    /*
-    Task 2: 
-
-     If status changed   emit 1 object (for deletion)
-      
-     Write MONGO QUERY GOES HERE ...
-     const status_changed = await Order.findOne({ status: "completed" });
-    
-     Write socket code here
-     io.emit("delete-order", status_changed);
-
-    */
-
-    /*
-    Task 3:
-
-    If the order was added  emit 1 object (for adding)
-
-    MONGO QUERY GOES HERE ...
-
-    Write socket code here
-    io.emit("add-order", status_changed);
-    */
   });
 
   io.on("connection", (socket) => {
     socket.on("new-user", (user) => {
       users[socket.id] = user.id;
 
-      //check where ms connected to
-      console.log(user.room);
       // no 2 mission control can connects to the same store
       // partition on functions and refactor if statements
 
@@ -65,6 +28,7 @@ module.exports = async function (io) {
         // so i replaced the forloop with the keyword In which is  O(1)
         // proof https://stackoverflow.com/a/19137197/2720256
         if (user.room in rooms) {
+          console.log(user);
           if (user.ms) {
             socket.join(user.room);
             console.log("USER.ROOM");

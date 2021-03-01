@@ -60,9 +60,11 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         ),
       };
     /*
+
     When a manager connects to a store and disconnects and the
     drivers are incoming and leaving  in the background
     Initalize driver will update the drag and drop
+    
     */
     case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
       //first find drag drop in collection
