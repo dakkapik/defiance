@@ -19,8 +19,8 @@ const persistConfig = {
   key: "root",
   storage,
   transforms: [cacheActiveMovingDriverONLY],
-  // We don't want to cache orders,stores
-  blacklist: ["orders", "stores"],
+  // We don't want to cache orders,stores, and socket
+  blacklist: ["orders", "stores", "socket"],
 };
 
 const rootReducer = combineReducers({

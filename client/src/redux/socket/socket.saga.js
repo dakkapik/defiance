@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest, select } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 import SocketActionTypes from "./socket.types";
 
 import { Socket } from "./socket.action";
