@@ -1,20 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import MissionControl from "./pages/missioncontrol/mission-control.component";
 import HomePage from "./pages/home/home.component";
 import SignIn from "./pages/sign-in/sign-in.component";
 import NavBar from "./components/navbar/navbar.component";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-// import Header from "./components/header/header.component";
 import "./App.styles.scss";
 
-const App = ({ history, managername }) => {
-  useEffect(() => {
-    if (managername.length > 0) {
-      history.push("/missioncontrol");
-    }
-  }, [managername, history]);
+const App = () => {
   return (
     <div className="App">
       <NavBar />
@@ -26,7 +18,5 @@ const App = ({ history, managername }) => {
     </div>
   );
 };
-const mapStateToProps = (state) => ({
-  managername: state.socket.managerName,
-});
-export default withRouter(connect(mapStateToProps, null)(App));
+
+export default App;

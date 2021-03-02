@@ -3,7 +3,6 @@ const INITIAL_STATE = {
   socket: {},
   socketToggle: false,
   socketStoreName: "",
-  managerName: "",
 };
 
 const socketReducer = (state = INITIAL_STATE, action) => {
@@ -23,11 +22,6 @@ const socketReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         socketToggle: false,
-      };
-    case SocketActionTypes.SET_MANAGER_NAME:
-      return {
-        ...state,
-        managerName: action.payload,
       };
     default:
       return state;

@@ -12,8 +12,6 @@ export const OrderApiSuccess = (OrdersAndStore) => ({
   payload: OrdersAndStore,
 });
 
-// Drag And Drop Actions
-
 export const SetdragDropSuccess = (OrdersAndStore) => ({
   type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,

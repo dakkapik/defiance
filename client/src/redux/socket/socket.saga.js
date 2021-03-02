@@ -3,12 +3,10 @@ import SocketActionTypes from "./socket.types";
 
 import { Socket } from "./socket.action";
 import { Connect_To_Socket_With_StoreName } from "./socket.utils";
-const GetManagerNameFromReducer = (state) => state.socket.managerName;
+
 export function* SetSocket({ payload: { name: storename } }) {
-  const managername = yield select(GetManagerNameFromReducer);
   const socket = yield call(Connect_To_Socket_With_StoreName, {
     storename: storename,
-    managername: managername,
   });
   //Rember to do a try and catch with this
   yield put(Socket(socket));

@@ -15,12 +15,10 @@ const cacheActiveMovingDriverONLY = createFilter("drivers", [
   "ActiveMovingDriver",
 ]);
 
-const cacheManagernameONLY = createFilter("socket", ["managerName"]);
-
 const persistConfig = {
   key: "root",
   storage,
-  transforms: [cacheActiveMovingDriverONLY, cacheManagernameONLY],
+  transforms: [cacheActiveMovingDriverONLY],
   // We don't want to cache orders,stores
   blacklist: ["orders", "stores"],
 };

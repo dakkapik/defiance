@@ -49,18 +49,12 @@ const NavBar = ({ history }) => {
           <Tab
             style={{ width: "20vh" }}
             onClick={() => history.push("/signin")}
-            label="SIGN IN"
+            label="signin"
           />
         </Tabs>
       </Paper>
     </div>
   );
 };
-// withRouter creates history
-// and history.push() do u know what that is???
-// are you aware of what history.push does?
-// it's like this <link  />
-// it just links you to pages
-// ok well history only exist because of the glue as a prop
-// so withrouter gives this component history
+
 export default withRouter(NavBar);

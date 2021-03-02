@@ -1,7 +1,7 @@
 import React from "react";
 
 const SignIn = () => {
-  return <div>Sign in with google Or Sign in with JWT</div>;
+  return <div>SignIn</div>;
 };
 
 export default SignIn;

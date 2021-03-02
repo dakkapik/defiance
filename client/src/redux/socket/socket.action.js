@@ -8,10 +8,6 @@ export const Socket = (socket) => ({
   type: SocketActionTypes.INITALIZE_SOCKET,
   payload: socket,
 });
-export const managerNameSocketStart = (ManagerName) => ({
-  type: SocketActionTypes.SET_MANAGER_NAME,
-  payload: ManagerName,
-});
 
 export const SocketOff = (bool) => ({
   type: SocketActionTypes.TOGGLE_SOCKET_OFF,
