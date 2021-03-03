@@ -27,6 +27,7 @@ describe("DriverSocketFlow generator function\n", () => {
   test("1. Get the socket from the socket reducer", () => {
     expect(generator.next().value).toEqual(select(GetSocket));
   });
+
   test("2. Read_Emit_Or_Write_Emit generator function operations for socket.on and emit", () => {
     expect(generator.next(socket).value.payload.fn).toEqual(
       fork(Read_Emit_Or_Write_Emit, socket).payload.fn
