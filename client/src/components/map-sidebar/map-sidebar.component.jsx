@@ -13,7 +13,7 @@ import { SocketOff } from "../../redux/socket/socket.action";
 import GenerateUser from "../../components-test/generateuser.component";
 // import SimUserMove from "../../components-test/move-user.component";
 import Button from "@material-ui/core/Button";
-import Map from "../map/map.component";
+// import Map from "../map/map.component";
 import StoreList from "../store-list/store-list.component";
 import Orders from "../orders/orders.component";
 //Assets
