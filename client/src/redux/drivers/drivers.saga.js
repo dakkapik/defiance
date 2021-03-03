@@ -41,7 +41,7 @@ First We need to retrieve data from the socket reducer
 
 */
 
-const GetSocket = (state) => state.socket.socket; //socket is an Object
+export const GetSocket = (state) => state.socket.socket; //socket is an Object
 
 /* DriverSocketFlow deals with driver socket operations */
 

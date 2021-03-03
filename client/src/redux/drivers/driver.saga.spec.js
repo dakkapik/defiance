@@ -1,18 +1,15 @@
-import { call, take, fork, cancel } from "redux-saga/effects";
+import { call, take, fork, cancel, select } from "redux-saga/effects";
 import {
   DriverSocketFlow,
-  Connect_To_Socket,
-  disconnect,
   Read_Emit_Or_Write_Emit,
-  socketbug,
+  GetSocket,
 } from "./drivers.saga";
-// import { createMockTask } from "@redux-saga/testing-utils";
+import { disconnect } from "./drivers.utlis";
 import io from "socket.io-client";
 import MockedSocket from "socket.io-mock";
 
-import DriversActionTypes from "./drivers.types";
+import SocketActionTypes from "../socket/socket.types";
 
-//Uses Jest
 jest.mock("socket.io-client");
 
 describe("DriverSocketFlow generator function\n", () => {
@@ -27,13 +24,8 @@ describe("DriverSocketFlow generator function\n", () => {
   const mockGeneratorPayload = { payload: { name: "Royal Palms" } };
   const generator = DriverSocketFlow(mockGeneratorPayload);
 
-  test("1. Connected to the socket successfully", () => {
-    expect(generator.next(socket).value).toEqual(
-      call(Connect_To_Socket, mockGeneratorPayload.payload.name)
-    );
-    expect(generator.next(socket).value).toEqual(
-      call(socketbug, mockGeneratorPayload.payload.name)
-    );
+  test("1. Get the socket from the socket reducer", () => {
+    expect(generator.next().value).toEqual(select(GetSocket));
   });
   test("2. Read_Emit_Or_Write_Emit generator function operations for socket.on and emit", () => {
     expect(generator.next(socket).value.payload.fn).toEqual(
@@ -43,11 +35,9 @@ describe("DriverSocketFlow generator function\n", () => {
 
   test("3. Disconnected gracefully", () => {
     expect(generator.next().value).toEqual(
-      take(DriversActionTypes.DRIVERS_SOCKET_OFF)
+      take(SocketActionTypes.TOGGLE_SOCKET_OFF)
     );
-    expect(generator.next(socket).value.payload.fn).toEqual(
-      call(disconnect, socket).payload.fn
-    );
+
     expect(generator.next(socket).value.payload.fn).toEqual(
       call(disconnect, socket).payload.fn
     );
