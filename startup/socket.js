@@ -1,84 +1,138 @@
-module.exports = async function (io) {
-  const users = {};
-  const rooms = {};
+const { Store } = require("../models/store");
 
-  io.on("connection", (socket) => {
-    socket.on("new-user", (user) => {
-      users[socket.id] = user.id;
-      // no 2 mission control can connects to the same store 
-      // partition on functions and refactor if statements
+const rooms = {};
+const users = {};
+const spectators = {};
 
-      if (Object.keys(rooms).length !== 0) {
-        Object.keys(rooms).forEach((room) => {
-          if (room === user.room) {
-            if (user.ms) {
-              socket.join(user.room);
+Store.find().then(stores=>{
+  stores.forEach(store=>{
+    rooms[store.storeId] = {users: {}, manager: false}
+  })
+})
 
-              socket
-                .to(user.room)
-                .broadcast.emit("current-users", rooms[user.room]);
+module.exports = async function (server) {
 
-              console.log(`MS: ${user.id} reconnected room ${user.room}`);
-            } else {
-              socket.join(user.room);
-              rooms[user.room].users[socket.id] = user.id;
-              socket
-                .to(user.room)
-                .broadcast.emit("current-users", rooms[user.room]);
-              console.log(`user: ${user.id} connected room ${user.room}`);
+  const io = require('socket.io')(server);
+    
+    io.on("connection", (socket)=>{
+
+        socket.on("new-user", (user)=>{
+
+            users[socket.id] = user.id;
+
+            switch(user.role){
+                case "manager":
+
+                    if(storeExists(user.store) === undefined){
+
+                        io.to(users[user.id]).emit("error", "this store does not exist")
+                        console.log(`Socket:`, user.id ,`${user.role} tried to join store-${user.store} undefined`)
+
+                    }else if(managerIsActive(user.store) === true){
+
+                        io.to(users[user.id]).emit("error", "manager is already in this store")
+                        console.log(`Socket:`, user.id , `${user.role} tried to join store-${user.store} with an active manager`)
+                        //disconnect
+
+                    }else if(managerIsActive(user.store) === false){
+
+                        socket.join(user.store);
+
+                        rooms[user.store].users[user.id] = user.role;
+                        rooms[user.store].manager = true
+
+                        io.to(findUserSocket(user.id)).emit("current-users", rooms[user.store]);
+
+                        console.log(`Socket:`, user.id, `${user.role} connected to room store-${user.store}`);
+                    };
+
+                break;
+
+                case "driver":
+                    if(storeExists(user.store) === undefined){
+
+                        io.to(users[user.id]).emit("error", "this store does not exists");
+                        console.log(`Socket:`, user.id ,`${user.role} tried to join store-${user.store} undefined`);
+
+                    }else if(managerIsActive(user.store) === false){
+
+                        io.to(users[user.id]).emit("error", "there is no manager in this store");
+                        console.log(`Socket:`, user.id , `${user.role} tried to join store-${user.store} without an active manager`);
+
+                    }else if(managerIsActive(user.store) === true){
+
+                        socket.join(user.store);
+
+                        rooms[user.store].users[user.id] = user.role
+
+                        socket.to(user.store).broadcast.emit("current-users", rooms[user.store])
+
+                        console.log(`Socket:`, user.id, `${user.role} connected to room store-${user.store}`);
+                    }
+                break;
+
+                case "spectator":
+                    console.log("case", 7)
+                break;
             }
-          } else {
-            console.log(`room ${user.room} not found`);
-
-            if (user.ms) {
-              console.log("creating room");
-              rooms[user.room] = { users: {} };
-              socket.join(user.room);
-              console.log(`MS: ${user.id} joined room ${user.room}`);
-            } else {
-              socket.send("store room not avalible");
-              //send to client store room not avalible
-            }
-          }
         });
-      } else {
-        console.log("no rooms active");
-        if (user.ms) {
-          console.log("starting first room");
-          rooms[user.room] = { users: {} };
-          socket.join(user.room);
-          console.log(`MS: ${user.id} joined room ${user.room}`);
-          socket.emit("current-users", rooms[user.rooms]);
-        } else {
-          socket.send("no store room has been created yet");
-          // reply to client, store is not avalible or no store rooms have been created
-        }
-      }
-    });
 
-    socket.on("message", (store) => {
-      console.log(rooms);
-    });
+        socket.on("message", (message)=>{
+            console.log(`user-`,user.id, `: `, message)
+        });
 
-    socket.on("position", (position, id, store) => {
-      console.log(position, " ", id, " ", store);
-      socket.to(store).emit("d-position", position, id, store);
-    });
+        socket.on("position", ( position, userId, storeId )=>{
 
-    socket.on("disconnect", (reason) => {
-      console.log(`user: ${users[socket.id]} disconnected, ${reason}`);
-      socket.broadcast.emit("disconnected-users", users[socket.id]);
-      delete users[socket.id];
-      getUserRooms(socket).forEach((room) => {
-        delete rooms[room].users[socket.id];
-      });
-    });
-  });
+            socket.to(storeId).emit("d-position", position, userId, store);
+            
+        });
 
-  function getUserRooms(socket) {
-    return Object.entries(rooms).reduce((ids, [id, room]) => {
-      if (room.users[socket.id] != null) ids.push(id);
-      return ids;
-    }, []);
-  }
+        socket.on("disconnect", (reason) => {
+
+            getUserRoomsAndRole(socket.id).forEach((roomRole)=>{
+                
+                const { roomId, role } = roomRole;
+
+                console.log("Socket: ", role, users[socket.id],  "has left room: ", roomId , " reason: ", reason );
+
+                delete rooms[roomId].users[users[socket.id]];
+
+                if(role === "manager"){
+                    rooms[roomId].manager = false
+                }else{
+                    console.log(roomId)
+                    console.log(rooms)
+                    io.to(roomId).emit("current-users", rooms[roomId])
+                }
+
+            });
+
+            delete users[socket.id];
+
+        });
+    })
 };
+
+
+function storeExists(userStore){
+  return rooms[userStore];
+}
+
+function managerIsActive(userStore){
+  return rooms[userStore].manager === true;
+}
+
+function getUserRoomsAndRole(socketId) {
+  return Object.entries(rooms).reduce((roomIds, [roomId, room]) => {
+    if (room.users[users[socketId]] != null) roomIds.push({roomId, role: room.users[users[socketId]]});
+    return roomIds;
+  }, []);
+}
+
+function findStoreManagerId(roomId){
+  return Object.keys(rooms[roomId].users).find(id => rooms[roomId].users[id] === "manager")
+}
+
+function findUserSocket(userId){
+  return Object.keys(users).find( socketId =>{return users[socketId] == userId})
+}
