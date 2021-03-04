@@ -4,8 +4,10 @@ import { Droppable } from "react-beautiful-dnd";
 import Task from "../task/task.component";
 import { Container, Title, TaskList } from "./column.styles";
 /*
+
 We will use styled components for this to changed dynamic styling with 
 React Beautiful DND
+
 */
 
 const Column = ({ column, tasks }) => {

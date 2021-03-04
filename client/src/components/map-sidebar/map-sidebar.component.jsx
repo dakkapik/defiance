@@ -1,57 +1,90 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
-import Button from "@material-ui/core/Button";
+//Actions
 import {
-  DriverSocketOff,
-  ClearActiveDriver,
-} from "../../redux/drivers/drivers.action";
-import { GenerateUser } from "../../components-test/generateuser.component";
-
-import Map from "../map/map.component";
+  OrdersSocketOn,
+  OrdersSocketOff,
+} from "../../redux/orders/orders.action";
+import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
+import { SocketOff } from "../../redux/socket/socket.action";
+//Components
+import GenerateUser from "../../components-test/generateuser.component";
+// import SimUserMove from "../../components-test/move-user.component";
+import Button from "@material-ui/core/Button";
+// import Map from "../map/map.component";
 import StoreList from "../store-list/store-list.component";
-import arrow from "./arrow.png";
 import Orders from "../orders/orders.component";
-
-const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
-  const [isexpanded, setisexpanded] = useState(false);
-
+//Assets
+import arrow from "./arrow.png";
+import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
+/*
+MapSideBar functionality
+Renders: Map componenet always 
+Renders components conditionally based on when the store buttons are clicked and the arrow button:
+StoreList: conditionally
+Dynamic Driver: conditionally
+Orders: conditionally
+*/
+const MapSideBar = ({
+  socket,
+  showorders,
+  SocketOff,
+  ClearActiveDriver,
+  OrdersSocketOn,
+  OrdersSocketOff,
+}) => {
   return (
     <div className="map-side-container">
-      <Map />
-
+      {/* <Map /> */}
+      {/* 
+       If Manager does click a store then socket=true  then dynamic driver loads with showorders being false
+       */}
       {socket ? (
-        //Render Orders and Disconnect button
         <div className="sidebar-container">
-          <div className={isexpanded ? "side-bar-expanded " : "side-bar"}>
+          <div className={showorders ? "side-bar-expanded " : "side-bar"}>
             <div className="disconnect-container">
               <GenerateUser id={3533} />
               <GenerateUser id={4545} />
               <GenerateUser id={5679} />
-
+              {/* <SimUserMove id={5556} /> */}
               <Button
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
-                  DriverSocketOff(false);
+                  SocketOff(false);
                   ClearActiveDriver();
                 }}
               >
                 Disconnect
               </Button>
             </div>
-            <Orders isexpanded={isexpanded} />
+            {/*If Manager clicks the arrow then showorders is true then Order Component renders */}
+            {showorders ? <Orders /> : <DynamicDriverList />}
           </div>
-          <img
-            src={arrow}
-            alt="arrow"
-            onClick={() => setisexpanded(!isexpanded)}
-            className={isexpanded ? "arrow-expanded" : "arrow"}
-          />
+          {showorders ? (
+            <img
+              src={arrow}
+              alt="expanded-arrow"
+              onClick={() => {
+                OrdersSocketOff();
+              }}
+              className="arrow-expanded"
+            />
+          ) : (
+            <img
+              src={arrow}
+              alt="arrow"
+              onClick={() => {
+                OrdersSocketOn();
+              }}
+              className="arrow"
+            />
+          )}
         </div>
       ) : (
-        //Render Stores
+        //If Manager does not click store socket=false then  StoreList component renders
         <div className="side-bar">
           <StoreList />
         </div>
@@ -61,11 +94,14 @@ const MapSideBar = ({ socket, DriverSocketOff, ClearActiveDriver }) => {
 };
 
 const mapStateToProps = (state) => ({
-  socket: state.drivers.socket,
+  socket: state.socket.socketToggle,
+  showorders: state.orders.showorders,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  DriverSocketOff: (bool) => dispatch(DriverSocketOff(bool)),
+  OrdersSocketOn: () => dispatch(OrdersSocketOn()),
+  OrdersSocketOff: () => dispatch(OrdersSocketOff()),
+  SocketOff: (bool) => dispatch(SocketOff(bool)),
   ClearActiveDriver: () => dispatch(ClearActiveDriver()),
 });
 
