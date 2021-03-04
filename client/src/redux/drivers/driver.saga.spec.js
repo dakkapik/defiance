@@ -1,21 +1,18 @@
-import { call, take, fork, cancel } from "redux-saga/effects";
+import { call, take, fork, cancel, select } from "redux-saga/effects";
 import {
   DriverSocketFlow,
-  connect,
-  disconnect,
   Read_Emit_Or_Write_Emit,
-  socketbug,
+  GetSocket,
 } from "./drivers.saga";
-import { createMockTask } from "@redux-saga/testing-utils";
+import { disconnect } from "./drivers.utlis";
 import io from "socket.io-client";
 import MockedSocket from "socket.io-mock";
 
-import DriversActionTypes from "./drivers.types";
+import SocketActionTypes from "../socket/socket.types";
 
-//Uses Jest
 jest.mock("socket.io-client");
 
-describe("DriverSocketFlow failed REASON:\n", () => {
+describe("DriverSocketFlow generator function\n", () => {
   let socket;
   beforeEach(() => {
     socket = new MockedSocket();
@@ -27,31 +24,25 @@ describe("DriverSocketFlow failed REASON:\n", () => {
   const mockGeneratorPayload = { payload: { name: "Royal Palms" } };
   const generator = DriverSocketFlow(mockGeneratorPayload);
 
-  test("Checking if DriverSocketFlow was called with it's methods and disconnected gracefully", () => {
-    const mockTask = createMockTask();
-    expect(generator.next(socket).value).toEqual(
-      call(connect, mockGeneratorPayload.payload.name)
-    );
-    expect(generator.next(socket).value).toEqual(
-      call(socketbug, mockGeneratorPayload.payload.name)
-    );
-    //disconnect gracefully
-    expect(generator.next(socket).value).toEqual(
-      fork(Read_Emit_Or_Write_Emit, socket)
-    );
-    expect(generator.next().value).toEqual(
-      take(DriversActionTypes.DRIVERS_SOCKET_OFF)
-    );
-    expect(generator.next(socket).value).toEqual(call(disconnect, socket));
-    expect(generator.next(socket).value).toEqual(call(disconnect, socket));
-    // expect(generator.next().value).toEqual(
-    //   fork(Read_Emit_Or_Write_Emit, socket)
-    // );
-    // console.log(generator.next({ type: "LOGOUT" }).cancel(createMockTask()));
+  test("1. Get the socket from the socket reducer", () => {
+    expect(generator.next().value).toEqual(select(GetSocket));
+  });
 
-    // console.log(fork(Read_Emit_Or_Write_Emit, socket));
-    // expect().toEqual(
-    //   cancel(fork(Read_Emit_Or_Write_Emit, socket))
-    // );
+  test("2. Read_Emit_Or_Write_Emit generator function operations for socket.on and emit", () => {
+    expect(generator.next(socket).value.payload.fn).toEqual(
+      fork(Read_Emit_Or_Write_Emit, socket).payload.fn
+    );
+  });
+
+  test("3. Disconnected gracefully", () => {
+    expect(generator.next().value).toEqual(
+      take(SocketActionTypes.TOGGLE_SOCKET_OFF)
+    );
+
+    expect(generator.next(socket).value.payload.fn).toEqual(
+      call(disconnect, socket).payload.fn
+    );
+
+    expect(generator.next().value).toEqual(cancel());
   });
 });

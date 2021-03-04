@@ -4,148 +4,113 @@ import {
   call,
   takeLatest,
   cancel,
+  select,
   fork,
   put,
 } from "redux-saga/effects";
-import { eventChannel } from "redux-saga";
-import DriversActionTypes from "./drivers.types";
-import io from "socket.io-client";
-import axios from "axios";
-import {
-  AddActiveDriver,
-  RemoveActiveDriver,
-  SetActiveDriverPosition,
-} from "./drivers.action";
+import SocketActionTypes from "../socket/socket.types";
+import { disconnect, socketDriverOn } from "./drivers.utlis";
 
-const getUser = (driverId) => {
-  var CancelToken = axios.CancelToken;
-  var { token } = CancelToken.source();
-  return axios
-    .get(`/api/users/${driverId}`, { cancelToken: token })
-    .then((res) => res.data);
-};
-const ConvertIds = (UseridArray) => {
-  let GetUserPromises = [];
-  UseridArray.forEach((id) => {
-    GetUserPromises.push(getUser(id));
-  });
-  return GetUserPromises;
-};
+/*
 
-function subscribe(socket) {
-  return eventChannel((emit) => {
-    socket.on("current-users", (data) => {
-      try {
-        // console.log(data);
-        //Object.values(data.users) convert json to array
-        const PromisesRequest = ConvertIds(Object.values(data.users));
-        //Iterate through all the promises and put em in redux
-        Promise.all(PromisesRequest).then((users) => {
-          emit(AddActiveDriver(users));
-        });
-      } catch (err) {
-        console.log(
-          "A promise has failed to request to the API within PromisesRequest Array "
-        );
-      }
-    });
-    //most intensive
-    socket.on("d-position", (position, id, store) => {
-      position["id"] = id;
-      position["store"] = store;
 
-      emit(SetActiveDriverPosition(position));
-    });
-    socket.on("disconnected-users", (data) => {
-      emit(RemoveActiveDriver(data));
-    });
-    socket.on("disconnect", (e) => {
-      console.log(e);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  });
+We can listen to any action within the array
+for now we want to listen to when the socket starts
+
+
+*/
+
+export function* driversSagas() {
+  yield all([call(ListenToSocket)]);
 }
 
-function* read(socket) {
-  const channel = yield call(subscribe, socket);
-  while (true) {
-    let action = yield take(channel);
-    yield put(action);
-  }
-}
+/* 
 
-export function* Read_Emit_Or_Write_Emit(socket) {
-  yield fork(read, socket);
+We listen to when the manager clicks a on a store and commences the generator function
+DriverSocketFlow
+
+*/
+
+export function* ListenToSocket() {
+  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, DriverSocketFlow);
 }
 
 /*
-  Socket Bug is for when mission control disconects and reconnects
-  This will emit a new-user of undefined to the server
-  for the function 
-  
-  function subscribe(socket) {  <- in the client 
-        socket.on("current-users", (data) => {
-        }
-  }
 
-  to show the users that were connected
+First We need to retrieve data from the socket reducer
+
 */
-export function socketbug(storeName) {
-  const sockbug = io(process.env.REACT_APP_endpoint);
-  sockbug.on("connect", () => {
-    sockbug.emit("new-user", {
-      room: storeName,
-      MS: false,
-    });
-  });
-  return sockbug;
-}
-export function connect(storeName) {
-  const socket = io(process.env.REACT_APP_endpoint);
 
-  return new Promise((resolve, reject) => {
-    socket.on("connect", (data) => {
-      resolve(socket);
-      socket.emit("new-user", {
-        id: "mission-control",
-        room: storeName,
-        ms: true,
-      });
-    });
-  });
-}
-export function disconnect(socket) {
-  socket.disconnect();
-}
-/*
-DriverSocketFlow takes in a storeName
-for the functions to work properly
-*/
-export function* DriverSocketFlow({ payload: { name: StoreName } }) {
-  const socket = yield call(connect, StoreName);
+export const GetSocket = (state) => state.socket.socket; //socket is an Object
 
-  const bug = yield call(socketbug, StoreName);
+/* DriverSocketFlow deals with driver socket operations */
+
+export function* DriverSocketFlow() {
+  /* We can pull state from other reducers using redux saga library select method */
+
+  const socket = yield select(GetSocket);
+
+  /* 
+
+  Yield represents that we are waiting for an action to be called so
+  this does not produce a infinite loop!
+
+  */
   while (true) {
-    // not an infinite loop due to yield take(DriversActionTypes.DRIVERS_SOCKET_OFF))
+    /* 
 
+    We start the flow of socket.on  or socket.emit  using  
+    Read_Emit_Or_Write_Emit function which requires the socket Object
+
+    */
     const emitAction = yield fork(Read_Emit_Or_Write_Emit, socket);
-    //                                   function^          ^ pass in values
-    //turn off everything if Driver_socket_off action has been called
-    yield take(DriversActionTypes.DRIVERS_SOCKET_OFF);
+    //                                    function^          ^ pass in values
+
+    /* 
+
+    The loop stops here when we listen to when the manager
+    is pressing the disconnect button aka listening to socket disconnect action
+    
+    */
+
+    yield take(SocketActionTypes.TOGGLE_SOCKET_OFF);
+
+    /*
+
+    afterwards we prepare to shutdown the socket gracefully
+
+    */
 
     yield call(disconnect, socket);
-    yield call(disconnect, bug);
+    // yield call(disconnect, spectator);
+    // canceling the emitAction from the socket.on and pulling away from the while loop
     yield cancel(emitAction);
   }
 }
 
-//Also a listener listen's Driversocketon within action
-export function* onDriverSocketStart() {
-  yield takeLatest(DriversActionTypes.DRIVERS_SOCKET_ON, DriverSocketFlow);
+export function* Read_Emit_Or_Write_Emit(socket) {
+  //Read from the socket
+  yield fork(read, socket);
+  /*
+
+  we can add a write emit here if for instance the 
+  manager wants to give a speific message
+  to a driver
+  
+  */
 }
 
-export function* driversSagas() {
-  yield all([call(onDriverSocketStart)]);
+export function* read(socket) {
+  /*
+  
+  You can check all the socket.on in driver.utlis.js.
+  Check the -> socketDriverOn function
+  which needs the socket object
+
+  */
+  const channel = yield call(socketDriverOn, socket);
+  while (true) {
+    let action = yield take(channel);
+    yield put(action);
+  }
 }
