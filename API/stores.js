@@ -15,8 +15,8 @@ router.get('/:storeNumber', async (req, res)=>{
     res.status(200).send(store)
 })
 
-router.get('/users/:id',async (req,res)=>{
-    const store = await Store.findById(req.params.id)
+router.get('/users/:storeId',async (req,res)=>{
+    const store = await Store.findOne({storeId: req.params.storeId})
     if(store.users === []) return res.status(200).send({message: 'no users logged in this store'})
     res.status(200).send(store.users)
     //get stores users by store id
@@ -26,11 +26,11 @@ router.post('/',async (req, res)=>{
     const {error} = validateStore(req.body)
     if(error) return res.status(404).send(`${error.details[0].message}`)
 
-    let store = await Store.findOne({number: req.body.number})
+    let store = await Store.findOne({storeId: req.body.storeId})
     if(store) return res.status(400).send('store number already exists')
 
     store = new Store({
-        number: req.body.number,
+        storeId: req.body.storeId,
         location: req.body.location,
         name: req.body.name,
     })
