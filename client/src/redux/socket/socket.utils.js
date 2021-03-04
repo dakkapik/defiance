@@ -5,9 +5,10 @@ export function Connect_To_Socket_With_StoreName({ storename }) {
     socket.on("connect", (data) => {
       resolve(socket);
       socket.emit("new-user", {
-        id: "mission-control",
-        room: storename,
-        ms: true,
+        store: "psq1",
+        id: 3533,
+        role: "manager",
+        // get storeId from get request in DATABASE get user from id from CREDENTIALS 
       });
     });
   });
