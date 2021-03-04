@@ -3,17 +3,18 @@ const joi = require('joi')
 
 function validateStore(input){
     const schema = joi.object({
-        number: joi.number().required(),
+        storeId: joi.string().required(),
         name: joi.string().required(),
         location: joi.object().required(),
-        users: joi.array()
+        users: joi.object(),
+        manager: joi.boolean()
     })
     return schema.validate(input)
 }
 
 const storeSchema = new mongoose.Schema({
-    number:{ 
-        type: Number,
+    storeId:{ 
+        type: String,
         required: true
     },
     name: {
@@ -25,9 +26,14 @@ const storeSchema = new mongoose.Schema({
         required: true,
     },
     users: {
-        type: Array,
-        required: true,
-        default: []
+        type: Object,
+        required: false,
+        default: {}
+    },
+    manager: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 

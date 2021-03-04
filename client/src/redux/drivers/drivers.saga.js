@@ -8,8 +8,10 @@ import {
   fork,
   put,
 } from "redux-saga/effects";
+
 import SocketActionTypes from "../socket/socket.types";
 import { disconnect, socketDriverOn } from "./drivers.utlis";
+
 
 /*
 
@@ -20,8 +22,10 @@ for now we want to listen to when the socket starts
 
 */
 
+
 export function* driversSagas() {
   yield all([call(ListenToSocket)]);
+
 }
 
 /* 
@@ -40,6 +44,7 @@ export function* ListenToSocket() {
 First We need to retrieve data from the socket reducer
 
 */
+
 
 export const GetSocket = (state) => state.socket.socket; //socket is an Object
 
@@ -82,8 +87,10 @@ export function* DriverSocketFlow() {
     */
 
     yield call(disconnect, socket);
+
     // yield call(disconnect, spectator);
     // canceling the emitAction from the socket.on and pulling away from the while loop
+
     yield cancel(emitAction);
   }
 }
