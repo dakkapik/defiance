@@ -93,15 +93,13 @@ module.exports = async function (server) {
                 
                 const { roomId, role } = roomRole;
 
-                console.log("Socket: ", role, users[socket.id],  "has left room: ", roomId , " reason: ", reason );
+                console.log("Socket:", role, users[socket.id],  "has left room: ", roomId , " reason: ", reason );
 
                 delete rooms[roomId].users[users[socket.id]];
 
                 if(role === "manager"){
                     rooms[roomId].manager = false
                 }else{
-                    console.log(roomId)
-                    console.log(rooms)
                     io.to(roomId).emit("current-users", rooms[roomId])
                 }
 

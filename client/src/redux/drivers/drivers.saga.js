@@ -38,7 +38,12 @@ function subscribe(socket) {
       try {
         // console.log(data);
         //Object.values(data.users) convert json to array
-        const PromisesRequest = ConvertIds(Object.values(data.users));
+        const PromisesRequest = ConvertIds(Object.entries(data.users).reduce((drivers, [id, role])=>{
+          if(role === "driver"){drivers.push(id)}
+          return drivers
+        }, []));
+
+
         //Iterate through all the promises and put em in redux
         Promise.all(PromisesRequest).then((users) => {
           emit(AddActiveDriver(users));
@@ -92,16 +97,16 @@ export function* Read_Emit_Or_Write_Emit(socket) {
 
   to show the users that were connected
 */
-export function socketbug(storeName) {
-  const sockbug = io(process.env.REACT_APP_endpoint);
-  sockbug.on("connect", () => {
-    sockbug.emit("new-user", {
-      room: storeName,
-      MS: false,
-    });
-  });
-  return sockbug;
-}
+// export function socketbug(storeName) {
+//   const sockbug = io(process.env.REACT_APP_endpoint);
+//   sockbug.on("connect", () => {
+//     sockbug.emit("new-user", {
+//       room: storeName,
+//       MS: false,
+//     });
+//   });
+//   return sockbug;
+// }
 export function connect(storeName) {
   const socket = io(process.env.REACT_APP_endpoint);
 
@@ -109,9 +114,9 @@ export function connect(storeName) {
     socket.on("connect", (data) => {
       resolve(socket);
       socket.emit("new-user", {
-        id: "mission-control",
-        room: storeName,
-        ms: true,
+        id: 3533,
+        store: "psq1",
+        role: "manager"
       });
     });
   });
@@ -126,7 +131,7 @@ for the functions to work properly
 export function* DriverSocketFlow({ payload: { name: StoreName } }) {
   const socket = yield call(connect, StoreName);
 
-  const bug = yield call(socketbug, StoreName);
+  // const bug = yield call(socketbug, StoreName);
   while (true) {
     // not an infinite loop due to yield take(DriversActionTypes.DRIVERS_SOCKET_OFF))
 
@@ -136,7 +141,7 @@ export function* DriverSocketFlow({ payload: { name: StoreName } }) {
     yield take(DriversActionTypes.DRIVERS_SOCKET_OFF);
 
     yield call(disconnect, socket);
-    yield call(disconnect, bug);
+    // yield call(disconnect, bug);
     yield cancel(emitAction);
   }
 }
