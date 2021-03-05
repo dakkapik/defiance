@@ -26,19 +26,19 @@ export function* listenToSocket() {
 }
 
 /*First We need to retrieve data from the socket reducer*/
-export const GetSocket = (state) => state.socket.socket; //socket is an Object
+export const getSocket = (state) => state.socket.socket; //socket is an Object
 
 /* driverSocketFlow deals with driver socket operations */
 export function* driverSocketFlow() {
   /* We can pull state from other reducers using redux saga library select method */
-  const socket = yield select(GetSocket);
+  const socket = yield select(getSocket);
 
   /* Yield represents that we are waiting for an action to be called so
   this does not produce a infinite loop!*/
   while (true) {
     /* We start the flow of socket.on  or socket.emit  using  
-    Read_Emit_Or_Write_Emit function which requires the socket Object*/
-    const emitAction = yield fork(Read_Emit_Or_Write_Emit, socket);
+    read_Emit_Or_Write_Emit function which requires the socket Object*/
+    const emitAction = yield fork(read_Emit_Or_Write_Emit, socket);
 
     /* The loop stops here when we listen to when the manager
     is pressing the disconnect button aka listening to socket disconnect action*/
@@ -52,7 +52,7 @@ export function* driverSocketFlow() {
   }
 }
 
-export function* Read_Emit_Or_Write_Emit(socket) {
+export function* read_Emit_Or_Write_Emit(socket) {
   //Read from the socket
   yield fork(read, socket);
 
