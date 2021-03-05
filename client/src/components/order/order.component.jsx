@@ -12,30 +12,30 @@ const Container = styled.div`
   /* width: fit-content; */
 `;
 
-const Task = ({ task, index }) => {
+const Order = ({ order, index }) => {
   /*
   A Draggable expects its child to be a function 
   Required to have an ID
   */
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={order.id} index={index}>
       {(provided) => (
         <Container
           {...provided.draggableProps}
           /*{...provided.dragHandleProps} can be used alternativly 
           for another dom element to make drags like if you wanted a tiny square in
-          the side of this task component to be dragged *task  u can drag the star instead
+          the side of this order component to be dragged *order  u can drag the star instead
           */
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <div> id : {task.id}</div>
-          <div> Address : {task.address}</div>
-          <div> Time : {task.time}</div>
+          <div> id : {order.id}</div>
+          <div> Address : {order.address}</div>
+          <div> Time : {order.time}</div>
         </Container>
       )}
     </Draggable>
   );
 };
 
-export default Task;
+export default Order;

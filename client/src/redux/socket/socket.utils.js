@@ -8,7 +8,7 @@ export function Connect_To_Socket_With_StoreName({ storename }) {
         store: "psq1",
         id: 3533,
         role: "manager",
-        // get storeId from get request in DATABASE get user from id from CREDENTIALS 
+        // get storeId from get request in DATABASE get user from id from CREDENTIALS
       });
     });
   });
