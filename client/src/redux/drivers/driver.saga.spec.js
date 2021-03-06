@@ -1,8 +1,8 @@
 import { call, take, fork, cancel, select } from "redux-saga/effects";
 import {
-  DriverSocketFlow,
-  Read_Emit_Or_Write_Emit,
-  GetSocket,
+  driverSocketFlow,
+  read_Emit_Or_Write_Emit,
+  getSocket,
 } from "./drivers.saga";
 import { disconnect } from "./drivers.utlis";
 import io from "socket.io-client";
@@ -12,7 +12,7 @@ import SocketActionTypes from "../socket/socket.types";
 
 jest.mock("socket.io-client");
 
-describe("DriverSocketFlow generator function\n", () => {
+describe("driverSocketFlow generator function\n", () => {
   let socket;
   beforeEach(() => {
     socket = new MockedSocket();
@@ -22,15 +22,15 @@ describe("DriverSocketFlow generator function\n", () => {
     jest.restoreAllMocks();
   });
   const mockGeneratorPayload = { payload: { name: "Royal Palms" } };
-  const generator = DriverSocketFlow(mockGeneratorPayload);
+  const generator = driverSocketFlow(mockGeneratorPayload);
 
   test("1. Get the socket from the socket reducer", () => {
-    expect(generator.next().value).toEqual(select(GetSocket));
+    expect(generator.next().value).toEqual(select(getSocket));
   });
 
-  test("2. Read_Emit_Or_Write_Emit generator function operations for socket.on and emit", () => {
+  test("2. read_Emit_Or_Write_Emit generator function operations for socket.on and emit", () => {
     expect(generator.next(socket).value.payload.fn).toEqual(
-      fork(Read_Emit_Or_Write_Emit, socket).payload.fn
+      fork(read_Emit_Or_Write_Emit, socket).payload.fn
     );
   });
 
