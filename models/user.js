@@ -8,7 +8,7 @@ function validateUser(input) {
         firstName: joi.string().min(3).max(50).required(),
         lastName: joi.string().min(3).max(50),
         employeeId: joi.number().min(3).required(),
-        isAdmin: joi.boolean()
+        role: joi.string().required()
     });
     return schema.validate(input);
 }
