@@ -10,7 +10,7 @@ require("./startup/db")();
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app);
-require("./startup/socket")(server);
+require("./startup/socket").socketIO(server);
 require("./startup/config")();
 
 const port = process.env.PORT || config.get("app.port")
