@@ -9,9 +9,9 @@ let rooms = {};
 const users = {};
 const spectators = {};
 
-module.exports.socketIO = async function (server) {
+module.exports.socketIO = async function (server, stores) {
 
-    rooms = await getStores();
+    rooms = stores;
 
     const io = require('socket.io')(server);
     
@@ -137,20 +137,6 @@ function findUserSocket(userId){
   return Object.keys(users).find( socketId =>{return users[socketId] == userId})
 }
 
-function getStores(){
-    return new Promise((resolve, rejecet)=>{
-        let rooms = {}
-        require("../models/store").Store.find()
-        .then(stores=>{
-            stores.forEach(store=>{
-                rooms[store.storeId] = {users: {}, manager: false}
-            });
-            resolve(rooms)
-        });
-    })
-};
-
-module.exports.getStores = getStores;
 module.exports.findUserSocket = findUserSocket;
 module.exports.findStoreManagerId = findStoreManagerId;
 module.exports.getUserRoomsAndRole = getUserRoomsAndRole;
