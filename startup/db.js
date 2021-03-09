@@ -10,13 +10,12 @@ module.exports = function () {
           useUnifiedTopology: true,
           useNewUrlParser: true,
           useFindAndModify: false,
-          useCreateIndex: true,
-        })
+          useCreateIndex: true})
         .then(() => {
           logger.log("info", `database: ${config.get("db.name") || config.get("db.host")}`)
           resolve()
         });
-        
+
     }catch(err){
       logger.log("error", err)
       reject(err)
