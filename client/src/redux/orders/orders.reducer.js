@@ -118,7 +118,18 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           ...NewDriver,
         }),
       };
-
+    case OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION:
+      return {
+        ...state,
+        dragdropcollection: addDragDropToCollection(
+          state.dragdropcollection,
+          action.payload
+        ),
+        currentdragdrop: getCurrentDragandDrop(
+          state.dragdropcollection,
+          action.payload
+        ),
+      };
     //API UPDATES
     case OrdersActionTypes.ORDER_API_SUCCESS:
       return {

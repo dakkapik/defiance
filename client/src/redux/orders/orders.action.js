@@ -6,17 +6,26 @@ export const OrdersSocketOn = () => ({
 export const OrdersSocketOff = () => ({
   type: OrdersActionTypes.ORDERS_SOCKET_OFF,
 });
-
+// order Success
 export const OrderApiSuccess = (OrdersAndStore) => ({
   type: OrdersActionTypes.ORDER_API_SUCCESS,
   payload: OrdersAndStore,
 });
-
+// order  Success
 export const SetdragDropSuccess = (OrdersAndStore) => ({
   type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,
 });
-
+// order failure
+export const OrderApiFailure = (OrdersAndStore) => ({
+  type: OrdersActionTypes.ORDER_API_FAILURE,
+  payload: OrdersAndStore,
+});
+// order failure
+export const SetdragDropFailure = (OrdersAndStore) => ({
+  type: OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION,
+  payload: OrdersAndStore,
+});
 export const PresistOrderColumn = (onDragEndProperties) => ({
   type: OrdersActionTypes.PERSIST_ORDER_COLUMN,
   payload: onDragEndProperties,
