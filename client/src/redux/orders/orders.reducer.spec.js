@@ -5,7 +5,7 @@ import { addDragDropToCollection, getCurrentDragandDrop } from "./orders.utils";
 describe("Order Reducer", () => {
   const defaultState = {
     showorders: false,
-    apiorders: {},
+    apiorders: [],
     dragdropcollection: [],
     currentdragdrop: {},
   };
@@ -16,6 +16,7 @@ describe("Order Reducer", () => {
 
   it("should return new state if receiving type ADD_DRAG_DROP_TO_COLLECTION", () => {
     const mockPayload = {
+      //Api orders
       orders: [
         {
           address: "3620 NW 59TH PLACE",
@@ -36,25 +37,10 @@ describe("Order Reducer", () => {
       payload: mockPayload,
     });
 
-    // we try to mock match returned object
-    /*
-     case OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION:
-      return {
-        ...state,
-        dragdropcollection: addDragDropToCollection(
-          state.dragdropcollection,
-          action.payload
-        ),
-        currentdragdrop: getCurrentDragandDrop(
-          state.dragdropcollection,
-          action.payload
-        ),
-      };
-
-    */
-    //we mimick the returned object by calling the functions from utlis
+    //we mimick the returned object from the reducer by calling the functions from utlis
     const mockOperations = {
       ...defaultState,
+      apiorders: mockPayload.orders,
       dragdropcollection: addDragDropToCollection(
         defaultState.dragdropcollection,
         mockPayload

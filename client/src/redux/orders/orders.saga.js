@@ -7,9 +7,7 @@ import DriversActionTypes from "../drivers/drivers.types";
 import { fetchOrders } from "./orders.utils";
 //Actions
 import {
-  OrderApiSuccess,
   SetdragDropSuccess,
-  OrderApiFailure,
   SetdragDropFailure,
   InitDriverDragAndDrop,
   RemoveDriverDragDrop,
@@ -32,13 +30,12 @@ export function* putOrdersAndDragAndDrop() {
     const orders = yield call(fetchOrders);
 
     // we want to pass storeName because we want to specify
-    // what drag and drop to save
+    // what drag and drop to save in dragdropcollections
     const ordersStoreName = {
       orders: orders,
       storename: storename,
     };
 
-    yield put(OrderApiSuccess(ordersStoreName));
     yield put(SetdragDropSuccess(ordersStoreName));
   } catch (error) {
     const ordersFailure = {
@@ -51,9 +48,9 @@ export function* putOrdersAndDragAndDrop() {
       ],
       storename: storename,
     };
-    yield put(OrderApiFailure(ordersFailure));
+    //For any reason if /api/orders fails if the internet goes down we pass a failing order^
     yield put(SetdragDropFailure(ordersFailure));
-    console.log("Request to orderApi Failed!");
+    alert("Request to /api/orders has failed please refresh the page");
   }
 }
 
