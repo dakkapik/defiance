@@ -68,19 +68,19 @@ export const Orders = ({
           {currentdragdrop.columnOrder.map((columnId, index) => {
             const column = currentdragdrop.columns[columnId];
             // console.log("error", column.orderIds);
-            const tasks = column.orderIds.map(
+            const orders = column.orderIds.map(
               (orderIds) => currentdragdrop.orders[orderIds]
             );
 
             if (column.id === "column-1") {
               return (
                 <ContainerOrder key={index}>
-                  <Column key={column.id} column={column} tasks={tasks} />
+                  <Column key={column.id} column={column} orders={orders} />
                 </ContainerOrder>
               );
             } else {
               drivers.push(
-                <Column key={column.id} column={column} tasks={tasks} />
+                <Column key={column.id} column={column} orders={orders} />
               );
             }
             //At the final iteration we want to display the driver in a containerized

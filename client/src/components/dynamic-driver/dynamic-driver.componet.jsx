@@ -18,10 +18,7 @@ const DynamicDriver = ({
         </div>
         <div className="sidecard__content__sub">
           <div className="sidecard__content__sub__text">
-            <span>
-              {employeeId}
-              {/*props.position.timestamp*/}
-            </span>
+            <span>{employeeId}</span>
           </div>
         </div>
       </div>

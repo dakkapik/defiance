@@ -13,7 +13,7 @@ export const Container = styled.div`
 export const Title = styled.div`
   padding: 8px;
 `;
-export const TaskList = styled.div`
+export const OrderList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
   background-color: ${(props) => (props.isDraggingOver ? "red" : "#202225")};

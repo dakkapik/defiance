@@ -34,7 +34,6 @@ const Map = ({ store, ActiveMovingDriver }) => {
               ) : null}
             </div>
           ))}
-          {/* {driverMarkers ? driverMarkers : null} */}
         </GoogleMap>
       </LoadScript>
     </div>

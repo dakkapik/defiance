@@ -10,10 +10,8 @@ import {
 import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
 //Components
-import GenerateUser from "../../components-test/generateuser.component";
-// import SimUserMove from "../../components-test/move-user.component";
-import Button from "@material-ui/core/Button";
 // import Map from "../map/map.component";
+import Button from "@material-ui/core/Button";
 import StoreList from "../store-list/store-list.component";
 import Orders from "../orders/orders.component";
 //Assets
@@ -45,10 +43,6 @@ const MapSideBar = ({
         <div className="sidebar-container">
           <div className={showorders ? "side-bar-expanded " : "side-bar"}>
             <div className="disconnect-container">
-              <GenerateUser id={3533} />
-              <GenerateUser id={4545} />
-              <GenerateUser id={5679} />
-              {/* <SimUserMove id={5556} /> */}
               <Button
                 variant="outlined"
                 color="inherit"

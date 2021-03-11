@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Droppable } from "react-beautiful-dnd";
-import Task from "../task/task.component";
-import { Container, Title, TaskList } from "./column.styles";
+import Order from "../order/order.component";
+import { Container, Title, OrderList } from "./column.styles";
 /*
 
 We will use styled components for this to changed dynamic styling with 
@@ -10,7 +10,7 @@ React Beautiful DND
 
 */
 
-const Column = ({ column, tasks }) => {
+const Column = ({ column, orders }) => {
   return (
     <Container>
       <Title>{column.id === "column-1" ? "Orders" : column.firstName}</Title>
@@ -26,7 +26,7 @@ const Column = ({ column, tasks }) => {
            Snapshot is styling props such as making the column red after a drag
         */}
         {(provided, snapshot) => (
-          <TaskList
+          <OrderList
             // provided.innerRef - is to supply the DOM node to reactbeautifuldnd is callback
             ref={provided.innerRef}
             /* 
@@ -40,12 +40,12 @@ const Column = ({ column, tasks }) => {
             {...provided.droppableProps}
             isDraggingOver={snapshot.isDraggingOver}
           >
-            {tasks.map((task, index) => (
-              <Task key={task.id} task={task} index={index} />
+            {orders.map((order, index) => (
+              <Order key={order.id} order={order} index={index} />
             ))}
             {/* provided.placeholder Is to Increase space when something is dropped in a column */}
             {provided.placeholder}
-          </TaskList>
+          </OrderList>
         )}
       </Droppable>
     </Container>
