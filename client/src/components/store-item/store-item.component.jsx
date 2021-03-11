@@ -7,7 +7,6 @@ import { setConnectedStore } from "../../redux/stores/stores.action";
 import { SocketInitStore } from "../../redux/socket/socket.action";
 export const StoreItem = ({
   storeInfo,
-
   setConnectedStore,
   SocketInitStore,
 }) => {
