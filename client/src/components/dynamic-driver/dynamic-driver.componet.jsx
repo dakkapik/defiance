@@ -2,7 +2,7 @@ import React from "react";
 import "./dynamic-driver.styles.scss";
 import MockImage from "./driver.jpg";
 import DiscordCircle from "../discord-circle/discord-circle.component";
-const DynamicDriver = ({
+export const DynamicDriver = ({
   userinfo: { firstName, employeeId, lastName, isActive },
 }) => {
   return (
