@@ -6,11 +6,10 @@ const server = require('http').createServer(app);
 
 const logger = require("./middleware/logger");
 
-require("./startup/db")();
+require("./startup/db")().then(()=>socketSetUp(server));
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app);
-require("./startup/socket")(server);
 require("./startup/config")();
 
 const port = process.env.PORT || config.get("app.port")
@@ -21,3 +20,22 @@ server.listen(port, () =>{
 });
 
 module.exports = server;
+
+async function socketSetUp (server){
+  const stores = await getStores()
+  require("./startup/socket").socketIO(server, stores);
+}
+
+const getStores = () => {
+  return new Promise((resolve, rejecet)=>{
+      let storesObj = {}
+      require("./models/store").Store.find()
+      .then(stores=>{
+          stores.forEach(store=>{
+              storesObj[store.storeId] = {users: {}, manager: false}
+          });
+          resolve(storesObj)
+        });
+
+  })
+};
