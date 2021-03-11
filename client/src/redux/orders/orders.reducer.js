@@ -11,7 +11,7 @@ import {
 import { differenceBy } from "lodash";
 const INITIAL_STATE = {
   showorders: false,
-  apiorders: {},
+  apiorders: [],
   dragdropcollection: [],
   currentdragdrop: {},
 };
@@ -21,6 +21,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
     case OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,
+        apiorders: action.payload.orders,
         dragdropcollection: addDragDropToCollection(
           state.dragdropcollection,
           action.payload
@@ -118,13 +119,20 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           ...NewDriver,
         }),
       };
-
-    //API UPDATES
-    case OrdersActionTypes.ORDER_API_SUCCESS:
+    case OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION:
       return {
         ...state,
-        apiorders: action.payload,
+        apiorders: action.payload.orders,
+        dragdropcollection: addDragDropToCollection(
+          state.dragdropcollection,
+          action.payload
+        ),
+        currentdragdrop: getCurrentDragandDrop(
+          state.dragdropcollection,
+          action.payload
+        ),
       };
+
     //UI UPDATES
     case OrdersActionTypes.ORDERS_SOCKET_ON:
       return {

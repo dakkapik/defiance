@@ -7,36 +7,55 @@ import DriversActionTypes from "../drivers/drivers.types";
 import { fetchOrders } from "./orders.utils";
 //Actions
 import {
-  OrderApiSuccess,
   SetdragDropSuccess,
+  SetdragDropFailure,
   InitDriverDragAndDrop,
   RemoveDriverDragDrop,
 } from "./orders.action";
 
-//StoreName
+//get storename
 const GetStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
+
 //get drivers
 const GetDriverFromReducer = (state) => state.drivers.currentDrivers;
-export function* callOrderApi() {
+
+// we want to put the orders in the reducer apiorders: {},
+// And we want to to showcase the orders in the reducer currentdragdrop: {},
+// And we to save the drag and drop in the reducer dragdropcollection: []
+export function* putOrdersAndDragAndDrop() {
   const storename = yield select(GetStoreNameFromReducer);
 
   try {
     //Right Now it's not dynamic so we make api call to Royal Palms
     const orders = yield call(fetchOrders);
-    //Bind orders and storename
+
+    // we want to pass storeName because we want to specify
+    // what drag and drop to save in dragdropcollections
     const ordersStoreName = {
       orders: orders,
       storename: storename,
     };
-    //
-    yield put(OrderApiSuccess(ordersStoreName));
+
     yield put(SetdragDropSuccess(ordersStoreName));
   } catch (error) {
-    console.log("Request to orderApi Failed!");
+    const ordersFailure = {
+      orders: [
+        {
+          address:
+            "Try checking your internet connection and refreshing this page.Otherwise contact the admin",
+          orderNumber: 404,
+        },
+      ],
+      storename: storename,
+    };
+    //For any reason if /api/orders fails if the internet goes down we pass a failing order^
+    yield put(SetdragDropFailure(ordersFailure));
+    alert("Request to /api/orders has failed please refresh the page");
   }
 }
 
-//We want to add all the driver to drag and drop
+// When a new Driver is added then we want to initalize the driver
+// to our drag and drop
 export function* InitalizeDriverDragAndDrop() {
   const driver = yield select(GetDriverFromReducer);
   const storename = yield select(GetStoreNameFromReducer);
@@ -54,7 +73,7 @@ export function* RemoveDriverDragAndDrop() {
 
 //Start the order socket when a manager hits any store button
 export function* listentoSocket() {
-  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, callOrderApi);
+  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, putOrdersAndDragAndDrop);
 }
 
 // Listen to when a driver is connecting

@@ -15,9 +15,10 @@ export const addDragDropToCollection = (
   const existingDragDrop = dragdropcollection.find(
     (collection) => collection.storename === NewStoreName
   );
-  // if the drag and drop is in the collection?
+
   if (existingDragDrop) return dragdropcollection;
 
+  //if it doesn't exist then take the existing dragdropcollection and add a new dragdrop to it
   return [...dragdropcollection, CreateNewDragDrop(NewOrders, NewStoreName)];
 };
 /*

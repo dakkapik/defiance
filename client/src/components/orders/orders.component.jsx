@@ -9,9 +9,14 @@ import {
   PresistOrderColumn,
   PresistAllColumn,
 } from "../../redux/orders/orders.action";
-
+//components
 import Column from "../column/column.component";
-const Orders = ({ PresistOrderColumn, PresistAllColumn, currentdragdrop }) => {
+
+export const Orders = ({
+  PresistOrderColumn,
+  PresistAllColumn,
+  currentdragdrop,
+}) => {
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     // if it went out of bounds we don't do anything etheir
