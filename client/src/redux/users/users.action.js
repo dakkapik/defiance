@@ -13,4 +13,9 @@ export const loginUser = (user) => ({
 export const disconnectUser = (user) => ({
     type: UsersActionTypes.DISCONNECT_USER,
     payload: user
-}) 
+})
+
+export const putUsers = (user) => ({
+    type: UsersActionTypes.DISCONNECT_USER,
+    payload: user
+})

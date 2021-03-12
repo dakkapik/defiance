@@ -21,6 +21,7 @@ let directory = {
   "/missioncontrol": 0,
   "/": 1,
   "/signin": 2,
+  "/signup": 3
 };
 const NavBar = ({ history }) => {
   const classes = useStyles();
@@ -50,6 +51,11 @@ const NavBar = ({ history }) => {
             style={{ width: "20vh" }}
             onClick={() => history.push("/signin")}
             label="signin"
+          />
+          <Tab
+            style={{ width: "20vh" }}
+            onClick={() => history.push("/signup")}
+            label="signup"
           />
         </Tabs>
       </Paper>
