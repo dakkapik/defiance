@@ -1,5 +1,12 @@
 .form-container {
-    background-color: rgb(101, 101, 190);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(202, 60, 60);
     width: 60%;
     padding: 5px;
     margin: auto;
@@ -8,7 +15,7 @@
         margin-bottom: 15px;
     }
     fieldset {
-        border-color: rgb(120, 120, 165);
+        border-color: rgb(192, 72, 72);
         border-width: 5px;
         border-radius: 5px;
     }
