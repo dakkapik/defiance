@@ -4,16 +4,20 @@ import './sign-up-form.styles.scss'
 
 const SignUpForm = () => {
     const handleSubmit = event => {
-        event.preventDefault();
-        console.log("name", event.target.name.value)
-        console.log("lastname", event.target.lastname.value)
-        console.log("role", event.target.role.value)
-        alert('You have submitted the form.')
+        const name = event.target.name.value
+        const lastname = event.target.lastname.value
+        const role = event.target.role.value
+        if (!name || !lastname || !role) {
+            alert('You must fill in all the fields')
+            return
+        }
+        alert('Submission successful.')
+        // store the data in db
     }
 
     return (
         <section className="form-container">
-            <h1>This is some shitty form</h1>
+            <h1>Sign up </h1>
             <form onSubmit={handleSubmit}>
                 <fieldset>
                     <label>
