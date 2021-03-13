@@ -3,14 +3,24 @@ const logger = require("../middleware/logger");
 const config = require("config")
 
 module.exports = function () {
-  mongoose
-    .connect(dbConstructor(), {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    })
-    .then(() => logger.log("info", `database: ${config.get("db.name") || config.get("db.host")}`));
+  return new Promise((resolve, reject)=>{
+    try{
+      mongoose
+        .connect(dbConstructor(), {
+          useUnifiedTopology: true,
+          useNewUrlParser: true,
+          useFindAndModify: false,
+          useCreateIndex: true})
+        .then(() => {
+          logger.log("info", `database: ${config.get("db.name") || config.get("db.host")}`)
+          resolve()
+        });
+
+    }catch(err){
+      logger.log("error", err)
+      reject(err)
+    }
+  })
 };
 
 function dbConstructor (){

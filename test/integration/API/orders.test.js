@@ -1,8 +1,8 @@
-const express = require("express");
-const app = express();
-const orders = require("../../../API/orders");
+// const express = require("express");
+// const app = express();
+// const orders = require("../../../API/orders");
 
-app.use(orders);
+// app.use(orders);
 
 // const chai = require("chai");
 // const chaiHttp = require("chai-http");

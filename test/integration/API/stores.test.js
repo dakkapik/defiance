@@ -1,8 +1,8 @@
-const express = require("express");
-const app = express.Router();
-const stores = require("../../../API/stores");
+// const express = require("express");
+// const app = express.Router();
+// const stores = require("../../../API/stores");
 
-app.use(stores);
+// app.use(stores);
 
 // const chai = require("chai");
 // const chaiHttp = require("chai-http");

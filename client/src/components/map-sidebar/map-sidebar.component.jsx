@@ -25,7 +25,7 @@ StoreList: conditionally
 Dynamic Driver: conditionally
 Orders: conditionally
 */
-const MapSideBar = ({
+export const MapSideBar = ({
   socket,
   showorders,
   SocketOff,
