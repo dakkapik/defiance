@@ -7,23 +7,23 @@ import DriversActionTypes from "../drivers/drivers.types";
 import { fetchOrders } from "./orders.utils";
 //Actions
 import {
-  SetdragDropSuccess,
-  SetdragDropFailure,
-  InitDriverDragAndDrop,
-  RemoveDriverDragDrop,
+  setdragDropSuccess,
+  setdragDropFailure,
+  initDriverDragAndDrop,
+  removeDriverDragDrop,
 } from "./orders.action";
 
 //get storename
-const GetStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
+const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
 
 //get drivers
-const GetDriverFromReducer = (state) => state.drivers.currentDrivers;
+const getDriverFromReducer = (state) => state.drivers.currentDrivers;
 
 // we want to put the orders in the reducer apiorders: {},
 // And we want to to showcase the orders in the reducer currentdragdrop: {},
 // And we to save the drag and drop in the reducer dragdropcollection: []
 export function* putOrdersAndDragAndDrop() {
-  const storename = yield select(GetStoreNameFromReducer);
+  const storename = yield select(getStoreNameFromReducer);
 
   try {
     //Right Now it's not dynamic so we make api call to Royal Palms
@@ -36,7 +36,7 @@ export function* putOrdersAndDragAndDrop() {
       storename: storename,
     };
 
-    yield put(SetdragDropSuccess(ordersStoreName));
+    yield put(setdragDropSuccess(ordersStoreName));
   } catch (error) {
     const ordersFailure = {
       orders: [
@@ -49,25 +49,29 @@ export function* putOrdersAndDragAndDrop() {
       storename: storename,
     };
     //For any reason if /api/orders fails if the internet goes down we pass a failing order^
-    yield put(SetdragDropFailure(ordersFailure));
+    yield put(setdragDropFailure(ordersFailure));
     alert("Request to /api/orders has failed please refresh the page");
   }
 }
 
 // When a new Driver is added then we want to initalize the driver
 // to our drag and drop
-export function* InitalizeDriverDragAndDrop() {
-  const driver = yield select(GetDriverFromReducer);
-  const storename = yield select(GetStoreNameFromReducer);
-  yield put(InitDriverDragAndDrop({ driver: driver, storename: storename }));
+export function* initalizeDriverDragAndDrop() {
+  const driver = yield select(getDriverFromReducer);
+  const storename = yield select(getStoreNameFromReducer);
+  yield put(initDriverDragAndDrop({ driver: driver, storename: storename }));
 }
 //get drivers
-const GetRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;
+const getRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;
 export function* RemoveDriverDragAndDrop() {
-  const RemoveDriver = yield select(GetRemovedDriverFromReducer);
-  const drivers = yield select(GetDriverFromReducer);
+  const RemoveDriver = yield select(getRemovedDriverFromReducer);
+
+  // we want the latest drivers in the currentdragdrop object
+  // we do not want it from the orders reducer because that would be old state
+  // so we want the LATEST DATA currentdrivers from driver reducer
+  const drivers = yield select(getDriverFromReducer);
   yield put(
-    RemoveDriverDragDrop({ currentdrivers: drivers, remove: RemoveDriver })
+    removeDriverDragDrop({ currentdrivers: drivers, remove: RemoveDriver })
   );
 }
 
@@ -80,7 +84,7 @@ export function* listentoSocket() {
 export function* listentoAddActiveDriver() {
   yield takeLatest(
     DriversActionTypes.ADD_ACTIVE_DRIVER,
-    InitalizeDriverDragAndDrop
+    initalizeDriverDragAndDrop
   );
 }
 // Listen to when a driver is disconnecting

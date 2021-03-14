@@ -5,20 +5,20 @@ import { shallow } from "enzyme";
 describe("Orders component render", () => {
   let wrapper;
   let mockSocketOff;
-  let mockClearActiveDriver;
-  let mockOrdersSocketOn;
-  let mockOrdersSocketOff;
+  let mockclearActiveDriver;
+  let mockordersSocketOn;
+  let mockordersSocketOff;
 
   beforeEach(() => {
     mockSocketOff = jest.fn();
-    mockClearActiveDriver = jest.fn();
-    mockOrdersSocketOn = jest.fn();
-    mockOrdersSocketOff = jest.fn();
+    mockclearActiveDriver = jest.fn();
+    mockordersSocketOn = jest.fn();
+    mockordersSocketOff = jest.fn();
     const mockProps = {
       SocketOff: mockSocketOff,
-      ClearActiveDriver: mockClearActiveDriver,
-      OrdersSocketOn: mockOrdersSocketOn,
-      OrdersSocketOff: mockOrdersSocketOff,
+      clearActiveDriver: mockclearActiveDriver,
+      ordersSocketOn: mockordersSocketOn,
+      ordersSocketOff: mockordersSocketOff,
       socket: false,
       showorders: false,
     };
