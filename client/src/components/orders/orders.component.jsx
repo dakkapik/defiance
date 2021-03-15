@@ -6,15 +6,15 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Container, ContainerDriver, ContainerOrder } from "./orders.styles";
 //actions
 import {
-  PresistOrderColumn,
-  PresistAllColumn,
+  persistOrderColumn,
+  persistAllColumn,
 } from "../../redux/orders/orders.action";
 //components
 import Column from "../column/column.component";
 
 export const Orders = ({
-  PresistOrderColumn,
-  PresistAllColumn,
+  persistOrderColumn,
+  persistAllColumn,
   currentdragdrop,
 }) => {
   const onDragEnd = (result) => {
@@ -38,7 +38,7 @@ export const Orders = ({
     // If a draggable object remained in the first column
     // we presist the value within the first column
     if (start === finish) {
-      PresistOrderColumn({
+      persistOrderColumn({
         startorderids: start.orderIds,
         start: start,
         source: source,
@@ -47,7 +47,7 @@ export const Orders = ({
       });
       return;
     } else {
-      PresistAllColumn({
+      persistAllColumn({
         startorderids: start.orderIds,
         finishorderids: finish.orderIds,
         source: source,
@@ -105,10 +105,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  PresistOrderColumn: (onDragEndProperties) =>
-    dispatch(PresistOrderColumn(onDragEndProperties)),
-  PresistAllColumn: (onDragEndProperties) =>
-    dispatch(PresistAllColumn(onDragEndProperties)),
+  persistOrderColumn: (onDragEndProperties) =>
+    dispatch(persistOrderColumn(onDragEndProperties)),
+  persistAllColumn: (onDragEndProperties) =>
+    dispatch(persistAllColumn(onDragEndProperties)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);
