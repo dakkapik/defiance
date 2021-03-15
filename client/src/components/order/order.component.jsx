@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import globalcss from '../../global-css/styled-component-variable'
 const Container = styled.div`
-  border: 1px solid lightgrey;
+  border: 1px solid ${globalcss.textcolor};
   margin: auto;
 
   border-radius: 2px;
