@@ -2,18 +2,38 @@ import OrdersActionTypes from "./orders.types";
 import {
   addDragDropToCollection,
   getCurrentDragandDrop,
-  PresistOrderColumn,
-  SaveDragDropCollection,
+  persistOrderColumn,
+  saveDragDropCollection,
   initalizeDriverDragDrop,
-  PresistAllColumns,
-  RemoveDriverFromDragAndDrop,
+  persistAllColumn,
+  removeDriverFromDragAndDrop,
 } from "./orders.utils";
-import { differenceBy } from "lodash";
+
 const INITIAL_STATE = {
-  showorders: false,
+  showorders: false, // red arrow component ui changes
   apiorders: [],
-  dragdropcollection: [],
-  currentdragdrop: {},
+  dragdropcollection: [], // disconnecting and reconnect things will be saved
+
+  /*orderIds array dynamically changes when a order is being dragged to the columns key
+  columns: { "5578": { id: "5578", orderIds: [], title: "Orders" } },
+  meaning if i drag orders to a driver an order will get pushed to their orderids KEY
+  columns: { "5578": { id: "5578", orderIds: ['50'], title: "Orders" } },
+  every columns key will have an orderIds even column-1 !
+
+  However,Note! you might run into issues with both columnOrder key and columns key
+  because both have to be in sync otherwise react beautiful dnd will crash!
+  columnOrder: ["column-1","4545"],
+  columns: { 
+    "column-1": { id: "column-1", orderIds: [], title: "Orders" },
+    "4545": { id: "4545", orderIds: [], title: "Orders" },
+  },
+  */
+  currentdragdrop: {
+    columnOrder: ["column-1"],
+    columns: { "column-1": { id: "column-1", orderIds: [], title: "Orders" } },
+    orders: {},
+    storename: "",
+  },
 };
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
@@ -33,21 +53,24 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       };
 
     case OrdersActionTypes.PERSIST_ORDER_COLUMN:
-      const NewDragDropData = PresistOrderColumn(
+      const NewDragDropData = persistOrderColumn(
         state.currentdragdrop,
         action.payload
       );
-
       return {
         ...state,
-        currentdragdrop: { ...NewDragDropData },
-        dragdropcollection: SaveDragDropCollection(
+        currentdragdrop: NewDragDropData,
+
+        /* if the manager were to disconnect and reconnect
+        then the orders would be left in tacked
+        */
+        dragdropcollection: saveDragDropCollection(
           state.dragdropcollection,
           NewDragDropData
         ),
       };
     case OrdersActionTypes.PERSIST_ALL_COLUMN:
-      const NewDragAllDropData = PresistAllColumns(
+      const NewDragAllDropData = persistAllColumn(
         state.currentdragdrop,
         action.payload
       );
@@ -55,67 +78,44 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentdragdrop: { ...NewDragAllDropData },
-        dragdropcollection: SaveDragDropCollection(
+        dragdropcollection: saveDragDropCollection(
           state.dragdropcollection,
           NewDragAllDropData
         ),
       };
-    /*
 
-    When a manager connects to a store and disconnects and the
+    /*When a manager connects to a store and disconnects and the
     drivers are incoming and leaving  in the background
-    Initalize driver will update the drag and drop
-    
-    */
+    Initalize driver will update the drag and drop */
     case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
       //first find drag drop in collection
-      const currentDragDrop = state.dragdropcollection.find(
+      const FoundDragDropInCollections = state.dragdropcollection.find(
         (collection) => collection.storename === action.payload.storename
       );
 
-      if (currentDragDrop === undefined) return { ...state };
+      if (FoundDragDropInCollections === undefined) return { ...state };
 
-      const newDriver = differenceBy(
-        action.payload.driver,
-        currentDragDrop.currentdriver,
-        "employeeId"
+      const NewCurrentDragDrop = initalizeDriverDragDrop(
+        FoundDragDropInCollections,
+        action.payload.driver
       );
-
-      const RemoveDriver = differenceBy(
-        currentDragDrop.currentdriver,
-        action.payload.driver,
-        "employeeId"
-      );
-
-      const NewDragDrop = initalizeDriverDragDrop(
-        currentDragDrop,
-        newDriver,
-        RemoveDriver
-      );
-
       return {
         ...state,
-
-        // if you don't specify a new Object then react components will not update
-        currentdragdrop: {
-          ...NewDragDrop,
-          currentdriver: [...action.payload.driver],
-        },
-        dragdropcollection: SaveDragDropCollection(state.dragdropcollection, {
-          ...NewDragDrop,
-          currentdriver: [...action.payload.driver],
-        }),
+        currentdragdrop: NewCurrentDragDrop,
+        dragdropcollection: saveDragDropCollection(
+          state.dragdropcollection,
+          NewCurrentDragDrop
+        ),
       };
     case OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP:
-      const NewDriver = RemoveDriverFromDragAndDrop(
+      const NewDriver = removeDriverFromDragAndDrop(
         state.currentdragdrop,
         action.payload
       );
-
       return {
         ...state,
         currentdragdrop: { ...NewDriver },
-        dragdropcollection: SaveDragDropCollection(state.dragdropcollection, {
+        dragdropcollection: saveDragDropCollection(state.dragdropcollection, {
           ...NewDriver,
         }),
       };
