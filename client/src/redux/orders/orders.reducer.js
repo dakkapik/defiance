@@ -106,6 +106,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           currentdriver: [...action.payload.driver],
         }),
       };
+
     case OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP:
       const NewDriver = RemoveDriverFromDragAndDrop(
         state.currentdragdrop,
@@ -131,6 +132,24 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           state.dragdropcollection,
           action.payload
         ),
+      };
+
+    case OrdersActionTypes.SAVE_ORDER:
+      //https://material-ui.com/components/dialogs/#dialog
+      let orderIds = [];
+      for (const i in state.currentdragdrop.columns) {
+        if (state.currentdragdrop.columns[i].id !== "column-1") {
+          state.currentdragdrop.columns[i].orderIds.forEach(
+            (orderid, index) => {
+              orderIds.push(state.currentdragdrop.orders[orderid]);
+            }
+          );
+        }
+      }
+      alert(JSON.stringify(orderIds));
+
+      return {
+        ...state,
       };
 
     //UI UPDATES

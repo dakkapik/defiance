@@ -6,6 +6,7 @@ import "./map-sidebar.styles.scss";
 import {
   OrdersSocketOn,
   OrdersSocketOff,
+  saveOrders,
 } from "../../redux/orders/orders.action";
 import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
@@ -32,6 +33,7 @@ export const MapSideBar = ({
   ClearActiveDriver,
   OrdersSocketOn,
   OrdersSocketOff,
+  saveOrders,
 }) => {
   return (
     <div className="map-side-container">
@@ -42,7 +44,7 @@ export const MapSideBar = ({
       {socket ? (
         <div className="sidebar-container">
           <div className={showorders ? "side-bar-expanded " : "side-bar"}>
-            <div className="disconnect-container">
+            <div className="top-container">
               <Button
                 variant="outlined"
                 color="inherit"
@@ -52,6 +54,13 @@ export const MapSideBar = ({
                 }}
               >
                 Disconnect
+              </Button>
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={() => saveOrders()}
+              >
+                save
               </Button>
             </div>
             {/*If Manager clicks the arrow then showorders is true then Order Component renders */}
@@ -97,6 +106,7 @@ const mapDispatchToProps = (dispatch) => ({
   OrdersSocketOff: () => dispatch(OrdersSocketOff()),
   SocketOff: (bool) => dispatch(SocketOff(bool)),
   ClearActiveDriver: () => dispatch(ClearActiveDriver()),
+  saveOrders: () => dispatch(saveOrders()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapSideBar);

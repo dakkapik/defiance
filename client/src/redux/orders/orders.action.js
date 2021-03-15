@@ -26,6 +26,11 @@ export const SetdragDropFailure = (OrdersAndStore) => ({
   type: OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION,
   payload: OrdersAndStore,
 });
+
+export const saveOrders = () => ({
+  type: OrdersActionTypes.SAVE_ORDER,
+});
+
 export const PresistOrderColumn = (onDragEndProperties) => ({
   type: OrdersActionTypes.PERSIST_ORDER_COLUMN,
   payload: onDragEndProperties,

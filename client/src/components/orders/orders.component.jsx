@@ -59,7 +59,7 @@ export const Orders = ({
     }
   };
   //Array of html elements
-  let drivers = [];
+  let dom_elements_of_drivers = [];
 
   return (
     <div>
@@ -79,7 +79,7 @@ export const Orders = ({
                 </ContainerOrder>
               );
             } else {
-              drivers.push(
+              dom_elements_of_drivers.push(
                 <Column key={column.id} column={column} orders={orders} />
               );
             }
@@ -88,7 +88,7 @@ export const Orders = ({
             if (currentdragdrop.columnOrder.length - 1 === index) {
               return (
                 <ContainerDriver key={index}>
-                  {drivers.map((e, i) => e)}
+                  {dom_elements_of_drivers.map((e, i) => e)}
                 </ContainerDriver>
               );
             }

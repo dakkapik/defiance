@@ -11,8 +11,6 @@ export const animationName = keyframes`
 `;
 
 export const Container = styled.div`
-  width: 70%;
-  margin: auto;
   justify-content: center;
   display: flex;
   animation: ${animationName} ease 3s;
