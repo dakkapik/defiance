@@ -180,6 +180,8 @@ export const removeDriver = (drivers, currentdragdrop) => {
 };
 
 //ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+// change initializeDriverDragDrop => DragDropDelta
+// change drivers => incomingDragDrop
 export const initalizeDriverDragDrop = (currentdragdrop, drivers) => {
   //Check if a driver was added or removed
   currentdragdrop = addDriver(drivers, currentdragdrop);
