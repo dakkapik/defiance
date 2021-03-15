@@ -33,11 +33,10 @@ export function socketDriverOn(socket) {
       }
     });
     //most intensive
-    socket.on("d-position", (position, id, store) => {
-      position["id"] = id;
-      position["store"] = store;
 
-      emit(setActiveDriverPosition(position));
+    socket.on("d-position", (position) => {
+      emit(SetActiveDriverPosition(position));
+
     });
     socket.on("disconnected-users", (data) => {
       emit(removeActiveDriver(data));
