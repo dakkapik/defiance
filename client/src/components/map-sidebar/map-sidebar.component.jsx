@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
 //Actions
 import {
-  OrdersSocketOn,
-  OrdersSocketOff,
   saveOrders,
+  ordersSocketOn,
+  ordersSocketOff,
 } from "../../redux/orders/orders.action";
-import { ClearActiveDriver } from "../../redux/drivers/drivers.action";
+import { clearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
 //Components
 // import Map from "../map/map.component";
@@ -30,9 +30,9 @@ export const MapSideBar = ({
   socket,
   showorders,
   SocketOff,
-  ClearActiveDriver,
-  OrdersSocketOn,
-  OrdersSocketOff,
+  clearActiveDriver,
+  ordersSocketOn,
+  ordersSocketOff,
   saveOrders,
 }) => {
   return (
@@ -50,7 +50,7 @@ export const MapSideBar = ({
                 color="inherit"
                 onClick={() => {
                   SocketOff(false);
-                  ClearActiveDriver();
+                  clearActiveDriver();
                 }}
               >
                 Disconnect
@@ -71,7 +71,7 @@ export const MapSideBar = ({
               src={arrow}
               alt="expanded-arrow"
               onClick={() => {
-                OrdersSocketOff();
+                ordersSocketOff();
               }}
               className="arrow-expanded"
             />
@@ -80,7 +80,7 @@ export const MapSideBar = ({
               src={arrow}
               alt="arrow"
               onClick={() => {
-                OrdersSocketOn();
+                ordersSocketOn();
               }}
               className="arrow"
             />
@@ -102,11 +102,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  OrdersSocketOn: () => dispatch(OrdersSocketOn()),
-  OrdersSocketOff: () => dispatch(OrdersSocketOff()),
+  ordersSocketOn: () => dispatch(ordersSocketOn()),
+  ordersSocketOff: () => dispatch(ordersSocketOff()),
   SocketOff: (bool) => dispatch(SocketOff(bool)),
-  ClearActiveDriver: () => dispatch(ClearActiveDriver()),
   saveOrders: () => dispatch(saveOrders()),
+  clearActiveDriver: () => dispatch(clearActiveDriver()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapSideBar);

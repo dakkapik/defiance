@@ -7,7 +7,14 @@ describe("Order Reducer", () => {
     showorders: false,
     apiorders: [],
     dragdropcollection: [],
-    currentdragdrop: {},
+    currentdragdrop: {
+      columnOrder: ["column-1"],
+      columns: {
+        "column-1": { id: "column-1", orderIds: [], title: "Orders" },
+      },
+      orders: {},
+      storename: "",
+    },
   };
   it("should return default state", () => {
     const newState = ordersReducer(undefined, {});
