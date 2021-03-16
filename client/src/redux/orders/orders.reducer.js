@@ -4,7 +4,7 @@ import {
   getCurrentDragandDrop,
   persistOrderColumn,
   saveDragDropCollection,
-  initalizeDriverDragDrop,
+  deltaDriverDragDrop,
   persistAllColumn,
   removeDriverFromDragAndDrop,
 } from "./orders.utils";
@@ -94,8 +94,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       );
 
       if (FoundDragDropInCollections === undefined) return { ...state };
-
-      const NewCurrentDragDrop = initalizeDriverDragDrop(
+      const NewCurrentDragDrop = deltaDriverDragDrop(
         FoundDragDropInCollections,
         action.payload.driver
       );

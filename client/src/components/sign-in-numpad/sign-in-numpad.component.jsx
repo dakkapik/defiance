@@ -2,7 +2,8 @@ import React from 'react'
 
 import './sign-in-numpad.styles.scss'
 
-function SingInNumpad() {
+
+const SignInNumpad = () => {
     const addNumber = num => {
         const useridInput = document.getElementById('userid')
         useridInput.value = useridInput.value + num
@@ -47,4 +48,4 @@ function SingInNumpad() {
     )
 }
 
-export default SingInNumpad
+export default SignInNumpad;

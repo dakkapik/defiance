@@ -1,35 +1,35 @@
-import React from 'react'
+import React from "react";
 
-import './sign-in-form.styles.scss';
+import "./sign-in-form.styles.scss";
 
-import SingInNumpad from '../sign-in-numpad/sign-in-numpad.component'
+import SignInNumpad from "../sign-in-numpad/sign-in-numpad.component";
 
-function SignInForm() {
-    const handleSubmit = event => {
-        event.preventDefault()
-        const userid = event.target.userid.value
-        if (!userid) {
-            alert('You must enter your user id!')
-            return
-        }
-        console.log(userid)
+const SignInForm = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const userid = event.target.userid.value;
+    if (!userid) {
+      alert("You must enter your user id!");
+      return;
     }
+    console.log(userid);
+  };
 
-    return (
-        <section className="form-container">
-            <h1>Sign In</h1>
-            <form onSubmit={handleSubmit}>
-                <fieldset>
-                    <label>
-                        <p>User id:</p>
-                        <input name="userid" id="userid" type="password" />
-                    </label>
-                    <SingInNumpad />
-                </fieldset>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-    )
-}
+  return (
+    <section className="form-container">
+      <h1>Sign In</h1>
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <label>
+            <p>User id:</p>
+            <input name="userid" id="userid" type="password" />
+          </label>
+          <SignInNumpad />
+        </fieldset>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  );
+};
 
-export default SignInForm
+export default SignInForm;

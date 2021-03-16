@@ -35,8 +35,7 @@ export function socketDriverOn(socket) {
     //most intensive
 
     socket.on("d-position", (position) => {
-      emit(SetActiveDriverPosition(position));
-
+      emit(setActiveDriverPosition(position));
     });
     socket.on("disconnected-users", (data) => {
       emit(removeActiveDriver(data));
