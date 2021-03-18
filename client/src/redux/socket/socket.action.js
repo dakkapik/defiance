@@ -1,10 +1,10 @@
 import SocketActionTypes from "./socket.types";
-export const SocketInitStore = (Store) => ({
+export const socketInitStore = (Store) => ({
   type: SocketActionTypes.SET_SOCKET_STORE_NAME,
   payload: Store,
 });
 
-export const Socket = (socket) => ({
+export const putSocketInReducer = (socket) => ({
   type: SocketActionTypes.INITALIZE_SOCKET,
   payload: socket,
 });

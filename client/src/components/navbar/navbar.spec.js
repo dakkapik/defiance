@@ -40,6 +40,7 @@ describe("NavBar component", () => {
     wrapper.find('[data-test="dateTab1"]').simulate("click");
     wrapper.find('[data-test="dateTab2"]').simulate("click");
     wrapper.find('[data-test="dateTab3"]').simulate("click");
+    wrapper.find('[data-test="dateTab4"]').simulate("click");
     expect(mockHistory.push).toHaveBeenCalledWith(`${mockMatch.path}`);
   });
 
