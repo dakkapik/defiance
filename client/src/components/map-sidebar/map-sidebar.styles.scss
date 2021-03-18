@@ -1,37 +1,13 @@
+@import "../../global-css/variables.scss";
 .map-side-container {
   position: relative;
-}
-
-.disconnect-container {
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  justify-content: center;
-  align-items: center;
-  overflow-y: hidden;
-}
-
-.arrow {
-  position: absolute;
-
-  height: 30px;
-  width: 30px;
-  top: 45%;
-  right: 14em;
-  transition: right 1s;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  cursor: pointer;
-  @media screen and (max-width: 670px) {
-    display: none;
-  }
 }
 
 .side-bar {
   width: 15em;
   height: 95vh;
   color: white;
-  background-color: #2f3136;
+  background-color: $lightdark;
   position: absolute;
   top: 0;
   right: 0;
@@ -50,6 +26,32 @@
     height: fit-content;
   }
 }
+
+.disconnect-container {
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+}
+
+.arrow {
+  position: absolute;
+  
+  height: 30px;
+  width: 30px;
+  top: 45%;
+  right: 14em;
+  transition: right 1s;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  cursor: pointer;
+  @media screen and (max-width: 670px) {
+    display: none;
+  }
+}
+
 
 .arrow-expanded {
   cursor: pointer;

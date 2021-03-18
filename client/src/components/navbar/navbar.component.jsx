@@ -6,14 +6,14 @@ import Tab from "@material-ui/core/Tab";
 import { useLocation } from "react-router-dom";
 import { withRouter } from "react-router";
 import "./navbar.styles.scss";
-
+import globalcss from "../../global-css/styled-component-variable";
 const useStyles = makeStyles({
   root: {
     display: "flex",
     flexGrow: 1,
     maxWidth: "100%",
     justifyContent: "center",
-    backgroundColor: "#202225",
+    backgroundColor: globalcss.secondary,
     color: "white",
   },
 });
@@ -21,7 +21,7 @@ let directory = {
   "/missioncontrol": 0,
   "/": 1,
   "/signin": 2,
-  "/signup": 3
+  "/signup": 3,
 };
 export const NavBar = ({ history }) => {
   const classes = useStyles();
@@ -37,10 +37,10 @@ export const NavBar = ({ history }) => {
       <Paper square className={classes.root}>
         <Tabs
           value={value}
+          TabIndicatorProps={{ style: { background: globalcss.primary } }}
           data-test="dateTabs"
           onChange={handleChange}
           variant="fullWidth"
-          indicatorColor="secondary"
           textColor="inherit"
           aria-label="icon label tabs example"
         >
@@ -61,6 +61,7 @@ export const NavBar = ({ history }) => {
             label="signin"
           />
           <Tab
+            data-test="dateTab4"
             style={{ width: "20vh" }}
             onClick={() => history.push("/signup")}
             label="signup"
