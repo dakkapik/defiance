@@ -146,7 +146,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           );
         }
       }
-      alert(JSON.stringify(orderIds));
+      console.log(JSON.stringify(orderIds));
 
       return {
         ...state,

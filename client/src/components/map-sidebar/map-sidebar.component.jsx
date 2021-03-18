@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
 //Actions
 import {
-  saveOrders,
   ordersSocketOn,
   ordersSocketOff,
 } from "../../redux/orders/orders.action";
@@ -12,12 +11,14 @@ import { clearActiveDriver } from "../../redux/drivers/drivers.action";
 import { SocketOff } from "../../redux/socket/socket.action";
 //Components
 // import Map from "../map/map.component";
+import ModalButton from "../modal/modal.component";
 import Button from "@material-ui/core/Button";
 import StoreList from "../store-list/store-list.component";
 import Orders from "../orders/orders.component";
 //Assets
 import arrow from "./arrow.png";
 import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
+import { DisconnectButtonStyles } from "./map-sidebar.styles";
 /*
 MapSideBar functionality
 Renders: Map componenet always 
@@ -33,8 +34,8 @@ export const MapSideBar = ({
   clearActiveDriver,
   ordersSocketOn,
   ordersSocketOff,
-  saveOrders,
 }) => {
+  const disconnect_button_classes = DisconnectButtonStyles();
   return (
     <div className="map-side-container">
       {/* <Map /> */}
@@ -44,25 +45,32 @@ export const MapSideBar = ({
       {socket ? (
         <div className="sidebar-container">
           <div className={showorders ? "side-bar-expanded " : "side-bar"}>
-            <div className="top-container">
-              <Button
-                variant="outlined"
-                color="inherit"
-                onClick={() => {
-                  SocketOff(false);
-                  clearActiveDriver();
-                }}
-              >
-                Disconnect
-              </Button>
-              <Button
-                variant="outlined"
-                color="inherit"
-                onClick={() => saveOrders()}
-              >
-                save
-              </Button>
-            </div>
+            {showorders ? (
+              <div className="top-container-expanded">
+                <div className="top-container-expanded__left-section" />
+                <div className="top-container-expanded__right-section">
+                  <ModalButton />
+                </div>
+              </div>
+            ) : (
+              <div className="top-container">
+                <Button
+                  classes={{
+                    label: disconnect_button_classes.label,
+                    root: disconnect_button_classes.root,
+                  }}
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => {
+                    SocketOff(false);
+                    clearActiveDriver();
+                  }}
+                >
+                  Disconnect
+                </Button>
+              </div>
+            )}
+
             {/*If Manager clicks the arrow then showorders is true then Order Component renders */}
             {showorders ? <Orders /> : <DynamicDriverList />}
           </div>
@@ -105,7 +113,6 @@ const mapDispatchToProps = (dispatch) => ({
   ordersSocketOn: () => dispatch(ordersSocketOn()),
   ordersSocketOff: () => dispatch(ordersSocketOff()),
   SocketOff: (bool) => dispatch(SocketOff(bool)),
-  saveOrders: () => dispatch(saveOrders()),
   clearActiveDriver: () => dispatch(clearActiveDriver()),
 });
 
