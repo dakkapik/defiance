@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import MissionControl from "./pages/missioncontrol/mission-control.component";
 import HomePage from "./pages/home/home.component";
 import SignIn from "./pages/sign-in/sign-in.component";
-import SignUpForm from './components/sign-up-form/sign-up-form.component'
+import SignUp from "./pages/sign-up/sign-up.component";
 import NavBar from "./components/navbar/navbar.component";
 import "./App.styles.scss";
 
@@ -15,7 +15,7 @@ const App = () => {
         <Route path="/missioncontrol" component={MissionControl} />
         <Route exact path="/" component={HomePage} />
         <Route path="/signin" component={SignIn} />
-        <Route path="/signup" component={SignUpForm} />
+        <Route path="/signup" component={SignUp} />
       </Switch>
     </div>
   );
