@@ -9,7 +9,7 @@ import { fetchOrders } from "./orders.utils";
 import {
   setdragDropSuccess,
   setdragDropFailure,
-  initDriverDragAndDrop,
+  deltaDriverDragAndDrop,
   removeDriverDragDrop,
 } from "./orders.action";
 
@@ -59,7 +59,7 @@ export function* putOrdersAndDragAndDrop() {
 export function* initalizeDriverDragAndDrop() {
   const driver = yield select(getDriverFromReducer);
   const storename = yield select(getStoreNameFromReducer);
-  yield put(initDriverDragAndDrop({ driver: driver, storename: storename }));
+  yield put(deltaDriverDragAndDrop({ driver: driver, storename: storename }));
 }
 //get drivers
 const getRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;

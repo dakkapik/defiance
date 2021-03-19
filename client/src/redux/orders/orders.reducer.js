@@ -7,6 +7,7 @@ import {
   deltaDriverDragDrop,
   persistAllColumn,
   removeDriverFromDragAndDrop,
+  getDriverWithOrders,
 } from "./orders.utils";
 
 const INITIAL_STATE = {
@@ -34,6 +35,7 @@ const INITIAL_STATE = {
     orders: {},
     storename: "",
   },
+  drivers_with_orders: [],
 };
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
@@ -87,7 +89,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
     /*When a manager connects to a store and disconnects and the
     drivers are incoming and leaving  in the background
     Initalize driver will update the drag and drop */
-    case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
+    case OrdersActionTypes.DELTA_DRIVER_FOR_DRAG_AND_DROP:
       //first find drag drop in collection
       const FoundDragDropInCollections = state.dragdropcollection.find(
         (collection) => collection.storename === action.payload.storename
@@ -134,21 +136,14 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       };
 
     case OrdersActionTypes.SAVE_ORDER:
-      //https://material-ui.com/components/dialogs/#dialog
-      let orderIds = [];
-      for (const i in state.currentdragdrop.columns) {
-        if (state.currentdragdrop.columns[i].id !== "column-1") {
-          state.currentdragdrop.columns[i].orderIds.forEach(
-            (orderid, index) => {
-              orderIds.push(state.currentdragdrop.orders[orderid]);
-            }
-          );
-        }
-      }
-      console.log(JSON.stringify(orderIds));
-
       return {
         ...state,
+        drivers_with_orders: getDriverWithOrders(
+          //drivers in currentdragdrop
+          state.currentdragdrop.columns,
+          //orders in currentdragdrop
+          state.currentdragdrop.orders
+        ),
       };
 
     //UI UPDATES

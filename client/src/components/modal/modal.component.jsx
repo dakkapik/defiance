@@ -5,18 +5,19 @@ import Modal from "@material-ui/core/Modal";
 
 import { useStyles, Fade } from "./modal.styles";
 import Button from "@material-ui/core/Button";
-export const ModalButton = () => {
+export const ModalButton = ({ saveOrders, drivers_with_orders }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  console.log(drivers_with_orders);
   const handleOpen = () => {
     setOpen(true);
+    saveOrders();
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log(drivers_with_orders);
   return (
     <div>
       <Button variant="outlined" color="inherit" onClick={handleOpen}>
@@ -33,7 +34,11 @@ export const ModalButton = () => {
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 id="spring-modal-title">Spring modal</h2>
-            <p id="spring-modal-description">react-spring animates me.</p>
+            {drivers_with_orders.map((order, i) => (
+              <p id="spring-modal-description">
+                {order.firstName}, {JSON.stringify(order.orders)}
+              </p>
+            ))}
           </div>
         </Fade>
       </Modal>
@@ -41,8 +46,12 @@ export const ModalButton = () => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  drivers_with_orders: state.orders.drivers_with_orders,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   saveOrders: () => dispatch(saveOrders()),
 });
 
-export default connect(null, mapDispatchToProps)(ModalButton);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalButton);

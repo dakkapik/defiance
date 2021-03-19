@@ -108,12 +108,14 @@ export const saveDragDropCollection = (dragdropcollection, NewDragDropData) => {
       : dragdrop
   );
 };
-//FUNCTION FOR ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+//FUNCTION FOR ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const addDriver = (drivers, currentdragdrop) => {
-  /*
-  drivers                       = [{employeeId: 4545'}]
+  /*drivers                       = [{employeeId: 4545'}]
+
   currentdragdrop.currentdriver = [{employeeId:'4545'}, {employeeId:'5578'}, {employeeId::"8954"}]
+
   because both drivers and currentdriver contain [{employeeId: 4545'}]
+
   the output is [{employeeId:'5578'},{employeeId::"8954"}]*/
   const add_driver = differenceBy(
     drivers,
@@ -141,7 +143,7 @@ export const addDriver = (drivers, currentdragdrop) => {
   );
   return currentdragdrop;
 };
-//FUNCTION FOR ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+//FUNCTION FOR ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const removeDriver = (drivers, currentdragdrop) => {
   const removedriver = differenceBy(
     currentdragdrop.currentdriver,
@@ -179,9 +181,7 @@ export const removeDriver = (drivers, currentdragdrop) => {
   return currentdragdrop;
 };
 
-//ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
-// change initializeDriverDragDrop => DragDropDelta
-// change drivers => incomingDragDrop
+//ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const deltaDriverDragDrop = (currentdragdrop, incoming_driver) => {
   //Check if a driver was added or removed
   currentdragdrop = addDriver(incoming_driver, currentdragdrop);
@@ -234,6 +234,31 @@ export const createNewDragDrop = (NewOrders, NewStoreName) => {
     newDragDropData.columns["column-1"].orderIds.push(orderNumber.toString());
   });
   return newDragDropData;
+};
+// ACTION TYPE FOR SAVE  When manager hits save button
+export const getDriverWithOrders = (drivers, orders) => {
+  let drivers_with_orders = [];
+  for (const i in drivers) {
+    //      array     string
+    const { orderIds, id } = drivers[i];
+    //skip column-1 we don't need column-1 lol?
+    if (id === "column-1") continue;
+
+    const driver_with_orders = {
+      orders: [], // push
+      ...drivers[i], // driver's firstName, lastName, etc..
+    };
+
+    // convert orderids array ['50','60'] to  [{address:'smithy jenkinz house'}, {{address:'felipe's rat house'}}]
+    orderIds.forEach((orderid, index) => {
+      // use '50','60' to search key  in orders['50'] , orders['60'] and push the data into orders
+      driver_with_orders.orders.push(orders[orderid]);
+    });
+    //finally after driver's orders been settled push the driver in  drivers_with_orders Array
+    drivers_with_orders.push(driver_with_orders);
+  }
+
+  return drivers_with_orders;
 };
 
 export const fetchOrders = () => {

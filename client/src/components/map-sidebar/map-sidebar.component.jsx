@@ -8,7 +8,7 @@ import {
   ordersSocketOff,
 } from "../../redux/orders/orders.action";
 import { clearActiveDriver } from "../../redux/drivers/drivers.action";
-import { SocketOff } from "../../redux/socket/socket.action";
+import { socketOff } from "../../redux/socket/socket.action";
 //Components
 // import Map from "../map/map.component";
 import ModalButton from "../modal/modal.component";
@@ -30,7 +30,7 @@ Orders: conditionally
 export const MapSideBar = ({
   socket,
   showorders,
-  SocketOff,
+  socketOff,
   clearActiveDriver,
   ordersSocketOn,
   ordersSocketOff,
@@ -62,7 +62,7 @@ export const MapSideBar = ({
                   variant="outlined"
                   color="secondary"
                   onClick={() => {
-                    SocketOff(false);
+                    socketOff(false);
                     clearActiveDriver();
                   }}
                 >
@@ -112,7 +112,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   ordersSocketOn: () => dispatch(ordersSocketOn()),
   ordersSocketOff: () => dispatch(ordersSocketOff()),
-  SocketOff: (bool) => dispatch(SocketOff(bool)),
+  socketOff: (bool) => dispatch(socketOff(bool)),
   clearActiveDriver: () => dispatch(clearActiveDriver()),
 });
 

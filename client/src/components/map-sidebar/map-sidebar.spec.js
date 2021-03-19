@@ -15,7 +15,7 @@ describe("Orders component render", () => {
     mockordersSocketOn = jest.fn();
     mockordersSocketOff = jest.fn();
     const mockProps = {
-      SocketOff: mockSocketOff,
+      socketOff: mockSocketOff,
       clearActiveDriver: mockclearActiveDriver,
       ordersSocketOn: mockordersSocketOn,
       ordersSocketOff: mockordersSocketOff,
