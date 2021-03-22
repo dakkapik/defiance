@@ -1,5 +1,13 @@
 const mongoose = require("mongoose")
 const joi = require("joi");
+const STATUS_COMPLETED = "completed";
+const STATUS_ON_ROUTE = "on_route";
+const STATUS_UNASSIGNED = "unassigned";
+
+function validateOrderStatus(status){
+    const schema = joi.string().required().equal(STATUS_COMPLETED, STATUS_ON_ROUTE, STATUS_UNASSIGNED)
+    return schema.validate(status)
+}
 
 function validateOrder(order) {
     const schema = joi.object({
@@ -81,4 +89,5 @@ const Order = new mongoose.model("Orders", orderSchema);
 
 module.exports.Order = Order;
 module.exports.validateOrder = validateOrder;
+module.exports.validateOrderStatus = validateOrderStatus;
 module.exports.orderSchema = orderSchema;
