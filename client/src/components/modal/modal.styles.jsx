@@ -19,6 +19,8 @@ export const useStyles = makeStyles((theme) =>
       borderRadius: "5px",
       padding: "20px",
       outline: "none",
+      width: "500px",
+      wordBreak: "break-all",
     },
   })
 );

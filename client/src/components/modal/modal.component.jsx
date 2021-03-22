@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 export const ModalButton = ({ saveOrders, drivers_with_orders }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  console.log(drivers_with_orders);
+
   const handleOpen = () => {
     setOpen(true);
     saveOrders();
@@ -17,7 +17,7 @@ export const ModalButton = ({ saveOrders, drivers_with_orders }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(drivers_with_orders);
+
   return (
     <div>
       <Button variant="outlined" color="inherit" onClick={handleOpen}>
@@ -35,7 +35,7 @@ export const ModalButton = ({ saveOrders, drivers_with_orders }) => {
           <div className={classes.paper}>
             <h2 id="spring-modal-title">Spring modal</h2>
             {drivers_with_orders.map((order, i) => (
-              <p id="spring-modal-description">
+              <p key={i} id="spring-modal-description">
                 {order.firstName}, {JSON.stringify(order.orders)}
               </p>
             ))}

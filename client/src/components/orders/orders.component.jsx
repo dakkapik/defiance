@@ -75,12 +75,22 @@ export const Orders = ({
             if (column.id === "column-1") {
               return (
                 <ContainerOrder key={index}>
-                  <Column key={column.id} column={column} orders={orders} />
+                  <Column
+                    delete_mark={false}
+                    key={column.id}
+                    column={column}
+                    orders={orders}
+                  />
                 </ContainerOrder>
               );
             } else {
               dom_elements_of_drivers.push(
-                <Column key={column.id} column={column} orders={orders} />
+                <Column
+                  delete_mark={true}
+                  key={column.id}
+                  column={column}
+                  orders={orders}
+                />
               );
             }
             //At the final iteration we want to display the driver in a containerized

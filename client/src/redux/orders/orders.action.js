@@ -35,6 +35,11 @@ export const removeDriverDragDrop = (driversAndremoveDriver) => ({
   type: OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP,
   payload: driversAndremoveDriver,
 });
+//when manager presses x button when driver has an order
+export const removeOrderFromDriver = (order) => ({
+  type: OrdersActionTypes.REMOVE_ORDER_FROM_DRIVER,
+  payload: order,
+});
 
 // UI CASES
 export const ordersSocketOn = () => ({
