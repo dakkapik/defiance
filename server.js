@@ -31,11 +31,10 @@ const getStores = () => {
       let storesObj = {}
       require("./models/store").Store.find()
       .then(stores=>{
-          stores.forEach(store=>{
-              storesObj[store.storeId] = {users: {}, manager: false}
-          });
-          resolve(storesObj)
+        stores.forEach(store=>{
+          storesObj[store.storeId] = {users: {}, manager: false}
         });
-
+        resolve(storesObj)
+      });
   })
 };
