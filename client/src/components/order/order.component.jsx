@@ -2,9 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import globalcss from "../../global-css/styled-component-variable";
-import IconButton from "@material-ui/core/IconButton";
-import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
-import { makeStyles } from "@material-ui/core/styles";
+import XmarkModalButton from "../x-mark-modal-button/x-mark-modal-button.component";
 const Container = styled.div`
   border: 1px solid ${globalcss.textcolor};
   margin: auto;
@@ -21,30 +19,13 @@ const OrderDetails = styled.div`
   width: 300px;
   margin-right: 3vh;
   word-break: break-all;
-  margin-right: ${(props) => (props.delete_mark ? "3vh" : "0px")};
+  margin-right: ${(props) => (props.delete_mark ? "1vh" : "0px")};
 `;
 const Info = styled.div`
   padding: 5px;
 `;
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "0px",
-  },
-}));
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
 
 const Order = ({ order, index, delete_mark }) => {
-  const classes = useStyles();
-  /*
-  A Draggable expects its child to be a function 
-  Required to have an ID
-  */
-  const removeOrderFromDriver = (orderid) => {
-    console.log(x);
-  };
   return (
     <Draggable draggableId={order.id} index={index}>
       {(provided) => (
@@ -64,18 +45,15 @@ const Order = ({ order, index, delete_mark }) => {
             <Info> Time : {order.date}</Info>
           </OrderDetails>
           {delete_mark ? (
-            <ButtonContainer>
-              <IconButton
-                onClick={() => removeOrderFromDriver(order.id)}
-                color="inherit"
-                className={classes.root}
-                aria-label="delete"
-              >
-                <CloseRoundedIcon />
-              </IconButton>
-            </ButtonContainer>
+            <XmarkModalButton
+              order_to_delete={{
+                orderid: order.id,
+                driverid: order.livesInColumn,
+                drivername: order.livesInNameColumn,
+              }}
+            />
           ) : (
-            <div></div>
+            <div />
           )}
         </Container>
       )}

@@ -8,6 +8,7 @@ import {
   persistAllColumn,
   removeDriverFromDragAndDrop,
   getDriverWithOrders,
+  removeorderfromDriver,
 } from "./orders.utils";
 
 const INITIAL_STATE = {
@@ -145,7 +146,20 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           state.currentdragdrop.orders
         ),
       };
+    case OrdersActionTypes.REMOVE_ORDER_FROM_DRIVER:
+      const NewCurrentDragDrop_RemoveOrder = removeorderfromDriver(
+        action.payload,
+        state.currentdragdrop
+      );
 
+      return {
+        ...state,
+        currentdragdrop: NewCurrentDragDrop_RemoveOrder,
+        dragdropcollection: saveDragDropCollection(
+          state.dragdropcollection,
+          NewCurrentDragDrop_RemoveOrder
+        ),
+      };
     //UI UPDATES
     case OrdersActionTypes.ORDERS_SOCKET_ON:
       return {

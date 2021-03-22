@@ -10,8 +10,8 @@ import {
 import { clearActiveDriver } from "../../redux/drivers/drivers.action";
 import { socketOff } from "../../redux/socket/socket.action";
 //Components
-// import Map from "../map/map.component";
-import ModalButton from "../modal/modal.component";
+import Map from "../map/map.component";
+import SaveModalButton from "../save-modal-button/save-modal-button.component";
 import Button from "@material-ui/core/Button";
 import StoreList from "../store-list/store-list.component";
 import Orders from "../orders/orders.component";
@@ -38,7 +38,7 @@ export const MapSideBar = ({
   const disconnect_button_classes = DisconnectButtonStyles();
   return (
     <div className="map-side-container">
-      {/* <Map /> */}
+      <Map />
       {/* 
        If Manager does click a store then socket=true  then dynamic driver loads with showorders being false
        */}
@@ -49,7 +49,7 @@ export const MapSideBar = ({
               <div className="top-container-expanded">
                 <div className="top-container-expanded__left-section" />
                 <div className="top-container-expanded__right-section">
-                  <ModalButton />
+                  <SaveModalButton />
                 </div>
               </div>
             ) : (

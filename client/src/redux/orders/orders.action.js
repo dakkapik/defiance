@@ -30,18 +30,18 @@ export const deltaDriverDragAndDrop = (driversAndstore) => ({
   type: OrdersActionTypes.DELTA_DRIVER_FOR_DRAG_AND_DROP,
   payload: driversAndstore,
 });
-// when a driver leaves called in drivers.utlis in drivers folder
+// when a driver leaves within the socket for more detail it's in drivers.utlis in drivers folder
 export const removeDriverDragDrop = (driversAndremoveDriver) => ({
   type: OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP,
   payload: driversAndremoveDriver,
 });
-//when manager presses x button when driver has an order
+//when manager presses x button to an order
 export const removeOrderFromDriver = (order) => ({
   type: OrdersActionTypes.REMOVE_ORDER_FROM_DRIVER,
   payload: order,
 });
 
-// UI CASES
+// UI CASES for expanded the mapsidebar-component and compressing
 export const ordersSocketOn = () => ({
   type: OrdersActionTypes.ORDERS_SOCKET_ON,
 });

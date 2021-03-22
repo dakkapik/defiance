@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import React from "react";
 import Modal from "@material-ui/core/Modal";
 
-import { useStyles, Fade } from "./modal.styles";
+import { useStyles, Fade } from "./save-modal-button.styles";
 import Button from "@material-ui/core/Button";
-export const ModalButton = ({ saveOrders, drivers_with_orders }) => {
+export const SaveModalButton = ({ saveOrders, drivers_with_orders }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -54,4 +54,4 @@ const mapDispatchToProps = (dispatch) => ({
   saveOrders: () => dispatch(saveOrders()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalButton);
+export default connect(mapStateToProps, mapDispatchToProps)(SaveModalButton);
