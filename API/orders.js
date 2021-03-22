@@ -3,8 +3,6 @@ const router = express.Router();
 const { validateOrder, Order } = require("../models/order");
 // const validateObjectId = require("../middleware/validateObjectId");
 
-//this is a test from github
-
 router.get('/', async(req, res)=>{
   const orders = await Order.find().sort('orderNumber')
   res.status(200).send(orders)
