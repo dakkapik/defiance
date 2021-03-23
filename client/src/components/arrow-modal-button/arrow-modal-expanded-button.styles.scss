@@ -1,0 +1,21 @@
+.arrow-expanded {
+  cursor: pointer;
+  position: absolute;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  height: 30px;
+  width: 30px;
+  top: 45%;
+  right: 83.5%;
+  transition: right 1s;
+
+  @media screen and (max-width: 1150px) {
+    right: 55em;
+  }
+  @media screen and (max-width: 1000px) {
+    right: 39em;
+  }
+  @media screen and (max-width: 670px) {
+    display: none;
+  }
+}

@@ -146,6 +146,35 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           state.currentdragdrop.orders
         ),
       };
+
+    case OrdersActionTypes.DISCARD_ORDER_CHANGES:
+      const arrays_in_array_orderid = [];
+      let Clear_All_Drivers_Order = state.currentdragdrop;
+      for (const i in Clear_All_Drivers_Order.columns) {
+        // we dont wanna clear order column ):
+        if (Clear_All_Drivers_Order.columns[i].id === "column-1") continue; // continue means skip within our loop
+        arrays_in_array_orderid.push(
+          Clear_All_Drivers_Order.columns[i].orderIds
+        );
+
+        Clear_All_Drivers_Order.columns[i].orderIds = [];
+      }
+      const flatten_arrays_in_array_orderid = [].concat.apply(
+        [],
+        arrays_in_array_orderid
+      );
+      Clear_All_Drivers_Order.columns["column-1"].orderIds = [
+        ...Clear_All_Drivers_Order.columns["column-1"].orderIds,
+        ...flatten_arrays_in_array_orderid,
+      ];
+
+      return {
+        ...state,
+        currentdragdrop: { ...Clear_All_Drivers_Order },
+        dragdropcollection: saveDragDropCollection(state.dragdropcollection, {
+          ...Clear_All_Drivers_Order,
+        }),
+      };
     case OrdersActionTypes.REMOVE_ORDER_FROM_DRIVER:
       const NewCurrentDragDrop_RemoveOrder = removeorderfromDriver(
         action.payload,

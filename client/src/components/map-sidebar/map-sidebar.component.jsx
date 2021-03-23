@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
@@ -10,6 +10,7 @@ import {
 import { clearActiveDriver } from "../../redux/drivers/drivers.action";
 import { socketOff } from "../../redux/socket/socket.action";
 //Components
+import ArrowModalButton from "../arrow-modal-button/arrow-expanded-modal-button.component";
 import Map from "../map/map.component";
 import SaveModalButton from "../save-modal-button/save-modal-button.component";
 import Button from "@material-ui/core/Button";
@@ -35,7 +36,16 @@ export const MapSideBar = ({
   ordersSocketOn,
   ordersSocketOff,
 }) => {
+  const [x, setX] = useState(false);
   const disconnect_button_classes = DisconnectButtonStyles();
+  const handleClose = () => {
+    setX(false);
+  };
+
+  const handleOpen = () => {
+    setX(true);
+  };
+
   return (
     <div className="map-side-container">
       <Map />
@@ -74,14 +84,15 @@ export const MapSideBar = ({
             {/*If Manager clicks the arrow then showorders is true then Order Component renders */}
             {showorders ? <Orders /> : <DynamicDriverList />}
           </div>
+          <ArrowModalButton x={x} handleClose={handleClose} />
           {showorders ? (
             <img
               src={arrow}
+              className="arrow-expanded"
               alt="expanded-arrow"
               onClick={() => {
-                ordersSocketOff();
+                handleOpen();
               }}
-              className="arrow-expanded"
             />
           ) : (
             <img
@@ -111,7 +122,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   ordersSocketOn: () => dispatch(ordersSocketOn()),
-  ordersSocketOff: () => dispatch(ordersSocketOff()),
+  ordersSocketOff: (x) => dispatch(ordersSocketOff(x)),
   socketOff: (bool) => dispatch(socketOff(bool)),
   clearActiveDriver: () => dispatch(clearActiveDriver()),
 });

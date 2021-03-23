@@ -41,10 +41,15 @@ export const removeOrderFromDriver = (order) => ({
   payload: order,
 });
 
+export const discardOrderChanges = () => ({
+  type: OrdersActionTypes.DISCARD_ORDER_CHANGES,
+});
+
 // UI CASES for expanded the mapsidebar-component and compressing
 export const ordersSocketOn = () => ({
   type: OrdersActionTypes.ORDERS_SOCKET_ON,
 });
-export const ordersSocketOff = () => ({
+export const ordersSocketOff = (arrow_modal_bool) => ({
   type: OrdersActionTypes.ORDERS_SOCKET_OFF,
+  payload: arrow_modal_bool,
 });
