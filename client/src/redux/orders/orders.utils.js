@@ -303,6 +303,6 @@ export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
   return axios
-    .get("/api/orders", { cancelToken: token })
+    .get("/api/orders/date/3/21/2021", { cancelToken: token })
     .then((res) => res.data);
 };
