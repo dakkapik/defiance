@@ -10,7 +10,7 @@ React Beautiful DND
 
 */
 
-const Column = ({ column, orders }) => {
+const Column = ({ column, orders, delete_mark }) => {
   return (
     <Container>
       <Title>{column.id === "column-1" ? "Orders" : column.firstName}</Title>
@@ -41,7 +41,12 @@ const Column = ({ column, orders }) => {
             isDraggingOver={snapshot.isDraggingOver}
           >
             {orders.map((order, index) => (
-              <Order key={order.id} order={order} index={index} />
+              <Order
+                delete_mark={delete_mark}
+                key={order.id}
+                order={order}
+                index={index}
+              />
             ))}
             {/* provided.placeholder Is to Increase space when something is dropped in a column */}
             {provided.placeholder}

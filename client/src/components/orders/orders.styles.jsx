@@ -11,8 +11,7 @@ export const animationName = keyframes`
 `;
 
 export const Container = styled.div`
-  width: 70%;
-  margin: auto;
+  padding: 30px;
   justify-content: center;
   display: flex;
   animation: ${animationName} ease 3s;
@@ -20,8 +19,9 @@ export const Container = styled.div`
 
 export const ContainerOrder = styled.div`
   height: 100%;
-  width: 50%;
-  margin: 1vh;
+  width: 40%;
+  margin-right: 10vh;
+  margin-left: 2vh;
 `;
 
 export const ContainerDriver = styled.div`

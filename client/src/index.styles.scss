@@ -3,9 +3,10 @@
 body {
   font-family: "Roboto", sans-serif;
   background-color: $pagebackgroundcolor;
-  
 }
-
+// *:focus {
+//   outline: none;
+// }
 * {
   box-sizing: border-box;
   margin: 0;

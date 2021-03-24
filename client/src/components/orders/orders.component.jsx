@@ -59,7 +59,7 @@ export const Orders = ({
     }
   };
   //Array of html elements
-  let drivers = [];
+  let dom_elements_of_drivers = [];
 
   return (
     <div>
@@ -75,12 +75,22 @@ export const Orders = ({
             if (column.id === "column-1") {
               return (
                 <ContainerOrder key={index}>
-                  <Column key={column.id} column={column} orders={orders} />
+                  <Column
+                    delete_mark={false}
+                    key={column.id}
+                    column={column}
+                    orders={orders}
+                  />
                 </ContainerOrder>
               );
             } else {
-              drivers.push(
-                <Column key={column.id} column={column} orders={orders} />
+              dom_elements_of_drivers.push(
+                <Column
+                  delete_mark={true}
+                  key={column.id}
+                  column={column}
+                  orders={orders}
+                />
               );
             }
             //At the final iteration we want to display the driver in a containerized
@@ -88,7 +98,7 @@ export const Orders = ({
             if (currentdragdrop.columnOrder.length - 1 === index) {
               return (
                 <ContainerDriver key={index}>
-                  {drivers.map((e, i) => e)}
+                  {dom_elements_of_drivers.map((e, i) => e)}
                 </ContainerDriver>
               );
             }

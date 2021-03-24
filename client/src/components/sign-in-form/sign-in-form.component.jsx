@@ -1,20 +1,16 @@
-import React from 'react'
+import React from "react";
 
 import "./sign-in-form.styles.scss";
 
 import SignInNumpad from "../sign-in-numpad/sign-in-numpad.component";
-
-function SignInForm() {
-    const handleSubmit = event => {
-        event.preventDefault()
-        const userid = event.target.userid.value
-        if (!userid) {
-            alert('You must enter your user id!')
-            return
-        }
-        console.log(userid)
+const SignInForm = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const userid = event.target.userid.value;
+    if (!userid) {
+      alert("You must enter your user id!");
+      return;
     }
-    console.log(userid);
   };
 
   return (

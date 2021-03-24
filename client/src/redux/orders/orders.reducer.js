@@ -7,6 +7,8 @@ import {
   deltaDriverDragDrop,
   persistAllColumn,
   removeDriverFromDragAndDrop,
+  getDriverWithOrders,
+  removeorderfromDriver,
 } from "./orders.utils";
 
 const INITIAL_STATE = {
@@ -34,6 +36,7 @@ const INITIAL_STATE = {
     orders: {},
     storename: "",
   },
+  drivers_with_orders: [],
 };
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
@@ -87,7 +90,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
     /*When a manager connects to a store and disconnects and the
     drivers are incoming and leaving  in the background
     Initalize driver will update the drag and drop */
-    case OrdersActionTypes.INITALIZE_DRIVER_FOR_DRAG_AND_DROP:
+    case OrdersActionTypes.DELTA_DRIVER_FOR_DRAG_AND_DROP:
       //first find drag drop in collection
       const FoundDragDropInCollections = state.dragdropcollection.find(
         (collection) => collection.storename === action.payload.storename
@@ -106,6 +109,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
           NewCurrentDragDrop
         ),
       };
+
     case OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP:
       const NewDriver = removeDriverFromDragAndDrop(
         state.currentdragdrop,
@@ -132,6 +136,59 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         ),
       };
 
+    case OrdersActionTypes.SAVE_ORDER:
+      return {
+        ...state,
+        drivers_with_orders: getDriverWithOrders(
+          //drivers in currentdragdrop
+          state.currentdragdrop.columns,
+          //orders in currentdragdrop
+          state.currentdragdrop.orders
+        ),
+      };
+
+    case OrdersActionTypes.DISCARD_ORDER_CHANGES:
+      const arrays_in_array_orderid = [];
+      let Clear_All_Drivers_Order = state.currentdragdrop;
+      for (const i in Clear_All_Drivers_Order.columns) {
+        // we dont wanna clear order column ):
+        if (Clear_All_Drivers_Order.columns[i].id === "column-1") continue; // continue means skip within our loop
+        arrays_in_array_orderid.push(
+          Clear_All_Drivers_Order.columns[i].orderIds
+        );
+
+        Clear_All_Drivers_Order.columns[i].orderIds = [];
+      }
+      const flatten_arrays_in_array_orderid = [].concat.apply(
+        [],
+        arrays_in_array_orderid
+      );
+      Clear_All_Drivers_Order.columns["column-1"].orderIds = [
+        ...Clear_All_Drivers_Order.columns["column-1"].orderIds,
+        ...flatten_arrays_in_array_orderid,
+      ];
+
+      return {
+        ...state,
+        currentdragdrop: { ...Clear_All_Drivers_Order },
+        dragdropcollection: saveDragDropCollection(state.dragdropcollection, {
+          ...Clear_All_Drivers_Order,
+        }),
+      };
+    case OrdersActionTypes.REMOVE_ORDER_FROM_DRIVER:
+      const NewCurrentDragDrop_RemoveOrder = removeorderfromDriver(
+        action.payload,
+        state.currentdragdrop
+      );
+
+      return {
+        ...state,
+        currentdragdrop: NewCurrentDragDrop_RemoveOrder,
+        dragdropcollection: saveDragDropCollection(
+          state.dragdropcollection,
+          NewCurrentDragDrop_RemoveOrder
+        ),
+      };
     //UI UPDATES
     case OrdersActionTypes.ORDERS_SOCKET_ON:
       return {
