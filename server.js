@@ -6,7 +6,10 @@ const server = require('http').createServer(app);
 
 const logger = require("./middleware/logger");
 
-require("./startup/db")().then(()=>socketSetUp(server));
+require("./startup/db")().then(()=>{
+  socketSetUp(server)
+});
+require("./startup/orderBundles")
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app);
