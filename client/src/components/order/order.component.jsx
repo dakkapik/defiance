@@ -1,61 +1,98 @@
 import React from "react";
-import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import globalcss from "../../global-css/styled-component-variable";
 import XmarkModalButton from "../x-mark-modal-button/x-mark-modal-button.component";
-const Container = styled.div`
-  border: 1px solid ${globalcss.textcolor};
-  margin: auto;
 
-  border-radius: 2px;
-  padding: 8px;
-  margin-bottom: 8px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  /* width: 200px; */
-`;
-const OrderDetails = styled.div`
-  width: 300px;
-  margin-right: 3vh;
-  word-break: break-all;
-  margin-right: ${(props) => (props.delete_mark ? "1vh" : "0px")};
-`;
-const Info = styled.div`
-  padding: 5px;
-`;
+//icons
+import AccessAlarmsIcon from "@material-ui/icons/AccessAlarms";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+//styled components
+import {
+  CardContainer,
+  OrderDetailContainer,
+  IconContainer,
+  IconSpace,
+  WhiteSideBarContainer,
+  OrderNumberContainer,
+  OrderTitle,
+  OrderNumber,
+  useIconStyles,
+  useIconAddressStyles,
+  XMarkContainer,
+} from "./order.styles";
+
+//Change Card height here
+export const theme = {
+  height: "130px",
+};
 
 const Order = ({ order, index, delete_mark }) => {
+  const classes = useIconStyles();
+  const classesAddress = useIconAddressStyles();
   return (
     <Draggable draggableId={order.id} index={index}>
-      {(provided) => (
-        <Container
+      {(
+        provided
+        // snapshot
+      ) => (
+        <CardContainer
           {...provided.draggableProps}
-          /*{...provided.dragHandleProps} can be used alternativly 
-          for another dom element to make drags like if you wanted a tiny square in
-          the side of this order component to be dragged *order  u can drag the star instead
-          */
-          {...provided.dragHandleProps}
+          theme={theme}
           ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          // isDragging={snapshot.isDragging}
         >
-          <OrderDetails delete_mark={delete_mark}>
-            <Info>Order : {order.id}</Info>
-            <Info>{order.address}</Info>
-            <Info> Date : {order.datePosted}</Info>
-            <Info> Time : {order.date}</Info>
-          </OrderDetails>
-          {delete_mark ? (
-            <XmarkModalButton
-              order_to_delete={{
-                orderid: order.id,
-                driverid: order.livesInColumn,
-                drivername: order.livesInNameColumn,
-              }}
-            />
-          ) : (
-            <div />
-          )}
-        </Container>
+          <OrderDetailContainer>
+            {/*ONLY SHOWN IN MOBILE  */}
+            <IconContainer title="true">
+              <FastfoodIcon disabled className={classes.root} />
+              <IconSpace> {order.id} </IconSpace>
+            </IconContainer>
+
+            <IconContainer title="true">
+              <AccessAlarmsIcon
+                disabled //Overwrite the css that is written within the button
+                className={classes.root}
+              />
+              <IconSpace> {order.date} </IconSpace>
+            </IconContainer>
+            <IconContainer title="false">
+              <LocationOnIcon
+                disabled //Overwrite the css that is written within the button
+                className={classesAddress.root}
+              />
+              <IconSpace address="true"> {order.address}</IconSpace>
+            </IconContainer>
+            <IconContainer title="false">
+              <DateRangeIcon
+                disabled //Overwrite the css that is written within the button
+                className={classes.root}
+              />
+              <IconSpace> {order.datePosted}</IconSpace>
+            </IconContainer>
+          </OrderDetailContainer>
+
+          <WhiteSideBarContainer theme={theme}>
+            <OrderNumberContainer>
+              <OrderTitle>Order</OrderTitle>
+              <OrderNumber>{order.id}</OrderNumber>
+              {delete_mark ? (
+                <XMarkContainer>
+                  <XmarkModalButton
+                    order_to_delete={{
+                      orderid: order.id,
+                      driverid: order.livesInColumn,
+                      drivername: order.livesInNameColumn,
+                    }}
+                  />
+                </XMarkContainer>
+              ) : (
+                <div />
+              )}
+            </OrderNumberContainer>
+          </WhiteSideBarContainer>
+        </CardContainer>
       )}
     </Draggable>
   );

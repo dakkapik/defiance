@@ -13,7 +13,9 @@ React Beautiful DND
 const Column = ({ column, orders, delete_mark }) => {
   return (
     <Container>
-      <Title>{column.id === "column-1" ? "Orders" : column.firstName}</Title>
+      <Title>
+        {column.id === "column-1" ? "Unassigned Orders" : column.firstName}
+      </Title>
       {/* 
         <Droppable /> components can be dropped on by a <Draggable />.
          They also contain <Draggable />s. A <Draggable /> 
