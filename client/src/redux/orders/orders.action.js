@@ -32,7 +32,7 @@ export const deltaDriverDragAndDrop = (driversAndstore) => ({
 });
 // when a driver leaves within the socket for more detail it's in drivers.utlis in drivers folder
 export const removeDriverDragDrop = (driversAndremoveDriver) => ({
-  type: OrdersActionTypes.REMOVE_DRIVER_FOR_DRAG_AND_DROP,
+  type: OrdersActionTypes.REMOVE_DRIVER_FROM_DRAG_AND_DROP,
   payload: driversAndremoveDriver,
 });
 //when manager presses x button to an order
