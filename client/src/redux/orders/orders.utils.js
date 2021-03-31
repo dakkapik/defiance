@@ -76,6 +76,7 @@ export const persistAllColumn = (
   }
 ) => {
   const Newstartorderids = Array.from(startorderids);
+
   Newstartorderids.splice(source.index, 1);
 
   const newStart = {
@@ -83,11 +84,30 @@ export const persistAllColumn = (
     orderIds: Newstartorderids,
   };
   const Newfinishorderids = Array.from(finishorderids);
+
   Newfinishorderids.splice(destination.index, 0, draggableId);
+
   const newFinish = {
     ...finish,
     orderIds: Newfinishorderids,
   };
+
+  /* when manager presses the x mark next to an order we need to know the driverId COLUMN
+  the UI is capable of getting the OrderNumber when manager clicks x mark with onClick method
+  however if we just use the orderNumber we would have to loop through all the drivers COLUMN
+  to find the order and delete and put it back in the order column
+  So a solution for this is when an order is dragged to different column
+  give it a livesInColumn key IN ORDERS OBJECT  by doing the following below*/
+
+  if (draggableId in currentDragDropData.orders)
+    // O(1) time complexity
+    // search key with driverId '4545 'in orders
+    currentDragDropData.orders[`${draggableId}`] = {
+      ...currentDragDropData.orders[`${draggableId}`], //because we want order to have current address,orderNumber, time, etc...
+      livesInColumn: finish.id, // driverId
+      livesInNameColumn: finish.firstName + " " + finish.lastName, // for css
+    };
+
   const newDragDropData = {
     ...currentDragDropData,
     columns: {
@@ -108,12 +128,14 @@ export const saveDragDropCollection = (dragdropcollection, NewDragDropData) => {
       : dragdrop
   );
 };
-//FUNCTION FOR ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+//FUNCTION FOR ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const addDriver = (drivers, currentdragdrop) => {
-  /*
-  drivers                       = [{employeeId: 4545'}]
+  /*drivers                       = [{employeeId: 4545'}]
+
   currentdragdrop.currentdriver = [{employeeId:'4545'}, {employeeId:'5578'}, {employeeId::"8954"}]
+
   because both drivers and currentdriver contain [{employeeId: 4545'}]
+
   the output is [{employeeId:'5578'},{employeeId::"8954"}]*/
   const add_driver = differenceBy(
     drivers,
@@ -141,7 +163,7 @@ export const addDriver = (drivers, currentdragdrop) => {
   );
   return currentdragdrop;
 };
-//FUNCTION FOR ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
+//FUNCTION FOR ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const removeDriver = (drivers, currentdragdrop) => {
   const removedriver = differenceBy(
     currentdragdrop.currentdriver,
@@ -179,9 +201,7 @@ export const removeDriver = (drivers, currentdragdrop) => {
   return currentdragdrop;
 };
 
-//ACTION TYPE FOR "INITALIZE_DRIVER_FOR_DRAG_AND_DROP"
-// change initializeDriverDragDrop => DragDropDelta
-// change drivers => incomingDragDrop
+//ACTION TYPE FOR "DELTA_DRIVER_FOR_DRAG_AND_DROP"
 export const deltaDriverDragDrop = (currentdragdrop, incoming_driver) => {
   //Check if a driver was added or removed
   currentdragdrop = addDriver(incoming_driver, currentdragdrop);
@@ -192,7 +212,8 @@ export const deltaDriverDragDrop = (currentdragdrop, incoming_driver) => {
   };
 };
 
-// ACTION TYPE FOR REMOVE_DRIVER_FOR_DRAG_AND_DROP
+// ACTION TYPE FOR REMOVE_DRIVER_FROM_DRAG_AND_DROP  when driver disconnects
+// update the drag and drop
 export const removeDriverFromDragAndDrop = (
   dragdrop,
   { currentdrivers, remove }
@@ -235,11 +256,54 @@ export const createNewDragDrop = (NewOrders, NewStoreName) => {
   });
   return newDragDropData;
 };
+// ACTION TYPE FOR SAVE  When manager hits save button
+export const getDriverWithOrders = (drivers, orders) => {
+  let drivers_with_orders = []; // list saved  multiple drivers
+  for (const i in drivers) {
+    const {
+      orderIds, //array
+      id, //string
+    } = drivers[i];
+
+    //skip column-1 we don't need column-1 lol?
+    if (id === "column-1") continue; // continue means skip within our loop
+
+    const driver_with_orders = {
+      orders: [], // where the saved orders reside in
+      ...drivers[i], // saved driver's firstName, lastName, etc..
+    };
+
+    // convert orderids array ['50','60'] to  [{address:'smithy jenkinz house'}, {{address:'felipe's rat house'}}]
+    orderIds.forEach((orderid, index) => {
+      // use '50','60' to search key  in orders['50'] , orders['60'] and push the data into orders
+      driver_with_orders.orders.push(orders[orderid]);
+    });
+    //finally after driver's orders been settled push the driver in  drivers_with_orders Array
+    drivers_with_orders.push(driver_with_orders);
+  }
+
+  return drivers_with_orders;
+};
+
+export const removeorderfromDriver = (for_deletion, currentdragdrop) => {
+  //lookup in columns object
+  currentdragdrop.columns[for_deletion.driverid] = {
+    ...currentdragdrop.columns[for_deletion.driverid], //loop up and grab it's data
+    // delete the orderNumber in the array
+    orderIds: currentdragdrop.columns[for_deletion.driverid].orderIds.filter(
+      (item) => item !== for_deletion.orderid
+    ),
+  };
+  // push the orderNumber back in the order's column
+  currentdragdrop.columns["column-1"].orderIds.push(for_deletion.orderid);
+  //return a new object because ui needs  to detect changes in memory
+  return { ...currentdragdrop };
+};
 
 export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
   return axios
-    .get("/api/orders", { cancelToken: token })
+    .get("/api/orders/date/3/21/2021", { cancelToken: token })
     .then((res) => res.data);
 };

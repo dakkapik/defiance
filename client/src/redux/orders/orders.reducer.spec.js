@@ -15,6 +15,7 @@ describe("Order Reducer", () => {
       orders: {},
       storename: "",
     },
+    drivers_with_orders: [],
   };
   it("should return default state", () => {
     const newState = ordersReducer(undefined, {});

@@ -92,8 +92,13 @@ module.exports.socketIO = async function (server, stores) {
     
                 if(role === "manager"){
                     rooms[roomId].manager = false
-                }else{
-                    io.to(roomId).emit("current-users", rooms[roomId])
+                } else {
+                    // changes => rooms[roomId] =>  users[socket.id]
+                    // changes => current-users =>  disconnected-users
+                    // fixes bug when all drivers disconnect simutanously when you press x on the browser... 
+                    // stops DELTA_DRIVER_FOR_DRAG_AND_DROP from running everytime it does two forloops 
+                    
+                    io.to(roomId).emit("disconnected-users", users[socket.id])
                 }
     
             });

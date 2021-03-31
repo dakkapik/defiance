@@ -1,39 +1,98 @@
 import React from "react";
-import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import globalcss from '../../global-css/styled-component-variable'
-const Container = styled.div`
-  border: 1px solid ${globalcss.textcolor};
-  margin: auto;
+import XmarkModalButton from "../x-mark-modal-button/x-mark-modal-button.component";
 
-  border-radius: 2px;
-  padding: 8px;
-  margin-bottom: 8px;
-  text-align: center;
-  /* width: fit-content; */
-`;
+//icons
+import AccessAlarmsIcon from "@material-ui/icons/AccessAlarms";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+//styled components
+import {
+  CardContainer,
+  OrderDetailContainer,
+  IconContainer,
+  IconSpace,
+  WhiteSideBarContainer,
+  OrderNumberContainer,
+  OrderTitle,
+  OrderNumber,
+  useIconStyles,
+  useIconAddressStyles,
+  XMarkContainer,
+} from "./order.styles";
 
-const Order = ({ order, index }) => {
-  /*
-  A Draggable expects its child to be a function 
-  Required to have an ID
-  */
+//Change Card height here
+export const theme = {
+  height: "130px",
+};
+
+const Order = ({ order, index, delete_mark }) => {
+  const classes = useIconStyles();
+  const classesAddress = useIconAddressStyles();
   return (
     <Draggable draggableId={order.id} index={index}>
-      {(provided) => (
-        <Container
+      {(
+        provided
+        // snapshot
+      ) => (
+        <CardContainer
           {...provided.draggableProps}
-          /*{...provided.dragHandleProps} can be used alternativly 
-          for another dom element to make drags like if you wanted a tiny square in
-          the side of this order component to be dragged *order  u can drag the star instead
-          */
-          {...provided.dragHandleProps}
+          theme={theme}
           ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          // isDragging={snapshot.isDragging}
         >
-          <div> id : {order.id}</div>
-          <div> Address : {order.address}</div>
-          <div> Time : {order.time}</div>
-        </Container>
+          <OrderDetailContainer>
+            {/*ONLY SHOWN IN MOBILE  */}
+            <IconContainer title="true">
+              <FastfoodIcon disabled className={classes.root} />
+              <IconSpace> {order.id} </IconSpace>
+            </IconContainer>
+
+            <IconContainer title="true">
+              <AccessAlarmsIcon
+                disabled //Overwrite the css that is written within the button
+                className={classes.root}
+              />
+              <IconSpace> {order.date} </IconSpace>
+            </IconContainer>
+            <IconContainer title="false">
+              <LocationOnIcon
+                disabled //Overwrite the css that is written within the button
+                className={classesAddress.root}
+              />
+              <IconSpace address="true"> {order.address}</IconSpace>
+            </IconContainer>
+            <IconContainer title="false">
+              <DateRangeIcon
+                disabled //Overwrite the css that is written within the button
+                className={classes.root}
+              />
+              <IconSpace> {order.datePosted}</IconSpace>
+            </IconContainer>
+          </OrderDetailContainer>
+
+          <WhiteSideBarContainer theme={theme}>
+            <OrderNumberContainer>
+              <OrderTitle>Order</OrderTitle>
+              <OrderNumber>{order.id}</OrderNumber>
+              {delete_mark ? (
+                <XMarkContainer>
+                  <XmarkModalButton
+                    order_to_delete={{
+                      orderid: order.id,
+                      driverid: order.livesInColumn,
+                      drivername: order.livesInNameColumn,
+                    }}
+                  />
+                </XMarkContainer>
+              ) : (
+                <div />
+              )}
+            </OrderNumberContainer>
+          </WhiteSideBarContainer>
+        </CardContainer>
       )}
     </Draggable>
   );
