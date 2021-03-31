@@ -10,29 +10,29 @@ router.get('/', async(req, res)=>{
   //get all orders
 })
 
-router.get('/:orderNumber', async(req, res)=>{
-  const order = await Order.findOne({orderNumber: req.params.orderNumber})
-  if(!order) return res.status(404).send({message: 'order not found'})
-  res.status(200).send(order)
-  //get order by order number
-})
+// router.get('/:orderNumber', async(req, res)=>{
+//   const order = await Order.findOne({orderNumber: req.params.orderNumber})
+//   if(!order) return res.status(404).send({message: 'order not found'})
+//   res.status(200).send(order)
+//   //get order by order number
+// })
 
 router.get('/date/:month/:day/:year', async(req, res)=>{
-  const orders = await Order.find({datePosted: `${req.params.month}/${req.params.day}/${req.params.year}`});
+  const orders = await Order.find({date: `${req.params.month}/${req.params.day}/${req.params.year}`});
   if(!orders) return res.status(404).send({message: 'no orders found on: ' + `${req.params.month}/${req.params.day}/${req.params.year}`});
   res.status(200).send(orders);
   // send all orders on this date
 });
 
 router.get('/today', async(req, res)=>{
-  const order = await Order.find({datePosted: new Date().toLocaleDateString(TIMEZONE)})
+  const order = await Order.find({date: new Date().toLocaleDateString(TIMEZONE)})
   if(!order) return res.status(404).send({message: 'no orders found this day'})
   res.status(200).send(order)
   // send daily orders
 });
 
 router.get('/today/:orderNumber', async(req, res)=>{
-  const order = await Order.findOne({orderNumber: req.params.orderNumber , dataPosted: new Date().toLocaleDateString(TIMEZONE)});
+  const order = await Order.findOne({orderNumber: req.params.orderNumber , date: new Date().toLocaleDateString(TIMEZONE)});
   if(!order) return res.status(404).send({message: 'order not found'});
   res.status(200).send(order);
   // send daily orders
@@ -45,7 +45,7 @@ router.put('/today/updateStatus/:orderNumber', async(req, res)=>{
   if(error) return res.status(422).send("cannot use status: " + req.body.status)
   
   try{
-    const order = await Order.findOne({orderNumber: req.params.orderNumber, datePosted: new Date().toLocaleDateString(TIMEZONE)})
+    const order = await Order.findOne({orderNumber: req.params.orderNumber, date: new Date().toLocaleDateString(TIMEZONE)})
     
     const result = await Order.findByIdAndUpdate(
       order._id,
