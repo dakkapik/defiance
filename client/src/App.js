@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import PrivateRoute from "./components/protected-route/protected-route.component";
 import MissionControl from "./pages/missioncontrol/mission-control.component";
 import HomePage from "./pages/home/home.component";
 import SignIn from "./pages/sign-in/sign-in.component";
@@ -14,7 +15,7 @@ const App = () => {
       <Switch>
         <Route path="/missioncontrol" component={MissionControl} />
         <Route exact path="/" component={HomePage} />
-        <Route path="/signin" component={SignIn} />
+        <PrivateRoute path="/signin" component={SignIn} />
         <Route path="/signup" component={SignUp} />
       </Switch>
     </div>

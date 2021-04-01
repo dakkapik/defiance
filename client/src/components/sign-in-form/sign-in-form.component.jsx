@@ -13,11 +13,22 @@ const SignInForm = () => {
       alert('You must enter your user id!')
       return
     }
-    axios.get(`/api/users/${userid}`)
-      .then(function (response) {
-        console.log(response)
+
+    const instance = axios.create({
+      baseURL: '/api/',
+      headers: { 'signed-in': false }
+    })
+
+    instance.get(`/users/${userid}`)
+      .then(response => {
+        instance.defaults.headers = {
+          'signed-in': true,
+          'token': response.data.token
+        }
+        // console.log(response)
+        // console.log(instance.defaults.headers)
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error)
         alert('Sorry, there is no user with this id, try again')
       })
