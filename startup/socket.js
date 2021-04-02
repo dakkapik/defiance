@@ -71,7 +71,7 @@ module.exports.socketIO = async function (server, stores) {
         });
     
         socket.on("message", (message)=>{
-            console.log(`user-`,users[socket.id] `: `, message)
+            console.log(`user-`,users[socket.id],  `: `, message)
         });
     
         socket.on("position", (positionObj)=>{
