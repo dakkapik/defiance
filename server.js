@@ -26,7 +26,7 @@ module.exports = server;
 
 async function socketSetUp (server){
   const stores = await getStores()
-  require("./startup/socket").socketIO(server, stores);
+  require("./socket/router").socketIO(server, stores);
 }
 
 const getStores = () => {
