@@ -23,7 +23,8 @@ function validateOrder(order) {
         address: joi.string().required(),
         city: joi.string(),
         zip: joi.string(),
-        geocode: joi.object().required()
+        geocode: joi.object().required(),
+        storeId: joi.string().required()
     })
     return schema.validate(order)
 };
@@ -84,6 +85,10 @@ const orderSchema = new mongoose.Schema({
     zip: {
         type: String,
         required: false
+    },
+    storeId: {
+        type: String,
+        required: true
     }
 });
 
