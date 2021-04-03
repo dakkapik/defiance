@@ -39,7 +39,7 @@ const Map = ({ store, ActiveMovingDriver, apiorders }) => {
 
     setInfoOpen(true);
   };
-  console.log(selectedPlace);
+
   const renderMap = () => {
     const { maps } = window.google;
 
@@ -64,7 +64,7 @@ const Map = ({ store, ActiveMovingDriver, apiorders }) => {
               ) : null}
             </div>
           ))}
-       
+
           {apiorders.map((order, index) => (
             <Marker
               key={order.orderNumber}
@@ -104,7 +104,9 @@ const Map = ({ store, ActiveMovingDriver, apiorders }) => {
                 <h3 style={{ color: "black" }}> {selectedPlace.orderNumber}</h3>
                 <div style={{ color: "black" }}>{selectedPlace.address}</div>
                 <div style={{ color: "black" }}>date: {selectedPlace.date}</div>
-                <div style={{ color: "black" }}>phone: {selectedPlace.phone} </div>
+                <div style={{ color: "black" }}>
+                  phone: {selectedPlace.phone}{" "}
+                </div>
               </div>
             </InfoWindow>
           )}

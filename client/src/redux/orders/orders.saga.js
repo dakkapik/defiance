@@ -1,10 +1,19 @@
 //External libraries
-import { takeLatest, put, all, call, select } from "redux-saga/effects";
+import {
+  takeLatest,
+  put,
+  all,
+  call,
+  select,
+  fork,
+  take,
+  cancel,
+} from "redux-saga/effects";
 //Listener
 import SocketActionTypes from "../socket/socket.types";
 import DriversActionTypes from "../drivers/drivers.types";
 //Functions
-import { fetchOrders } from "./orders.utils";
+import { fetchOrders, socketOrderOn, disconnect } from "./orders.utils";
 //Actions
 import {
   setdragDropSuccess,
@@ -13,16 +22,49 @@ import {
   removeDriverDragDrop,
 } from "./orders.action";
 
+export function* read_Emit_Or_Write_Emit(socket) {
+  yield fork(read, socket);
+}
+
+export function* read(socket) {
+  const channel = yield call(socketOrderOn, socket);
+  while (true) {
+    let action = yield take(channel);
+    yield put(action);
+  }
+}
+
+/*First We need to retrieve data from the socket reducer*/
+export const getSocket = (state) => state.socket.socket; //socket is an Object
+
+export function* orderSocketFlow() {
+  const socket = yield select(getSocket);
+  /* Yield represents that we are waiting for an action to be called so
+  this does not produce a infinite loop!*/
+  while (true) {
+    /* We start the flow of socket.on  or socket.emit  using  
+    read_Emit_Or_Write_Emit function which requires the socket Object*/
+    const emitAction = yield fork(read_Emit_Or_Write_Emit, socket);
+
+    /* The loop stops here when we listen to when the manager
+    is pressing the disconnect button aka listening to socket disconnect action*/
+    yield take(SocketActionTypes.TOGGLE_SOCKET_OFF);
+
+    /*afterwards we prepare to shutdown the socket gracefully*/
+    yield call(disconnect, socket);
+
+    // canceling the emitAction from the socket.on and pulling away from the while loop
+    yield cancel(emitAction);
+  }
+}
+
 //get storename
 const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
 
-//get drivers
-const getDriverFromReducer = (state) => state.drivers.currentDrivers;
-
 // we want to put the orders in the reducer apiorders: {},
-// And we want to to showcase the orders in the reducer currentdragdrop: {},
-// And we to save the drag and drop in the reducer dragdropcollection: []
-export function* putOrdersAndDragAndDrop() {
+// And we want to to showcase the orders
+// in the ui by placing it in the reducer currentdragdrop: { },
+export function* apiSocketGetOrders() {
   const storename = yield select(getStoreNameFromReducer);
 
   try {
@@ -52,6 +94,9 @@ export function* putOrdersAndDragAndDrop() {
     yield put(setdragDropFailure(ordersFailure));
     alert("Request to /api/orders has failed please refresh the page");
   }
+  //After we get the api
+  //where we start checking for order updates
+  yield call(orderSocketFlow);
 }
 
 // When a new Driver is added then we want to initalize the driver
@@ -62,6 +107,8 @@ export function* initalizeDriverDragAndDrop() {
   yield put(deltaDriverDragAndDrop({ driver: driver, storename: storename }));
 }
 //get drivers
+const getDriverFromReducer = (state) => state.drivers.currentDrivers;
+
 const getRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;
 export function* RemoveDriverDragAndDrop() {
   const RemoveDriver = yield select(getRemovedDriverFromReducer);
@@ -78,7 +125,7 @@ export function* RemoveDriverDragAndDrop() {
 
 //Start the order socket when a manager hits any store button
 export function* listentoSocket() {
-  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, putOrdersAndDragAndDrop);
+  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, apiSocketGetOrders);
 }
 
 // Listen to when a driver is connecting

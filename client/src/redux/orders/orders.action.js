@@ -5,6 +5,11 @@ export const setdragDropSuccess = (OrdersAndStore) => ({
   type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,
 });
+//when socket gives an order update
+export const socketOrderDisplayUpdate = (driver_completed_order) => ({
+  type: OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE,
+  payload: driver_completed_order,
+});
 
 // when order api fails
 export const setdragDropFailure = (OrdersAndStore) => ({

@@ -41,7 +41,31 @@ const INITIAL_STATE = {
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    //
+    case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
+      let toDeleteOrder = { ...state.currentdragdrop };
+
+      for (const i in toDeleteOrder.columns) {
+        toDeleteOrder.columns[i].orderIds = toDeleteOrder.columns[i].orderIds.filter((item) => !action.payload.includes(parseInt(item)));
+      }
+
+      // toDeleteOrder.columns["column-1"].orderIds = toDeleteOrder.columns[
+      //   "column-1"
+      // ].orderIds.filter((item) => !action.payload.includes(parseInt(item)));
+
+      action.payload.forEach((todelete, index) => {
+        delete toDeleteOrder.orders[todelete.toString()];
+      });
+      const new_map_icon_orders = [
+        ...state.apiorders.filter(
+          (item) => !action.payload.includes(item.orderNumber)
+        ),
+      ];
+
+      return {
+        ...state,
+        apiorders: new_map_icon_orders,
+        currentdragdrop: toDeleteOrder,
+      };
     case OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,

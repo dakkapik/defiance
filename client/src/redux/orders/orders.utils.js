@@ -1,9 +1,29 @@
 import axios from "axios";
 import { differenceBy } from "lodash";
+import { eventChannel } from "redux-saga";
+import { socketOrderDisplayUpdate } from "./orders.action";
 /*ACTION TYPE FOR "ADD_DRAG_DROP_TO_COLLECTION"
 If a store exist within a draganddropcollection then we leave it as is
 otherwise if the manager clicks on a new store then 
 we generate a newDragAndDrop and add it to draganddrop collectio*/
+
+export function disconnect(socket) {
+  socket.disconnect();
+}
+export function socketOrderOn(socket) {
+  return eventChannel((emit) => {
+    socket.on("order-display", (updatedOrders) => {
+      emit(socketOrderDisplayUpdate(updatedOrders));
+    });
+
+    socket.on("disconnect", (e) => {
+      console.log(e);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  });
+}
 
 export const addDragDropToCollection = (
   dragdropcollection,
@@ -304,6 +324,6 @@ export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
   return axios
-    .get("/api/orders/today", { cancelToken: token })
+    .get("/api/orders/date/3/30/2021", { cancelToken: token })
     .then((res) => res.data);
 };
