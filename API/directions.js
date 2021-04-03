@@ -7,26 +7,25 @@ const fs = require("fs")
 const { Client, TravelMode } = require("@googlemaps/google-maps-services-js")
 const Loader = require("@googlemaps/js-api-loader");
 
-router.get("/:origin/:destination/:waypoints", async (req, res)=>{
-    
+router.get("/:origin/:destination", async (req, res)=>{
+
     const gMapsEndpoint = "https://maps.googleapis.com/maps/api/directions/json?";
     const origin = req.params.origin;
     const destination = req.params.destination;
-    const waypoints = req.params.waypoints;
 
-    let query
-    if(!req.params.waypoints){
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${process.env.google_maps_api}`)
-    }else{
-        query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&waypoints=${waypoints}&key=${process.env.google_maps_api}`)
-    }
-
+    query = (gMapsEndpoint + `origin=${origin}&destination=${destination}&key=${process.env.google_maps_api}`)
+    
     console.log(query)
-    // const res = http.get(query)
+    axios.get(query)
+         .then(responce=>{
 
-    res.status(200).send({
-        origin, destination, waypoints
-    })
+             const { status } = responce.data
+             
+             if(status === "OK") console.log("status was OK")
+             else console.log(responce.data)
+
+             res.status(200).send(responce.data)
+         });
 })
 
 router.post("/", async (req, res)=>{
@@ -55,7 +54,7 @@ router.post("/", async (req, res)=>{
 
     axios.get(query)
          .then(result=>{
-            console.log(result.data);
+            // console.log(result.data);
             res.send(result.data);
          })
          .catch(error=>{

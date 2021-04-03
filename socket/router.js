@@ -2,12 +2,18 @@ let rooms = {};
 const users = {};
 const spectators = {};
 
-module.exports.socketIO = async function (server, stores) {
+const position = require("./position");
+const orders = require("./orders");
+const message = require("./message");
+const displayNumbers = require("./displayNumbers")
 
+module.exports.socketIO = async function (server, stores) {
     rooms = stores;
 
     const io = require('socket.io')(server);
     
+    displayNumbers(io);
+
     io.on("connection", (socket)=>{
 
         socket.on("new-user", (user)=>{
@@ -70,12 +76,13 @@ module.exports.socketIO = async function (server, stores) {
             }
         });
     
-        socket.on("message", (message)=>{
-            console.log(`user-`,users[socket.id] `: `, message)
-        });
-    
+        socket.on("message", (msg)=> message(socket, msg, users));
+
+        socket.on("order-bundles", (data) => orders(socket, data));
+
         socket.on("position", (positionObj)=>{
             
+            console.log("position")
             socket.to(positionObj.storeId).emit("d-position", positionObj);
             
         });
@@ -92,8 +99,13 @@ module.exports.socketIO = async function (server, stores) {
     
                 if(role === "manager"){
                     rooms[roomId].manager = false
-                }else{
-                    io.to(roomId).emit("current-users", rooms[roomId])
+                } else {
+                    // changes => rooms[roomId] =>  users[socket.id]
+                    // changes => current-users =>  disconnected-users
+                    // fixes bug when all drivers disconnect simutanously when you press x on the browser... 
+                    // stops DELTA_DRIVER_FOR_DRAG_AND_DROP from running everytime it does two forloops 
+                    
+                    io.to(roomId).emit("disconnected-users", users[socket.id])
                 }
     
             });

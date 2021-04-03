@@ -6,6 +6,9 @@ import globalcss from "../../global-css/styled-component-variable";
 //styling
 export const useStyles = makeStyles((theme) =>
   createStyles({
+    root: {
+      padding: "0px",
+    },
     modal: {
       display: "flex",
       alignItems: "center",
@@ -24,6 +27,33 @@ export const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+export const useXmarkpopButtons = makeStyles({
+  root: {
+    color: globalcss.primary,
+    margin: "10px",
+  },
+  label: {
+    color: globalcss.primary,
+  },
+});
+export const useSvgxMarkStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      fill: `${globalcss.primary} !important`,
+
+      // [theme.breakpoints.up("md")]: {
+      //   fill: `${globalcss.primary} !important`,
+      // },
+    },
+  })
+);
+
+export const useXmarkButtonStyles = makeStyles({
+  root: {
+    padding: "0px !important",
+  },
+});
 
 //animation
 // Problems with animating this modal using useRef

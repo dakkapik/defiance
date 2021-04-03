@@ -3,6 +3,7 @@ const joi = require("joi");
 const STATUS_COMPLETED = "completed";
 const STATUS_ON_ROUTE = "on_route";
 const STATUS_UNASSIGNED = "unassigned";
+const TIMEZONE = "en-US";
 
 function validateOrderStatus(status){
     const schema = joi.string().required().equal(STATUS_COMPLETED, STATUS_ON_ROUTE, STATUS_UNASSIGNED)
@@ -15,14 +16,15 @@ function validateOrder(order) {
         status: joi.string(),
         driver: joi.number(),
         date: joi.string(),
-        time: joi.string(),
+        time: joi.object().required(),
         firstName: joi.string(),
         lastName: joi.string(),
-        phoneNumber: joi.string(),
+        phone: joi.string(),
         address: joi.string().required(),
         city: joi.string(),
         zip: joi.string(),
-        marker: joi.object(),
+        geocode: joi.object().required(),
+        storeId: joi.string().required()
     })
     return schema.validate(order)
 };
@@ -30,9 +32,9 @@ function validateOrder(order) {
 const orderSchema = new mongoose.Schema({
     orderNumber: {
         type: Number,
-        required: true,
+        require: true,
     },
-    status: {
+    status:{
         type: String,
         default: 'unassigned'
     },
@@ -41,11 +43,12 @@ const orderSchema = new mongoose.Schema({
     },
     date: {
         type: String,
-        required: false
+        required: true,
+        default: new Date().toLocaleDateString(TIMEZONE)
     },
     time: {
-        type: String,
-        required: false
+        type: Object,
+        required: true
     },
     firstName: {
         type: String,
@@ -59,7 +62,7 @@ const orderSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 50,
     },
-    phoneNumber: {
+    phone: {
         type: String,
         required: false,
         minlength: 10,
@@ -71,6 +74,10 @@ const orderSchema = new mongoose.Schema({
         minlength: 4,
         maxlength: 255,
     },
+    geocode: {
+        type: Object,
+        required: true
+    },
     city: {
         type: String,
         required: false,
@@ -79,9 +86,9 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    marker: {
-      type: Object,
-      required: false
+    storeId: {
+        type: String,
+        required: true
     }
 });
 

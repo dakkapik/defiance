@@ -6,6 +6,9 @@ import { Fade, useStyles } from "./arrow-expanded-modal-button.styles";
 import "./arrow-modal-expanded-button.styles.scss";
 import { connect } from "react-redux";
 import { discardOrderChanges } from "../../redux/orders/orders.action";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import globalcss from "../../global-css/styled-component-variable";
 /*
 The reason why this modal is Odd
 is because animation were not working within mapsidebar conditionalloading
@@ -21,8 +24,14 @@ so the work arounds were to just pass function to the child component  and call 
 component function to work around the werid  css animation bug.
 without effecting the <img className='expanded-arrow'/>
 */
+export const useCustomMarginButton = makeStyles({
+  root: {
+    margin: "10px",
+  },
+  label: {},
+});
 export const ArrowModalButton = ({
-  x,
+  show_arrow_modal,
   handleClose,
   discardOrderChanges,
   ordersSocketOff,
@@ -33,50 +42,50 @@ export const ArrowModalButton = ({
     ordersSocketOff();
     handleClose();
   };
-  const SaveButGoToFullMap = () => {
-    ordersSocketOff();
-    handleClose();
-  };
-  const clearButStayOnPage = () => {
-    discardOrderChanges();
-    handleClose();
-  };
+
+  const classesButton = useCustomMarginButton();
+
   return (
     <div>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
         className={classes.modal}
-        open={x}
+        open={show_arrow_modal}
         onClose={handleClose}
       >
-        <Fade in={x}>
+        <Fade in={show_arrow_modal}>
           <div className={classes.paper}>
-            <h2 id="spring-modal-title">U WANNA DELETE EVERYTHING BOI?</h2>
-            <br />
-            <button onClick={clearButStayOnPage} style={{ color: "black" }}>
-              CONFIRM DELETION BUT STAY ON THE PAGE
-            </button>
-            <br />
-            <br />
-            <button onClick={discardorderChanges} style={{ color: "black" }}>
-              CONFIRM DELETION BUT LEAVE PAGE
-            </button>
-            <br />
-            <br />
-            <button onClick={handleClose} style={{ color: "black" }}>
-              CANCEL DELETION BUT KEEP EDITING
-            </button>
-            <br />
-            <br />
-            <button onClick={SaveButGoToFullMap} style={{ color: "black" }}>
-              CANCEL DELETION BUT GO TO FULLMAP
-            </button>
-            <br />
-            <br />
-            but felipe what if
-            <br /> i wanna keep the changes and go to the full map???? btw
-            everything is automatically saved when you go to fullmap disconnect
+            <h2 id="spring-modal-title">
+              Do you want to discard
+              <span style={{ color: "red" }}> all </span>
+              your changes ?
+            </h2>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={discardorderChanges}
+                classes={{
+                  root: classesButton.root,
+                  label: classesButton.label,
+                }}
+              >
+                Confirm
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={handleClose}
+                classes={{
+                  root: classesButton.root,
+                  label: classesButton.label,
+                }}
+              >
+                cancel
+              </Button>
+            </div>
           </div>
         </Fade>
       </Modal>

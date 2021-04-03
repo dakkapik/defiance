@@ -1,7 +1,7 @@
 import { useTransition, animated } from "react-spring/web.cjs";
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-
+import styled from "styled-components";
 import globalcss from "../../global-css/styled-component-variable";
 //styling
 export const useStyles = makeStyles((theme) =>
@@ -19,11 +19,47 @@ export const useStyles = makeStyles((theme) =>
       borderRadius: "5px",
       padding: "20px",
       outline: "none",
-      width: "500px",
+      width: "600px",
+      height: "500px",
+      overflowY: "auto",
       wordBreak: "break-all",
     },
   })
 );
+
+export const RowContainer = styled.div`
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+`;
+
+export const DriverColumnContainer = styled.div`
+  display: flex;
+  flex: 10%;
+  justify-content: center;
+  word-break: break-all;
+`;
+
+export const CenterColumnContainer = styled.div`
+  display: flex;
+  flex: 10%;
+  justify-content: center;
+`;
+
+export const OrderColumnContainer = styled.div`
+  display: flex;
+  flex: 10%;
+  justify-content: center;
+`;
+
+export const OrderNumbersContainer = styled.div`
+  width: 37px;
+  color: red;
+  text-align: center;
+  height: 25px;
+`;
+
 //animation
 // Problems with animating this modal using useRef
 // https://codesandbox.io/s/material-demo-forked-xu097?file=/demo.tsx
