@@ -87,10 +87,10 @@ module.exports.socketIO = async function (server, stores) {
             
         });
 // sorry i used this to test order-display check it out dawg  o;O
-   socket.on('trigger', () => {
-        console.log('hello world');
-        io.to("psq2").emit("order-display", [82,90]);
-        })
+//    socket.on('trigger', () => {
+//         console.log('hello world');
+//         io.to("psq2").emit("order-display", [82,90]);
+//         })
 
         socket.on("disconnect", (reason) => {
     
