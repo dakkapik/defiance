@@ -66,7 +66,7 @@ const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //
 // in the ui by placing it in the reducer currentdragdrop: { },
 export function* apiSocketGetOrders() {
   const storename = yield select(getStoreNameFromReducer);
- 
+
   try {
     //Right Now it's not dynamic so we make api call to Royal Palms
     const orders = yield call(fetchOrders);
@@ -100,14 +100,15 @@ export function* apiSocketGetOrders() {
 }
 
 // When a new Driver is added then we want to initalize the driver
-// to our drag and drop
+
+//get drivers
+const getDriverFromReducer = (state) => state.drivers.currentDrivers;
+
 export function* initalizeDriverDragAndDrop() {
   const driver = yield select(getDriverFromReducer);
   const storename = yield select(getStoreNameFromReducer);
   yield put(deltaDriverDragAndDrop({ driver: driver, storename: storename }));
 }
-//get drivers
-const getDriverFromReducer = (state) => state.drivers.currentDrivers;
 
 const getRemovedDriverFromReducer = (state) => state.drivers.disconnectedDriver;
 export function* RemoveDriverDragAndDrop() {

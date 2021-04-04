@@ -99,22 +99,13 @@ export const MapSideBar = ({
               className="arrow-expanded"
               alt="expanded-arrow"
               onClick={() => {
-               /*
-              jira task no question on red arrow closing if no changes
-                
-                unassigned_orders dynamically changes bery important
-
-               if any any orders are missing in unassigned order column use its length
-               and compare it with the api length 
-
-               orderSocketOff compresses the mapsidebar
-               handleOpenArrowModal opens arrowmodal
-
-               
+                /*
+               if no orders where dragged to a driver then don't popup a modal and go to full map screen   
               */
 
-                apiorders.length === unassigned_orders.length ?  ordersSocketOff() : handleOpenArrowModal();
-               
+                apiorders.length === unassigned_orders.length
+                  ? ordersSocketOff()
+                  : handleOpenArrowModal();
               }}
             />
           ) : (
@@ -140,7 +131,7 @@ export const MapSideBar = ({
 
 const mapStateToProps = (state) => ({
   apiorders: state.orders.apiorders,
-  unassigned_orders: state.orders.currentdragdrop.columns['column-1'].orderIds,
+  unassigned_orders: state.orders.currentdragdrop.columns["column-1"].orderIds,
   socket: state.socket.socketToggle,
   showorders: state.orders.showorders,
 });

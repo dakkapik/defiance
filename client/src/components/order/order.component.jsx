@@ -31,7 +31,7 @@ const Order = ({ order, index, delete_mark }) => {
   const classes = useIconStyles();
   const classesAddress = useIconAddressStyles();
 
-  const convertStandard = ({ hour, minute }) => {
+  const convertMiltaryTimeToStandard = ({ hour, minute }) => {
     hour = ((hour + 11) % 12) + 1;
     const amPm = hour > 11 ? "pm" : "am";
     return hour + ":" + minute + amPm;
@@ -62,7 +62,7 @@ const Order = ({ order, index, delete_mark }) => {
                 disabled //Overwrite the css that is written within the button
                 className={classes.root}
               />
-              <IconSpace> {convertStandard(order.time)} </IconSpace>
+              <IconSpace>{convertMiltaryTimeToStandard(order.time)}</IconSpace>
             </IconContainer>
             <IconContainer title="false">
               <LocationOnIcon

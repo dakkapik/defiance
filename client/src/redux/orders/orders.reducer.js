@@ -42,7 +42,7 @@ const INITIAL_STATE = {
 const ordersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
-      let toDeleteOrder = { ...state.currentdragdrop };
+      let completed_order_currentdragdrop = { ...state.currentdragdrop };
 
       let toBeDeleted = [];
       for (const i in state.apiorders) {
@@ -51,14 +51,16 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         }
       }
 
-      for (const i in toDeleteOrder.columns) {
-        toDeleteOrder.columns[i].orderIds = toDeleteOrder.columns[
+      for (const i in completed_order_currentdragdrop.columns) {
+        completed_order_currentdragdrop.columns[
           i
-        ].orderIds.filter((item) => !toBeDeleted.includes(parseInt(item)));
+        ].orderIds = completed_order_currentdragdrop.columns[i].orderIds.filter(
+          (item) => !toBeDeleted.includes(parseInt(item))
+        );
       }
 
       toBeDeleted.forEach((todelete, index) => {
-        delete toDeleteOrder.orders[todelete.toString()];
+        delete completed_order_currentdragdrop.orders[todelete.toString()];
       });
       const new_map_icon_orders = [
         ...state.apiorders.filter(
@@ -69,7 +71,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         apiorders: new_map_icon_orders,
-        currentdragdrop: toDeleteOrder,
+        currentdragdrop: completed_order_currentdragdrop,
       };
     //actiontype addApiOrderSuccessDragDrop
     case OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION:
