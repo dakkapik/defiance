@@ -22,7 +22,7 @@ describe("Order Reducer", () => {
     expect(newState).toEqual(defaultState);
   });
 
-  it("should return new state if receiving type ADD_DRAG_DROP_TO_COLLECTION", () => {
+  it("should return new state if receiving type ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION", () => {
     const mockPayload = {
       //Api orders
       orders: [
@@ -41,7 +41,7 @@ describe("Order Reducer", () => {
     };
     // we pass a payload to the reducer and expect a new state
     const newState = ordersReducer(undefined, {
-      type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
+      type: OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION,
       payload: mockPayload,
     });
 

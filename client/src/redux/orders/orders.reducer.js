@@ -44,20 +44,25 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
     case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
       let toDeleteOrder = { ...state.currentdragdrop };
 
-      for (const i in toDeleteOrder.columns) {
-        toDeleteOrder.columns[i].orderIds = toDeleteOrder.columns[i].orderIds.filter((item) => !action.payload.includes(parseInt(item)));
+      let toBeDeleted = [];
+      for (const i in state.apiorders) {
+        if (!action.payload.includes(state.apiorders[i].orderNumber)) {
+          toBeDeleted.push(state.apiorders[i].orderNumber);
+        }
       }
 
-      // toDeleteOrder.columns["column-1"].orderIds = toDeleteOrder.columns[
-      //   "column-1"
-      // ].orderIds.filter((item) => !action.payload.includes(parseInt(item)));
+      for (const i in toDeleteOrder.columns) {
+        toDeleteOrder.columns[i].orderIds = toDeleteOrder.columns[
+          i
+        ].orderIds.filter((item) => !toBeDeleted.includes(parseInt(item)));
+      }
 
-      action.payload.forEach((todelete, index) => {
+      toBeDeleted.forEach((todelete, index) => {
         delete toDeleteOrder.orders[todelete.toString()];
       });
       const new_map_icon_orders = [
         ...state.apiorders.filter(
-          (item) => !action.payload.includes(item.orderNumber)
+          (item) => !toBeDeleted.includes(item.orderNumber)
         ),
       ];
 
@@ -66,7 +71,8 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         apiorders: new_map_icon_orders,
         currentdragdrop: toDeleteOrder,
       };
-    case OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION:
+    //actiontype addApiOrderSuccessDragDrop
+    case OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,
         apiorders: action.payload.orders,
@@ -101,7 +107,6 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       };
     // when you drag orders to different columns
     // it will keep your changes in place
-    // if u delete this then like dudde when you drag an order nothing will happen
     case OrdersActionTypes.PERSIST_ALL_COLUMN:
       const NewDragAllDropData = persistAllColumn(
         state.currentdragdrop,
@@ -230,7 +235,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         showorders: false,
       };
     // when  /api/orders fails ):
-    case OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION:
+    case OrdersActionTypes.ADD_APIORDER_FAILURE_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,
         apiorders: action.payload.orders,

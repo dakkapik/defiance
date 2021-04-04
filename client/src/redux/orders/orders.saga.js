@@ -16,8 +16,8 @@ import DriversActionTypes from "../drivers/drivers.types";
 import { fetchOrders, socketOrderOn, disconnect } from "./orders.utils";
 //Actions
 import {
-  setdragDropSuccess,
-  setdragDropFailure,
+  addApiOrderSuccessDragDrop,
+  addApiOrderFailureDragDrop,
   deltaDriverDragAndDrop,
   removeDriverDragDrop,
 } from "./orders.action";
@@ -66,7 +66,7 @@ const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //
 // in the ui by placing it in the reducer currentdragdrop: { },
 export function* apiSocketGetOrders() {
   const storename = yield select(getStoreNameFromReducer);
-
+ 
   try {
     //Right Now it's not dynamic so we make api call to Royal Palms
     const orders = yield call(fetchOrders);
@@ -78,7 +78,7 @@ export function* apiSocketGetOrders() {
       storename: storename,
     };
 
-    yield put(setdragDropSuccess(ordersStoreName));
+    yield put(addApiOrderSuccessDragDrop(ordersStoreName));
   } catch (error) {
     const ordersFailure = {
       orders: [
@@ -91,7 +91,7 @@ export function* apiSocketGetOrders() {
       storename: storename,
     };
     //For any reason if /api/orders fails if the internet goes down we pass a failing order^
-    yield put(setdragDropFailure(ordersFailure));
+    yield put(addApiOrderFailureDragDrop(ordersFailure));
     alert("Request to /api/orders has failed please refresh the page");
   }
   //After we get the api
