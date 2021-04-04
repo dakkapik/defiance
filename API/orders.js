@@ -190,17 +190,25 @@ router.put('/updateDriver/:orderNumber', async(req, res)=>{
   //update driver by order number
 })
 
-router.delete('/:orderNumber', async(req, res)=>{
-  try{
-    const order = await Order.findOne({orderNumber: req.params.orderNumber});
-    if(!order) return res.status(404).send('order number not found')
-
-    const result = await Order.findByIdAndRemove(order._id)
-    res.status(200).send({deleted: result})
-  }catch(err){
-    res.status(404).send(err)
-  }
-  //delete order by order number
+router.delete("/today", (req, res) => {
+  Order.deleteMany({date: new Date().toLocaleDateString(TIMEZONE)})
+  .then(orders => res.status(200).send({deleted: orders}))
+  .catch(err => res.status(404).send(err))
 })
+
+// router.delete('/:orderNumber', async(req, res)=>{
+//   try{
+//     const order = await Order.findOne({orderNumber: req.params.orderNumber});
+//     if(!order) return res.status(404).send('order number not found')
+
+//     const result = await Order.findByIdAndRemove(order._id)
+//     res.status(200).send({deleted: result})
+//   }catch(err){
+//     res.status(404).send(err)
+//   }
+//   //delete order by order number
+// })
+
+
 
 module.exports = router;
