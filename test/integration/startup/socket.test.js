@@ -1,5 +1,5 @@
 const sinon = require("sinon")
-const socket = require("../../../startup/socket");
+const socket = require("../../../socket/router");
 const expect = require("chai").expect;
 const Http = require("http");
 
