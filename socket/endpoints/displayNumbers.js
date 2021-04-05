@@ -1,5 +1,5 @@
-const { DisplayNumbers } = require("../models/displayNumbers");
-const { Order } = require("../models/order");
+const { DisplayNumbers } = require("../../models/displayNumbers");
+const { Order } = require("../../models/order");
 const TIMEZONE = "en-US"
 
 module.exports = function (io){

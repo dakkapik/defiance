@@ -2,10 +2,12 @@ let rooms = {};
 const users = {};
 const spectators = {};
 
-const position = require("./position");
-const orders = require("./orders");
-const message = require("./message");
-const displayNumbers = require("./displayNumbers")
+const position = require("./endpoints/position");
+const driverStatus = require("./endpoints/driverStatus");
+const orderBundles = require("./endpoints/orderBundles");
+const orderStatus = require("./endpoints/orderStatus");
+const message = require("./endpoints/message");
+const displayNumbers = require("./endpoints/displayNumbers");
 
 module.exports.socketIO = async function (server, stores) {
     rooms = stores;
@@ -78,15 +80,14 @@ module.exports.socketIO = async function (server, stores) {
     
         socket.on("message", (msg)=> message(socket, msg, users));
 
-        socket.on("order-bundles", (data) => orders(socket, data));
+        socket.on("order-bundles", (data) => orderBundles(socket, data));
+        
+        socket.on("order-status", (order) => orderStatus(socket, order));
 
-        socket.on("position", (positionObj)=>{
+        socket.on("position", (positionObj) => position(socket, positionObj));
+
+        socket.on("driver-status", (status) => driverStatus(socket, status));
             
-            console.log("position")
-            socket.to(positionObj.storeId).emit("d-position", positionObj);
-            
-        });
-    
         socket.on("disconnect", (reason) => {
     
             getUserRoomsAndRole(socket.id).forEach((roomRole)=>{
