@@ -31,6 +31,9 @@ Orders: conditionally
 */
 
 export const MapSideBar = ({
+  //comparison variables for no question on red arrow closing if no changes
+  apiorders,
+  unassigned_orders,
   socket,
   showorders,
   socketOff,
@@ -44,7 +47,7 @@ export const MapSideBar = ({
     openArrowModal(false);
   };
 
-  const handleOpen = () => {
+  const handleOpenArrowModal = () => {
     openArrowModal(true);
   };
 
@@ -96,7 +99,13 @@ export const MapSideBar = ({
               className="arrow-expanded"
               alt="expanded-arrow"
               onClick={() => {
-                handleOpen();
+                /*
+               if no orders where dragged to a driver then don't popup a modal and go to full map screen   
+              */
+
+                apiorders.length === unassigned_orders.length
+                  ? ordersSocketOff()
+                  : handleOpenArrowModal();
               }}
             />
           ) : (
@@ -121,6 +130,8 @@ export const MapSideBar = ({
 };
 
 const mapStateToProps = (state) => ({
+  apiorders: state.orders.apiorders,
+  unassigned_orders: state.orders.currentdragdrop.columns["column-1"].orderIds,
   socket: state.socket.socketToggle,
   showorders: state.orders.showorders,
 });
