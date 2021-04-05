@@ -19,11 +19,14 @@ const SignInForm = () => {
       headers: { 'signed-in': false }
     })
 
-    instance.get(`/users/${userid}`)
+    instance.post(`/users/${userid}`)
       .then(response => {
-        instance.defaults.headers = {
-          'signed-in': true,
-          'token': response.data.token
+        console.log(response)
+        if (response.status === 200) {
+          instance.defaults.headers = {
+            'signed-in': true,
+            'token': response.data.token
+          }
         }
         // console.log(response)
         // console.log(instance.defaults.headers)

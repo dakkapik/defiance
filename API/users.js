@@ -19,18 +19,7 @@ router.get('/:id', async(req, res) => {
         return res.status(404).send({ message: 'employee with searched ID not found' })
     }
 
-    const token = jwt.sign({ id: user.employeeId }, process.env.db_pswrd)
-    res.status(200).send(token)
-
-    // io.use((socket, next) => {
-    //     const joinServerParameters = JSON.parse(socket.handshake.query.joinServerParameters)
-    //     if (joinServerParameters.token === 'signed-in') {
-    //         next()
-    //     } else {
-    //         next(new Error('Authentication error'))
-    //     }
-    //     return
-    // })
+    res.status(200).send(user)
 })
 
 router.post('/', async(req, res) => {
@@ -126,6 +115,16 @@ router.delete('/:id', async(req, res) => {
         res.status(404).send(err)
     }
     //delete user
+})
+
+router.post('/:id', async(req, res) => {
+    const user = await User.findOne({ employeeId: req.params.id })
+    if (!user) {
+        return res.status(404).send({ message: 'employee with searched ID not found' })
+    }
+
+    const token = jwt.sign({ id: user.employeeId }, process.env.db_pswrd)
+    res.status(200).send(token)
 })
 
 module.exports = router
