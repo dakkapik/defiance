@@ -21,7 +21,6 @@ const SignInForm = () => {
 
     instance.post(`/users/${userid}`)
       .then(response => {
-        console.log(response)
         if (response.status === 200) {
           instance.defaults.headers = {
             'signed-in': true,
