@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { connect } from "react-redux";
+
 import "./map-sidebar.styles.scss";
 //Actions
 import {
@@ -28,6 +29,7 @@ StoreList: conditionally
 Dynamic Driver: conditionally
 Orders: conditionally
 */
+
 export const MapSideBar = ({
   socket,
   showorders,
@@ -36,14 +38,14 @@ export const MapSideBar = ({
   ordersSocketOn,
   ordersSocketOff,
 }) => {
-  const [x, setX] = useState(false);
+  const [show_arrow_modal, openArrowModal] = useState(false);
   const disconnect_button_classes = DisconnectButtonStyles();
   const handleClose = () => {
-    setX(false);
+    openArrowModal(false);
   };
 
   const handleOpen = () => {
-    setX(true);
+    openArrowModal(true);
   };
 
   return (
@@ -84,7 +86,10 @@ export const MapSideBar = ({
             {/*If Manager clicks the arrow then showorders is true then Order Component renders */}
             {showorders ? <Orders /> : <DynamicDriverList />}
           </div>
-          <ArrowModalButton x={x} handleClose={handleClose} />
+          <ArrowModalButton
+            show_arrow_modal={show_arrow_modal}
+            handleClose={handleClose}
+          />
           {showorders ? (
             <img
               src={arrow}

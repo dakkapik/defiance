@@ -212,7 +212,8 @@ export const deltaDriverDragDrop = (currentdragdrop, incoming_driver) => {
   };
 };
 
-// ACTION TYPE FOR REMOVE_DRIVER_FOR_DRAG_AND_DROP  when driver disconnects
+// ACTION TYPE FOR REMOVE_DRIVER_FROM_DRAG_AND_DROP  when driver disconnects
+// update the drag and drop
 export const removeDriverFromDragAndDrop = (
   dragdrop,
   { currentdrivers, remove }
