@@ -5,7 +5,7 @@ const TIMEZONE = "en-US"
 module.exports = function (io){
     //send orders
     DisplayNumbers.watch().on("change", ( data ) => {
-
+        
         if(data.operationType === "update"){
             const displayArray = [];
             let iteration = 0;
@@ -19,7 +19,10 @@ module.exports = function (io){
                         sendOrders(displayArray);
                     }
                 })
-            })    
+            })
+            if(data.updateDescription.updatedFields.numbers.length === 0){
+                sendOrders([]);
+            }
         }
 
         function sendOrders(displayArray) {
