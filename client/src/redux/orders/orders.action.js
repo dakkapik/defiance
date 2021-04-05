@@ -1,14 +1,19 @@
 import OrdersActionTypes from "./orders.types";
 
-// when order api is successful
-export const setdragDropSuccess = (OrdersAndStore) => ({
-  type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
+//  when api order succeeds add it to currentdragdrop reducer
+export const addApiOrderSuccessDragDrop = (OrdersAndStore) => ({
+  type: OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,
 });
+//when socket gives an order update
+export const socketOrderDisplayUpdate = (driver_completed_order) => ({
+  type: OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE,
+  payload: driver_completed_order,
+});
 
-// when order api fails
-export const setdragDropFailure = (OrdersAndStore) => ({
-  type: OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION,
+// when api order fails add custom failure to currentdragdrop reducer
+export const addApiOrderFailureDragDrop = (OrdersAndStore) => ({
+  type: OrdersActionTypes.ADD_APIORDER_FAILURE_DRAG_DROP_TO_COLLECTION,
   payload: OrdersAndStore,
 });
 // When manager clicks the save button

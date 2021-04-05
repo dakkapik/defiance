@@ -30,6 +30,13 @@ export const theme = {
 const Order = ({ order, index, delete_mark }) => {
   const classes = useIconStyles();
   const classesAddress = useIconAddressStyles();
+
+  const convertMiltaryTimeToStandard = ({ hour, minute }) => {
+    hour = ((hour + 11) % 12) + 1;
+    const amPm = hour > 11 ? "pm" : "am";
+    return hour + ":" + minute + amPm;
+  };
+
   return (
     <Draggable draggableId={order.id} index={index}>
       {(
@@ -55,7 +62,7 @@ const Order = ({ order, index, delete_mark }) => {
                 disabled //Overwrite the css that is written within the button
                 className={classes.root}
               />
-              <IconSpace> {order.date} </IconSpace>
+              <IconSpace>{convertMiltaryTimeToStandard(order.time)}</IconSpace>
             </IconContainer>
             <IconContainer title="false">
               <LocationOnIcon
@@ -69,7 +76,7 @@ const Order = ({ order, index, delete_mark }) => {
                 disabled //Overwrite the css that is written within the button
                 className={classes.root}
               />
-              <IconSpace> {order.datePosted}</IconSpace>
+              <IconSpace> {order.date}</IconSpace>
             </IconContainer>
           </OrderDetailContainer>
 

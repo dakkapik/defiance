@@ -86,7 +86,50 @@ module.exports.socketIO = async function (server, stores) {
             socket.to(positionObj.storeId).emit("d-position", positionObj);
             
         });
-    
+// sorry i used this to test order-display check it out dawg  o;O
+   socket.on('trigger', () => {
+        console.log('hello world');
+       io.to("psq2").emit("order-display", [
+           {
+        status: "unassigned",
+        date: "4/4/2021",
+        _id: "606a190757343a2a0437bbac",
+        orderNumber: 82,
+        address: "5543 NW 39th Ave, Coconut Creek, FL 33073, USA",
+        time: {
+        hour: 18,
+        minute: 10
+        },
+        phone: "954-753-4148 ",
+        geocode: {
+        lat: 26.2987923,
+        lng: -80.1770006
+        },
+        storeId: "psq2",
+               __v: 0
+           },
+           {
+            status: "unassigned",
+            date: "4/4/2021",
+            _id: "606a190757343a2a0437bbad",
+            orderNumber: 84,
+            address: "3303 Aruba Way, Coconut Creek, FL 33066, USA",
+            time: {
+            hour: 18,
+            minute: 11
+            },
+            phone: "754-368-2708 ",
+            geocode: {
+            lat: 26.2497314,
+            lng: -80.1753439
+            },
+            storeId: "psq2",
+            __v: 0
+            }
+       
+       ]);
+        })
+
         socket.on("disconnect", (reason) => {
     
             getUserRoomsAndRole(socket.id).forEach((roomRole)=>{

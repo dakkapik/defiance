@@ -41,8 +41,17 @@ const INITIAL_STATE = {
 
 const ordersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    //
-    case OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION:
+    case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
+      console.log(action.payload);
+      const newOrderDragDrop = { ...state.currentdragdrop };
+
+      return {
+        ...state,
+        apiorders: [...action.payload],
+        // currentdragdrop: completed_order_currentdragdrop,
+      };
+    //actiontype addApiOrderSuccessDragDrop
+    case OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,
         apiorders: action.payload.orders,
@@ -77,7 +86,6 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       };
     // when you drag orders to different columns
     // it will keep your changes in place
-    // if u delete this then like dudde when you drag an order nothing will happen
     case OrdersActionTypes.PERSIST_ALL_COLUMN:
       const NewDragAllDropData = persistAllColumn(
         state.currentdragdrop,
@@ -206,7 +214,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         showorders: false,
       };
     // when  /api/orders fails ):
-    case OrdersActionTypes.ADD_DRAG_DROP_FAILURE_TO_COLLECTION:
+    case OrdersActionTypes.ADD_APIORDER_FAILURE_DRAG_DROP_TO_COLLECTION:
       return {
         ...state,
         apiorders: action.payload.orders,

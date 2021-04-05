@@ -1,9 +1,30 @@
 import axios from "axios";
 import { differenceBy } from "lodash";
-/*ACTION TYPE FOR "ADD_DRAG_DROP_TO_COLLECTION"
+import { eventChannel } from "redux-saga";
+import { socketOrderDisplayUpdate } from "./orders.action";
+/*ACTION TYPE FOR "ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION"
 If a store exist within a draganddropcollection then we leave it as is
 otherwise if the manager clicks on a new store then 
 we generate a newDragAndDrop and add it to draganddrop collectio*/
+
+export function disconnect(socket) {
+  socket.disconnect();
+}
+export function socketOrderOn(socket) {
+  return eventChannel((emit) => {
+    socket.on("order-display", (updatedOrders) => {
+     
+      emit(socketOrderDisplayUpdate(updatedOrders));
+    });
+
+    socket.on("disconnect", (e) => {
+      console.log(e);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  });
+}
 
 export const addDragDropToCollection = (
   dragdropcollection,
@@ -21,7 +42,7 @@ export const addDragDropToCollection = (
   return [...dragdropcollection, createNewDragDrop(NewOrders, NewStoreName)];
 };
 
-/* ACTION TYPE FOR "ADD_DRAG_DROP_TO_COLLECTION"
+/* ACTION TYPE FOR "ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION"
 We look for the current Draganddrop from a specific store
 by iterating through the Draganddropcollection.
 if we find it then we set the currentdragdrop
@@ -304,6 +325,6 @@ export const fetchOrders = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
   return axios
-    .get("/api/orders/date/3/21/2021", { cancelToken: token })
+    .get("/api/orders/today", { cancelToken: token })
     .then((res) => res.data);
 };
