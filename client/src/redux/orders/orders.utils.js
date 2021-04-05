@@ -13,6 +13,7 @@ export function disconnect(socket) {
 export function socketOrderOn(socket) {
   return eventChannel((emit) => {
     socket.on("order-display", (updatedOrders) => {
+     
       emit(socketOrderDisplayUpdate(updatedOrders));
     });
 

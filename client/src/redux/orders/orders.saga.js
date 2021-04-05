@@ -64,38 +64,13 @@ const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //
 // we want to put the orders in the reducer apiorders: {},
 // And we want to to showcase the orders
 // in the ui by placing it in the reducer currentdragdrop: { },
-export function* apiSocketGetOrders() {
+export function* setupOrderDragDrop() {
   const storename = yield select(getStoreNameFromReducer);
-
-  try {
-    //Right Now it's not dynamic so we make api call to Royal Palms
-    const orders = yield call(fetchOrders);
-
-    // we want to pass storeName because we want to specify
-    // what drag and drop to save in dragdropcollections
-    const ordersStoreName = {
-      orders: orders,
-      storename: storename,
-    };
-
-    yield put(addApiOrderSuccessDragDrop(ordersStoreName));
-  } catch (error) {
-    const ordersFailure = {
-      orders: [
-        {
-          address:
-            "Try checking your internet connection and refreshing this page.Otherwise contact the admin",
-          orderNumber: 404,
-        },
-      ],
-      storename: storename,
-    };
-    //For any reason if /api/orders fails if the internet goes down we pass a failing order^
-    yield put(addApiOrderFailureDragDrop(ordersFailure));
-    alert("Request to /api/orders has failed please refresh the page");
-  }
-  //After we get the api
-  //where we start checking for order updates
+  const ordersStoreName = {
+    orders: [],
+    storename: storename,
+  };
+  yield put(addApiOrderSuccessDragDrop(ordersStoreName));
   yield call(orderSocketFlow);
 }
 
@@ -126,7 +101,7 @@ export function* RemoveDriverDragAndDrop() {
 
 //Start the order socket when a manager hits any store button
 export function* listentoSocket() {
-  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, apiSocketGetOrders);
+  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, setupOrderDragDrop);
 }
 
 // Listen to when a driver is connecting
