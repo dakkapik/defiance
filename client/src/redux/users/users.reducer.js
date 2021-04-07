@@ -10,7 +10,7 @@ const INITIAL_STATE = {
         role: "manager",
         __v: 0,
         _id: "5ff3e0bdd756ce68b0b848be",
-    },
+    }
 };
 
 const usersReducer = (state = INITIAL_STATE, action) => {
@@ -36,4 +36,4 @@ const usersReducer = (state = INITIAL_STATE, action) => {
     }
 };
 
-export default usersReducer; 
+export default usersReducer;

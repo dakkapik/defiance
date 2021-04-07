@@ -16,6 +16,10 @@ const cacheActiveMovingDriverONLY = createFilter("drivers", [
     "ActiveMovingDriver",
 ]);
 
+const cacheActiveMovingUserONLY = createFilter("users", [
+    "jwt-token",
+]);
+
 const persistConfig = {
     key: "root",
     storage,
