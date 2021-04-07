@@ -24,6 +24,7 @@ function validateOrder(order) {
         city: joi.string(),
         zip: joi.string(),
         geocode: joi.object().required(),
+        location: joi.object(),
         storeId: joi.string().required()
     })
     return schema.validate(order)
@@ -77,6 +78,9 @@ const orderSchema = new mongoose.Schema({
     geocode: {
         type: Object,
         required: true
+    },
+    location: {
+        type: Object,
     },
     city: {
         type: String,

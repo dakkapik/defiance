@@ -9,7 +9,7 @@ const orderStatus = require("./endpoints/orderStatus");
 const message = require("./endpoints/message");
 const displayNumbers = require("./endpoints/displayNumbers");
 
-module.exports.socketIO = async function (server, stores) {
+module.exports.socketIO = function (server, stores) {
     rooms = stores;
 
     const io = require('socket.io')(server);
@@ -80,13 +80,13 @@ module.exports.socketIO = async function (server, stores) {
     
         socket.on("message", (msg)=> message(socket, msg, users));
 
-        socket.on("order-bundles", (data) => orderBundles(socket, data));
+        socket.on("order-bundles", (data) => orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0]));
         
-        socket.on("order-status", (order) => orderStatus(socket, order));
-
+        socket.on("order-status", (data) => orderStatus(socket, data, getUserRoomsAndRole(socket.id)[0]));
+        
+        socket.on("driver-status", (status) => driverStatus(socket, status, users[socket.id], getUserRoomsAndRole(socket.id)[0]));
+        
         socket.on("position", (positionObj) => position(socket, positionObj));
-
-        socket.on("driver-status", (status) => driverStatus(socket, status));
             
         socket.on("disconnect", (reason) => {
     
@@ -128,10 +128,10 @@ function managerIsActive(userStore){
 }
 
 function getUserRoomsAndRole(socketId) {
-  return Object.entries(rooms).reduce((roomIds, [roomId, room]) => {
-    if (room.users[users[socketId]] != null) roomIds.push({roomId, role: room.users[users[socketId]]});
-    return roomIds;
-  }, []);
+    return Object.entries(rooms).reduce((roomIds, [roomId, room]) => {
+        if (room.users[users[socketId]] != null) roomIds.push({roomId, role: room.users[users[socketId]]});
+        return roomIds;
+    }, []);
 }
 
 function findStoreManagerId(roomId){

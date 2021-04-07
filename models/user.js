@@ -8,7 +8,8 @@ function validateUser(input) {
         firstName: joi.string().min(3).max(50).required(),
         lastName: joi.string().min(3).max(50),
         employeeId: joi.number().min(3).required(),
-        role: joi.string().required()
+        role: joi.string().required(),
+        status: joi.string()
     });
     return schema.validate(input);
 }
@@ -36,6 +37,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: false,
         required: true
+    },
+    status: {
+        type: String,
+        default: "offline"
     }
 });
 

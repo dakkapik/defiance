@@ -6,6 +6,8 @@ const server = require('http').createServer(app);
 
 const logger = require("./middleware/logger");
 
+global.GLOBAL_TIMEZONE = "en-US" 
+
 require("./startup/db")().then(()=>{
   socketSetUp(server);
 });

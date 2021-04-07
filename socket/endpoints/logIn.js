@@ -60,3 +60,15 @@ module.exports = function (socket, user, users, rooms, spectators) {
     
 }
 
+function storeExists(userStore){
+    return rooms[userStore];
+  }
+  
+  function managerIsActive(userStore){
+    return rooms[userStore].manager === true;
+  }
+  
+  function findUserSocket(userId){
+    return Object.keys(users).find( socketId =>{return users[socketId] == userId})
+  }
+  
