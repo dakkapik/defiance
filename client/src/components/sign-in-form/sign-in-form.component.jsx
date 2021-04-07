@@ -15,20 +15,20 @@ const SignInForm = () => {
     }
 
     const instance = axios.create({
-      baseURL: '/api/',
+      baseURL: '/auth/',
       headers: { 'signed-in': false }
     })
 
-    instance.post(`/users/${userid}`)
+    instance.get(`/${userid}`)
       .then(response => {
         if (response.status === 200) {
           instance.defaults.headers = {
             'signed-in': true,
-            'token': response.data.token
+            'token': response.data
           }
         }
-        // console.log(response)
-        // console.log(instance.defaults.headers)
+        console.log(response)
+        console.log(instance.defaults.headers)
       })
       .catch(error => {
         console.log(error)

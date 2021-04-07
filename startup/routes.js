@@ -9,6 +9,7 @@ module.exports = function(app) {
     const directions = require('../API/directions')
     const places = require('../API/places')
     const error = require('../middleware/error')
+    const auth = require('../API/authentication')
 
     //this is main
     app.use(express.static(path.join(__dirname, '../client/build')))
@@ -18,6 +19,7 @@ module.exports = function(app) {
 
     app.use(express.urlencoded({ extended: true }))
 
+    app.use('/auth', auth)
     app.use('/api/stores', stores)
     app.use('/api/react', react)
     app.use('/api/orders', orders)
