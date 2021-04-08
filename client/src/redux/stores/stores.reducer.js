@@ -15,7 +15,7 @@ const INITIAL_STATE = {
 
 const storesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case StoresActionTypes.PUT_STORES:
+    case StoresActionTypes.PUT_STORES_IN_REDUCER:
       return {
         ...state,
         stores: action.payload,

@@ -13,26 +13,26 @@ describe("socketReducer", () => {
     expect(newState).toEqual(defaultState);
   });
 
-  it("should return new state if receiving type SET_SOCKET_STORE_NAME", () => {
-    const mockStorePayload = "psq-1";
-    // we pass a payload to the reducer and expect a new state
-    const newState = socketReducer(undefined, {
-      type: SocketActionTypes.SET_SOCKET_STORE_NAME,
-      payload: mockStorePayload,
-    });
-    const expectedState = {
-      ...defaultState,
-      socketToggle: true,
-      socketStoreName: "psq-1",
-    };
-    // //we mimick the returned object from the reducer by calling the functions from utlis
-    expect(newState).toEqual(expectedState);
-  });
-  it("should return new state if receiving type INITALIZE_SOCKET", () => {
+  // it("should return new state if receiving type STORE IN SOCKET", () => {
+  //   const mockStorePayload = "psq-1";
+  //   // we pass a payload to the reducer and expect a new state
+  //   const newState = socketReducer(undefined, {
+  //     type: SocketActionTypes.!*#&*!?>AD,
+  //     payload: mockStorePayload,
+  //   });
+  //   const expectedState = {
+  //     ...defaultState,
+  //     socketToggle: true,
+  //     socketStoreName: "psq-1",
+  //   };
+  //   // //we mimick the returned object from the reducer by calling the functions from utlis
+  //   expect(newState).toEqual(expectedState);
+  // });
+  it("should return new state if receiving type SOCKET_ON", () => {
     const mockSocket = {};
     // we pass a payload to the reducer and expect a new state
     const newState = socketReducer(undefined, {
-      type: SocketActionTypes.INITALIZE_SOCKET,
+      type: SocketActionTypes.SOCKET_ON,
       payload: mockSocket,
     });
 
@@ -41,11 +41,11 @@ describe("socketReducer", () => {
     };
     expect(newState).toEqual(expectedState);
   });
-  it("should return new state if receiving type TOGGLE_SOCKET_OFF", () => {
+  it("should return new state if receiving type SOCKET_OFF", () => {
     const mocksocketToggleOff = false;
     // we pass a payload to the reducer and expect a new state
     const newState = socketReducer(undefined, {
-      type: SocketActionTypes.TOGGLE_SOCKET_OFF,
+      type: SocketActionTypes.SOCKET_OFF,
       payload: mocksocketToggleOff,
     });
 

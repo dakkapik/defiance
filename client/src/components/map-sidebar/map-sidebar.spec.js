@@ -17,8 +17,8 @@ describe("Orders component render", () => {
     const mockProps = {
       socketOff: mockSocketOff,
       clearActiveDriver: mockclearActiveDriver,
-      ordersSocketOn: mockordersSocketOn,
-      ordersSocketOff: mockordersSocketOff,
+      expandOrderDragDropSideBar: mockexpandOrderDragDropSideBar,
+      compressOrderDragDropSideBar: mockcompressOrderDragDropSideBar,
       socket: false,
       showorders: false,
     };

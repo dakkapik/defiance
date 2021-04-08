@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Droppable } from "react-beautiful-dnd";
-import Order from "../order/order.component";
+import Order from "../drag-drop-order-card/order.component";
 import { Container, Title, OrderList } from "./column.styles";
 /*
 

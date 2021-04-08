@@ -5,10 +5,14 @@ import { connect } from "react-redux";
 import "./map-sidebar.styles.scss";
 //Actions
 import {
-  ordersSocketOn,
-  ordersSocketOff,
+  expandOrderDragDropSideBar,
+  compressOrderDragDropSideBar,
 } from "../../redux/orders/orders.action";
-import { clearActiveDriver } from "../../redux/drivers/drivers.action";
+
+import {
+  clearActiveDriver,
+  showStorePanel,
+} from "../../redux/drivers/drivers.action";
 import { socketOff } from "../../redux/socket/socket.action";
 //Components
 import ArrowModalButton from "../arrow-modal-button/arrow-expanded-modal-button.component";
@@ -16,11 +20,12 @@ import Map from "../map/map.component";
 import SaveModalButton from "../save-modal-button/save-modal-button.component";
 import Button from "@material-ui/core/Button";
 import StoreList from "../store-list/store-list.component";
-import Orders from "../orders/orders.component";
+import Orders from "../drag-drop-orders/orders.component";
 //Assets
 import arrow from "./arrow.png";
 import DynamicDriverList from "../dynamic-driverlist/dynamic-driverlist.component";
 import { DisconnectButtonStyles } from "./map-sidebar.styles";
+
 /*
 MapSideBar functionality
 Renders: Map componenet always 
@@ -31,15 +36,24 @@ Orders: conditionally
 */
 
 export const MapSideBar = ({
-  //comparison variables for no question on red arrow closing if no changes
+  // if no orders are within drivers then  compressOrderDragDropSidebar
   apiorders,
   unassigned_orders,
-  socket,
-  showorders,
+  //turn the socket off
   socketOff,
+
+  //clear all drivers within the driver panel when disconnected
   clearActiveDriver,
-  ordersSocketOn,
-  ordersSocketOff,
+
+  //when clicking the red arrow button
+  showorders,
+  expandOrderDragDropSideBar,
+  compressOrderDragDropSideBar,
+
+  //when pressing the disconnect button
+  showStorePanel,
+  // if true show driver panel, if false show store panel
+  show_drivers_or_stores_panel,
 }) => {
   const [show_arrow_modal, openArrowModal] = useState(false);
   const disconnect_button_classes = DisconnectButtonStyles();
@@ -57,7 +71,7 @@ export const MapSideBar = ({
       {/* 
        If Manager does click a store then socket=true  then dynamic driver loads with showorders being false
        */}
-      {socket ? (
+      {show_drivers_or_stores_panel ? (
         <div className="sidebar-container">
           <div className={showorders ? "side-bar-expanded " : "side-bar"}>
             {showorders ? (
@@ -77,7 +91,8 @@ export const MapSideBar = ({
                   variant="outlined"
                   color="secondary"
                   onClick={() => {
-                    socketOff(false);
+                    socketOff();
+                    showStorePanel();
                     clearActiveDriver();
                   }}
                 >
@@ -104,7 +119,7 @@ export const MapSideBar = ({
               */
 
                 apiorders.length === unassigned_orders.length
-                  ? ordersSocketOff()
+                  ? compressOrderDragDropSideBar()
                   : handleOpenArrowModal();
               }}
             />
@@ -113,7 +128,7 @@ export const MapSideBar = ({
               src={arrow}
               alt="arrow"
               onClick={() => {
-                ordersSocketOn();
+                expandOrderDragDropSideBar();
               }}
               className="arrow"
             />
@@ -132,15 +147,16 @@ export const MapSideBar = ({
 const mapStateToProps = (state) => ({
   apiorders: state.orders.apiorders,
   unassigned_orders: state.orders.currentdragdrop.columns["column-1"].orderIds,
-  socket: state.socket.socketToggle,
+  show_drivers_or_stores_panel: state.drivers.show_drivers_or_stores_panel,
   showorders: state.orders.showorders,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  ordersSocketOn: () => dispatch(ordersSocketOn()),
-  ordersSocketOff: (x) => dispatch(ordersSocketOff(x)),
-  socketOff: (bool) => dispatch(socketOff(bool)),
+  expandOrderDragDropSideBar: () => dispatch(expandOrderDragDropSideBar()),
+  compressOrderDragDropSideBar: () => dispatch(compressOrderDragDropSideBar()),
+  socketOff: () => dispatch(socketOff()),
   clearActiveDriver: () => dispatch(clearActiveDriver()),
+  showStorePanel: () => dispatch(showStorePanel()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapSideBar);

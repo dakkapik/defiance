@@ -42,16 +42,13 @@ const INITIAL_STATE = {
 const ordersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
-      console.log(action.payload);
-      const newOrderDragDrop = { ...state.currentdragdrop };
-
       return {
         ...state,
         apiorders: [...action.payload],
         // currentdragdrop: completed_order_currentdragdrop,
       };
-    //actiontype addApiOrderSuccessDragDrop
-    case OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION:
+    //actiontype setupCurrentDragDrop
+    case OrdersActionTypes.SETUP_CURRENT_DRAG_DROP:
       return {
         ...state,
         apiorders: action.payload.orders,
@@ -203,12 +200,12 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         ),
       };
     //UI UPDATES for expanding and compressing side bar
-    case OrdersActionTypes.ORDERS_SOCKET_ON:
+    case OrdersActionTypes.EXPAND_ORDER_DRAG_DROP_SIDEBAR:
       return {
         ...state,
         showorders: true,
       };
-    case OrdersActionTypes.ORDERS_SOCKET_OFF:
+    case OrdersActionTypes.COMPRESS_ORDER_DRAG_DROP_SIDEBAR:
       return {
         ...state,
         showorders: false,

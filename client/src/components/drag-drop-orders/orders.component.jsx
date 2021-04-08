@@ -10,7 +10,7 @@ import {
   persistAllColumn,
 } from "../../redux/orders/orders.action";
 //components
-import Column from "../column/column.component";
+import Column from "../drag-drop-column-card/column.component";
 
 export const Orders = ({
   persistOrderColumn,
@@ -60,7 +60,7 @@ export const Orders = ({
   };
   //Array of html elements
   let dom_elements_of_drivers = [];
-
+  console.log(currentdragdrop);
   return (
     <div>
       <Container>

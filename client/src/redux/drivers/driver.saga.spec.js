@@ -35,9 +35,7 @@ describe("driverSocketFlow generator function\n", () => {
   });
 
   test("3. Disconnected gracefully", () => {
-    expect(generator.next().value).toEqual(
-      take(SocketActionTypes.TOGGLE_SOCKET_OFF)
-    );
+    expect(generator.next().value).toEqual(take(SocketActionTypes.SOCKET_OFF));
 
     expect(generator.next(socket).value.payload.fn).toEqual(
       call(disconnect, socket).payload.fn

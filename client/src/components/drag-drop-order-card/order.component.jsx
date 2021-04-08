@@ -28,10 +28,12 @@ export const theme = {
 };
 
 const Order = ({ order, index, delete_mark }) => {
+  console.log(order);
   const classes = useIconStyles();
   const classesAddress = useIconAddressStyles();
 
-  const convertMiltaryTimeToStandard = ({ hour, minute }) => {
+  const convertMiltaryTimeToStandard = ({ hour, minute } = {}) => {
+    if (hour || minute === undefined) return "";
     hour = ((hour + 11) % 12) + 1;
     const amPm = hour > 11 ? "pm" : "am";
     return hour + ":" + minute + amPm;
