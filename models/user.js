@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: false,
+        default: "driver",
         required: true
     },
     status: {
