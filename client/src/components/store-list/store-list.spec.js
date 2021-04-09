@@ -1,6 +1,11 @@
 import React from "react";
-import { StoreList } from "./store-list.component";
-import { shallow } from "enzyme";
+import {
+  StoreList,
+  mapStateToProps,
+  mapDispatchToProps,
+} from "./store-list.component";
+
+import renderWithState from "./hoc-testing";
 
 const stores = [
   {
@@ -37,23 +42,29 @@ const stores = [
   },
 ];
 
+jest.mock("../../redux/stores/stores.action", () => ({
+  fetchApiStoreListUseEffect: () => ({ name: "mock name" }),
+}));
+
 describe("StoreList component render", () => {
-  let wrapper;
+  const dispatch = jest.fn();
+  let mockFetchCollectionsStart = jest.fn();
 
-  let mocktriggerStores;
-
-  beforeEach(() => {
-    mocktriggerStores = jest.fn();
-
-    const mockProps = {
-      stores: stores,
-      fetchApiStoreListUseEffect: mocktriggerStores,
+  it("should render storelist", () => {
+    const initialState = {
+      stores: { stores: stores },
     };
 
-    wrapper = shallow(<StoreList {...mockProps} />);
+    expect(mapStateToProps(initialState).stores.length).toEqual(4);
+    mapDispatchToProps(dispatch).fetchApiStoreListUseEffect();
+    renderWithState(
+      <StoreList
+        stores={stores}
+        fetchApiStoreListUseEffect={mockFetchCollectionsStart}
+      />,
+      { initialState }
+    );
   });
 
-  it("should render StoreList component", () => {
-    expect(wrapper).toMatchSnapshot();
-  });
+  // const { container } = render(<StoreList stores={stores} />);
 });

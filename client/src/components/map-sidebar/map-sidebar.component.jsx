@@ -64,7 +64,6 @@ export const MapSideBar = ({
   const handleOpenArrowModal = () => {
     openArrowModal(true);
   };
-
   return (
     <div className="map-side-container">
       <Map />

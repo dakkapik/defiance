@@ -16,11 +16,11 @@ export const StoreList = ({ stores, fetchApiStoreListUseEffect }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+export const mapStateToProps = (state) => ({
   stores: state.stores.stores,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch) => ({
   fetchApiStoreListUseEffect: () => dispatch(fetchApiStoreListUseEffect()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(StoreList);

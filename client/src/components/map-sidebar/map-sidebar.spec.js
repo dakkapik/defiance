@@ -6,14 +6,14 @@ describe("Orders component render", () => {
   let wrapper;
   let mockSocketOff;
   let mockclearActiveDriver;
-  let mockordersSocketOn;
-  let mockordersSocketOff;
+  let mockexpandOrderDragDropSideBar;
+  let mockcompressOrderDragDropSideBar;
 
   beforeEach(() => {
     mockSocketOff = jest.fn();
     mockclearActiveDriver = jest.fn();
-    mockordersSocketOn = jest.fn();
-    mockordersSocketOff = jest.fn();
+    mockexpandOrderDragDropSideBar = jest.fn();
+    mockcompressOrderDragDropSideBar = jest.fn();
     const mockProps = {
       socketOff: mockSocketOff,
       clearActiveDriver: mockclearActiveDriver,

@@ -3,6 +3,7 @@ import StoresActionTypes from "../stores/stores.types";
 import { socketOn } from "./socket.action";
 import { Connect_To_Socket_With_StoreId } from "./socket.utils";
 
+//when the user clicks on a store
 export const getUserOnClickStore = (state) => state.stores.connectedStore;
 
 export function* setSocket() {
@@ -10,7 +11,6 @@ export function* setSocket() {
   const socket = yield call(Connect_To_Socket_With_StoreId, {
     storeId: connectedStore.storeId,
   });
-  //Rember to do a try and catch with this
   yield put(socketOn(socket));
 }
 
