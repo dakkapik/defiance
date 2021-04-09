@@ -1,5 +1,6 @@
 import OrdersActionTypes from "./orders.types";
 import {
+  putOrderCurrentDragDrop,
   addDragDropToCollection,
   getCurrentDragandDrop,
   persistOrderColumn,
@@ -42,10 +43,18 @@ const INITIAL_STATE = {
 const ordersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE:
+      const newOrderDragDrop = putOrderCurrentDragDrop(
+        state.currentdragdrop,
+        action.payload
+      );
       return {
         ...state,
         apiorders: [...action.payload],
-        // currentdragdrop: completed_order_currentdragdrop,
+        currentdragdrop: newOrderDragDrop,
+        dragdropcollection: saveDragDropCollection(
+          state.dragdropcollection,
+          newOrderDragDrop
+        ),
       };
     //actiontype setupCurrentDragDrop
     case OrdersActionTypes.SETUP_CURRENT_DRAG_DROP:

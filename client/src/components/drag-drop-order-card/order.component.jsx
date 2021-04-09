@@ -28,7 +28,6 @@ export const theme = {
 };
 
 const Order = ({ order, index, delete_mark }) => {
-  console.log(order);
   const classes = useIconStyles();
   const classesAddress = useIconAddressStyles();
 

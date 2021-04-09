@@ -25,6 +25,18 @@ export function socketOrderOn(socket) {
   });
 }
 
+export const putOrderCurrentDragDrop = (currentdragdrop, orders) => {
+  orders.forEach(({ orderNumber, ...data }, index) => {
+    currentdragdrop.orders[orderNumber.toString()] = {
+      id: orderNumber.toString(),
+      ...data,
+    };
+    currentdragdrop.columns["column-1"].orderIds.push(orderNumber.toString());
+  });
+
+  return { ...currentdragdrop };
+};
+
 export const addDragDropToCollection = (
   dragdropcollection,
   { orders: NewOrders, storename: NewStoreName }
