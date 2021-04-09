@@ -5,7 +5,7 @@ export const clearActiveDriver = () => ({
 });
 
 export const currentConnectedDriver = (driver) => ({
-  type: DriversActionTypes.CURRENT_ACTIVE_DRIVER,
+  type: DriversActionTypes.CURRENT_CONNECTED_DRIVER,
   payload: driver,
 });
 

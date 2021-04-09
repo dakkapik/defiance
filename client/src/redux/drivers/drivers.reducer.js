@@ -23,7 +23,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         show_drivers_or_stores_panel: false,
       };
 
-    case DriversActionTypes.CURRENT_ACTIVE_DRIVER:
+    case DriversActionTypes.CURRENT_CONNECTED_DRIVER:
       let justadded = {};
       if (state.currentDrivers) {
         if (state.currentDrivers.length === 0) {

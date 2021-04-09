@@ -106,7 +106,7 @@ export function* listentoSocket() {
 // Listen to when a driver is connecting
 export function* listentoAddActiveDriver() {
   yield takeLatest(
-    DriversActionTypes.CURRENT_ACTIVE_DRIVER,
+    DriversActionTypes.CURRENT_CONNECTED_DRIVER,
     initalizeDriverDragAndDrop
   );
 }
