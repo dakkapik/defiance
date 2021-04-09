@@ -67,6 +67,8 @@ module.exports.socketIO = function (server, stores) {
                         rooms[user.store].users[user.id] = user.role;
     
                         socket.to(user.store).broadcast.emit("current-users", rooms[user.store]);
+
+                        io.to(socket.id).emit("login-success");
                         
                         console.log(`Socket:`, user.id, `${user.role} connected to room store-${user.store}`);
                     }
