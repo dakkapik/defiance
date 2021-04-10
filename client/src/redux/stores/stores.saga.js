@@ -1,7 +1,7 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import StoresActionTypes from "./stores.types";
 import axios from "axios";
-import { putStoreInReducer } from "./stores.action";
+import { putStoreInState } from "./stores.action";
 const callApiStores = () => {
   var CancelToken = axios.CancelToken;
   var { token } = CancelToken.source();
@@ -14,7 +14,7 @@ export function* SetStores() {
   try {
     const stores = yield call(callApiStores);
 
-    yield put(putStoreInReducer(stores));
+    yield put(putStoreInState(stores));
   } catch (error) {
     console.log("Request to storeApi Failed!");
   }
