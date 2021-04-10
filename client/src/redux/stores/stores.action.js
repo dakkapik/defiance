@@ -5,7 +5,7 @@ export const fetchApiStoreListUseEffect = () => ({
 });
 
 export const putStoreInReducer = (store) => ({
-  type: StoresActionTypes.PUT_STORES_IN_REDUCER,
+  type: StoresActionTypes.PUT_STORES_IN_STATE,
   payload: store,
 });
 
