@@ -10,7 +10,7 @@ import {
   persistAllColumn,
 } from "../../redux/orders/orders.action";
 //components
-import Column from "../column/column.component";
+import Column from "../drag-drop-column-card/column.component";
 
 export const Orders = ({
   persistOrderColumn,

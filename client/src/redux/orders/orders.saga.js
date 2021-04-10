@@ -13,11 +13,10 @@ import {
 import SocketActionTypes from "../socket/socket.types";
 import DriversActionTypes from "../drivers/drivers.types";
 //Functions
-import { fetchOrders, socketOrderOn, disconnect } from "./orders.utils";
+import { socketOrderOn, disconnect } from "./orders.utils";
 //Actions
 import {
-  addApiOrderSuccessDragDrop,
-  addApiOrderFailureDragDrop,
+  setupCurrentDragDrop,
   deltaDriverDragAndDrop,
   removeDriverDragDrop,
 } from "./orders.action";
@@ -48,7 +47,7 @@ export function* orderSocketFlow() {
 
     /* The loop stops here when we listen to when the manager
     is pressing the disconnect button aka listening to socket disconnect action*/
-    yield take(SocketActionTypes.TOGGLE_SOCKET_OFF);
+    yield take(SocketActionTypes.SOCKET_OFF);
 
     /*afterwards we prepare to shutdown the socket gracefully*/
     yield call(disconnect, socket);
@@ -59,18 +58,18 @@ export function* orderSocketFlow() {
 }
 
 //get storename
-const getStoreNameFromReducer = (state) => state.socket.socketStoreName.name; //socket is an Object
+const getStoreNameFromReducer = (state) => state.stores.connectedStore.name; //socket is an Object
 
-// we want to put the orders in the reducer apiorders: {},
-// And we want to to showcase the orders
-// in the ui by placing it in the reducer currentdragdrop: { },
+//setup Order drag and drop
 export function* setupOrderDragDrop() {
   const storename = yield select(getStoreNameFromReducer);
-  const ordersStoreName = {
-    orders: [],
-    storename: storename,
-  };
-  yield put(addApiOrderSuccessDragDrop(ordersStoreName));
+
+  yield put(
+    setupCurrentDragDrop({
+      orders: [],
+      storename: storename,
+    })
+  );
   yield call(orderSocketFlow);
 }
 
@@ -101,13 +100,13 @@ export function* RemoveDriverDragAndDrop() {
 
 //Start the order socket when a manager hits any store button
 export function* listentoSocket() {
-  yield takeLatest(SocketActionTypes.INITALIZE_SOCKET, setupOrderDragDrop);
+  yield takeLatest(SocketActionTypes.SOCKET_ON, setupOrderDragDrop);
 }
 
 // Listen to when a driver is connecting
 export function* listentoAddActiveDriver() {
   yield takeLatest(
-    DriversActionTypes.ADD_ACTIVE_DRIVER,
+    DriversActionTypes.CURRENT_CONNECTED_DRIVER,
     initalizeDriverDragAndDrop
   );
 }

@@ -1,8 +1,8 @@
 import OrdersActionTypes from "./orders.types";
 
 //  when api order succeeds add it to currentdragdrop reducer
-export const addApiOrderSuccessDragDrop = (OrdersAndStore) => ({
-  type: OrdersActionTypes.ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION,
+export const setupCurrentDragDrop = (OrdersAndStore) => ({
+  type: OrdersActionTypes.SETUP_CURRENT_DRAG_DROP,
   payload: OrdersAndStore,
 });
 //when socket gives an order update
@@ -51,10 +51,9 @@ export const discardOrderChanges = () => ({
 });
 
 // UI CASES for expanded the mapsidebar-component and compressing
-export const ordersSocketOn = () => ({
-  type: OrdersActionTypes.ORDERS_SOCKET_ON,
+export const expandOrderDragDropSideBar = () => ({
+  type: OrdersActionTypes.EXPAND_ORDER_DRAG_DROP_SIDEBAR,
 });
-export const ordersSocketOff = (arrow_modal_bool) => ({
-  type: OrdersActionTypes.ORDERS_SOCKET_OFF,
-  payload: arrow_modal_bool,
+export const compressOrderDragDropSideBar = () => ({
+  type: OrdersActionTypes.COMPRESS_ORDER_DRAG_DROP_SIDEBAR,
 });

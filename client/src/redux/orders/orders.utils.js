@@ -2,7 +2,7 @@ import axios from "axios";
 import { differenceBy } from "lodash";
 import { eventChannel } from "redux-saga";
 import { socketOrderDisplayUpdate } from "./orders.action";
-/*ACTION TYPE FOR "ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION"
+/*ACTION TYPE FOR "SETUP_CURRENT_DRAG_DROP"
 If a store exist within a draganddropcollection then we leave it as is
 otherwise if the manager clicks on a new store then 
 we generate a newDragAndDrop and add it to draganddrop collectio*/
@@ -13,18 +13,29 @@ export function disconnect(socket) {
 export function socketOrderOn(socket) {
   return eventChannel((emit) => {
     socket.on("order-display", (updatedOrders) => {
-     
       emit(socketOrderDisplayUpdate(updatedOrders));
     });
 
     socket.on("disconnect", (e) => {
-      console.log(e);
+      console.log("Order Socket", e);
     });
     return () => {
       socket.disconnect();
     };
   });
 }
+
+export const putOrderCurrentDragDrop = (currentdragdrop, orders) => {
+  orders.forEach(({ orderNumber, ...data }, index) => {
+    currentdragdrop.orders[orderNumber.toString()] = {
+      id: orderNumber.toString(),
+      ...data,
+    };
+    currentdragdrop.columns["column-1"].orderIds.push(orderNumber.toString());
+  });
+
+  return { ...currentdragdrop };
+};
 
 export const addDragDropToCollection = (
   dragdropcollection,
@@ -42,7 +53,7 @@ export const addDragDropToCollection = (
   return [...dragdropcollection, createNewDragDrop(NewOrders, NewStoreName)];
 };
 
-/* ACTION TYPE FOR "ADD_APIORDER_SUCCESS_DRAG_DROP_TO_COLLECTION"
+/* ACTION TYPE FOR "SETUP_CURRENT_DRAG_DROP"
 We look for the current Draganddrop from a specific store
 by iterating through the Draganddropcollection.
 if we find it then we set the currentdragdrop
