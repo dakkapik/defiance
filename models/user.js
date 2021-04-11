@@ -2,6 +2,16 @@ const mongoose = require("mongoose");
 const joi = require("joi");
 // const jwt = require("jsonwebtoken");
 // const config = require("config");
+const STATUS_OFFLINE = "offline";
+const STATUS_AWAITING = "awaiting";
+const STATUS_ON_ROUTE = "on_route";
+const STATUS_RETURNING = "returning";
+const TIMEZONE = "en-US";
+
+function validateOrderStatus(status){
+    const schema = joi.string().required().equal(STATUS_OFFLINE, STATUS_AWAITING, STATUS_ON_ROUTE)
+    return schema.validate(status)
+}
 
 function validateUser(input) {
     const schema = joi.object({
