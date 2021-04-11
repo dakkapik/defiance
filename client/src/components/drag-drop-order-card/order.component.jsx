@@ -32,14 +32,18 @@ const Order = ({ order, index, delete_mark }) => {
   const classesAddress = useIconAddressStyles();
 
   const convertMiltaryTimeToStandard = ({ hour, minute } = {}) => {
-    if (hour || minute === undefined) return "";
+    if (hour === undefined && minute === undefined) {
+      console.log(hour);
+      console.log(minute);
+      return "";
+    }
     hour = ((hour + 11) % 12) + 1;
     const amPm = hour > 11 ? "pm" : "am";
     return hour + ":" + minute + amPm;
   };
 
   return (
-    <Draggable draggableId={order.id} index={index}>
+    <Draggable draggableId={order._id} index={index}>
       {(
         provided
         // snapshot
@@ -55,7 +59,7 @@ const Order = ({ order, index, delete_mark }) => {
             {/*ONLY SHOWN IN MOBILE  */}
             <IconContainer title="true">
               <FastfoodIcon disabled className={classes.root} />
-              <IconSpace> {order.id} </IconSpace>
+              <IconSpace> {order.orderNumber} </IconSpace>
             </IconContainer>
 
             <IconContainer title="true">
@@ -84,12 +88,13 @@ const Order = ({ order, index, delete_mark }) => {
           <WhiteSideBarContainer theme={theme}>
             <OrderNumberContainer>
               <OrderTitle>Order</OrderTitle>
-              <OrderNumber>{order.id}</OrderNumber>
+              <OrderNumber>{order.orderNumber}</OrderNumber>
               {delete_mark ? (
                 <XMarkContainer>
                   <XmarkModalButton
                     order_to_delete={{
-                      orderid: order.id,
+                      orderNumber: order.orderNumber,
+                      _id: order._id,
                       driverid: order.livesInColumn,
                       drivername: order.livesInNameColumn,
                     }}

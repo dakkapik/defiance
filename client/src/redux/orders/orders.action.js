@@ -6,9 +6,22 @@ export const setupCurrentDragDrop = (OrdersAndStore) => ({
   payload: OrdersAndStore,
 });
 //when socket gives an order update
-export const socketOrderDisplayUpdate = (driver_completed_order) => ({
-  type: OrdersActionTypes.ORDER_DISPLAY_SOCKET_UPDATE,
-  payload: driver_completed_order,
+export const socketOrderNew = (New_Order) => ({
+  type: OrdersActionTypes.SOCKET_ORDER_NEW,
+  payload: New_Order,
+});
+
+//when socket gives an order update changes the order STATUS
+// if status = completed -> delete
+// if status = onroute -> change text
+export const socketOrderUpdate = (Order_With_Updated_Status) => ({
+  type: OrdersActionTypes.SOCKET_ORDER_UPDATE,
+  payload: Order_With_Updated_Status,
+});
+
+export const socketOrderDelete = (Delete_Order) => ({
+  type: OrdersActionTypes.SOCKET_ORDER_DELETE,
+  payload: Delete_Order,
 });
 
 // when api order fails add custom failure to currentdragdrop reducer

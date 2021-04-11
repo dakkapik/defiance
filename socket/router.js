@@ -79,7 +79,18 @@ module.exports.socketIO = function (server, stores) {
                 break;
             }
         });
-    
+        socket.on('trigger-new-orders', (order) => {
+            io.to('psq2').emit("orders-new", order);
+        });
+        socket.on('trigger-new-updates', (order) => {
+            console.log(order);
+            io.to('psq2').emit("order-updates", order);
+        });
+        socket.on('trigger-order-delete', (order) => {
+            console.log(order);
+            io.to('psq2').emit("order-delete", order);
+        });
+
         socket.on("message", (msg)=> message(socket, msg, users));
 
         socket.on("order-bundles", (data) => orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0]));
