@@ -2,7 +2,7 @@ const { Order, validateOrderStatus } = require("../../models/order");
 const { OrderBundle, validateOrderBundle } = require("../../models/orderBundle")
 const getDirections = require("../../functions/getDirections");
 const { writeFileSync } = require("fs")
-// const mockDirections = require("../../../responce.json")
+const mockDirections = require("../../../directions/responce.json")
 
 const CURRENT_STORE = { lat: 26.286659103811463, lng: -80.19981933329022 }
 
@@ -18,16 +18,22 @@ module.exports = function (socket, orderBundleList, users) {
             waypoints.push(order.geocode)
         })
 
-        // console.log("sending directions to: ", user)
+        // console.log("sending directions to: ", orderBundle.id, user)
         // socket.to(user).emit("route", mockDirections)
         getDirections(origin, destination, waypoints)
         .then(res=>{
+            orderBundle.orders.forEach(( order, index ) => {
+                res.geocoded_waypoints[index + 1].coords = order.geocode
+            })
+            res.geocoded_waypoints[0].coords = CURRENT_STORE
+            res.geocoded_waypoints[res.geocoded_waypoints.length - 1].coords = CURRENT_STORE
+            
             console.log("sending directions to: ", orderBundle.id, user)
 
             updateOrders(orderBundle.orderIds)
             saveDirectionData(res)
             saveOrderBundle(orderBundle)
-            
+
             socket.to(user).emit("route", res)
         })
         .catch(err => console.log("getDirections ERROR: ", err))
