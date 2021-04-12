@@ -1,7 +1,11 @@
 import axios from "axios";
 import { differenceBy } from "lodash";
 import { eventChannel } from "redux-saga";
-import { socketOrderDisplayUpdate } from "./orders.action";
+import {
+  socketOrderNew,
+  socketOrderUpdate,
+  socketOrderDelete,
+} from "./orders.action";
 /*ACTION TYPE FOR "SETUP_CURRENT_DRAG_DROP"
 If a store exist within a draganddropcollection then we leave it as is
 otherwise if the manager clicks on a new store then 
@@ -12,8 +16,18 @@ export function disconnect(socket) {
 }
 export function socketOrderOn(socket) {
   return eventChannel((emit) => {
-    socket.on("order-display", (updatedOrders) => {
-      emit(socketOrderDisplayUpdate(updatedOrders));
+    socket.on("orders-new", (New_Order) => {
+      console.log('socket.on("orders-new")', New_Order);
+      emit(socketOrderNew(New_Order));
+    });
+    socket.on("order-updates", (Order_With_Updated_Status) => {
+      console.log('socket.on("order-updates")', Order_With_Updated_Status);
+      emit(socketOrderUpdate(Order_With_Updated_Status));
+    });
+
+    socket.on("order-delete", (Delete_Order) => {
+      console.log('socket.on("order-delete")', Delete_Order);
+      emit(socketOrderDelete(Delete_Order));
     });
 
     socket.on("disconnect", (e) => {
@@ -323,11 +337,11 @@ export const removeorderfromDriver = (for_deletion, currentdragdrop) => {
     ...currentdragdrop.columns[for_deletion.driverid], //loop up and grab it's data
     // delete the orderNumber in the array
     orderIds: currentdragdrop.columns[for_deletion.driverid].orderIds.filter(
-      (item) => item !== for_deletion.orderid
+      (item) => item !== for_deletion._id
     ),
   };
   // push the orderNumber back in the order's column
-  currentdragdrop.columns["column-1"].orderIds.push(for_deletion.orderid);
+  currentdragdrop.columns["column-1"].orderIds.push(for_deletion._id);
   //return a new object because ui needs  to detect changes in memory
   return { ...currentdragdrop };
 };

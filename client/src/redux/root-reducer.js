@@ -10,15 +10,15 @@ import storesReducer from "./stores/stores.reducer";
 import socketReducer from "./socket/socket.reducer";
 import ordersReducer from "./orders/orders.reducer";
 import usersReducer from './users/users.reducer'
-
+// READ ABOUT REDUX PERSIST HERE
 //Documentation- https://github.com/rt2zz/redux-persist#readme
 const cacheActiveMovingDriverONLY = createFilter("drivers", [
     "ActiveMovingDriver",
 ]);
 
-const cacheActiveMovingUserONLY = createFilter("users", [
-    "jwt-token",
-]);
+// const cacheActiveMovingUserONLY = createFilter("users", [
+//     "jwt-token",
+// ]);
 
 const persistConfig = {
     key: "root",

@@ -45,7 +45,7 @@ const Column = ({ column, orders, delete_mark }) => {
             {orders.map((order, index) => (
               <Order
                 delete_mark={delete_mark}
-                key={order.id}
+                key={order._id}
                 order={order}
                 index={index}
               />

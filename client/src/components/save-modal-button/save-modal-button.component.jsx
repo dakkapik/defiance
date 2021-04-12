@@ -81,7 +81,7 @@ export const SaveModalButton = ({ saveOrders, drivers_with_orders }) => {
                     >
                       {driver.orders.map((order, i) => (
                         <OrderNumbersContainer key={i}>
-                          {order.id},
+                          {order.orderNumber},
                         </OrderNumbersContainer>
                       ))}
                     </OrderColumnContainer>

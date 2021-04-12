@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   GoogleMap,
   useLoadScript,
@@ -13,11 +13,20 @@ const containerStyle = {
   height: "95vh",
 };
 // You should refactor stuff here man
-const Map = ({ store, ActiveMovingDriver, apiorders }) => {
+const Map = ({
+  store,
+  ActiveMovingDriver,
+  apiorders,
+  updated_status_order,
+}) => {
   //for when you click on an order
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [markerMap, setMarkerMap] = useState({});
   const [infoOpen, setInfoOpen] = useState(false);
+  
+  useEffect(() => {
+    setSelectedPlace(updated_status_order);
+  }, [updated_status_order]);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_google_map_api,
@@ -73,7 +82,8 @@ const Map = ({ store, ActiveMovingDriver, apiorders }) => {
                   label={{
                     className: "marktest",
                     text: `${order.orderNumber}`,
-                    color: "white",
+                    color: `${order.status === "on_route" ? "cyan" : "white"} `,
+
                     fontSize: "16px",
                     fontWeight: "600",
                   }}
@@ -104,8 +114,11 @@ const Map = ({ store, ActiveMovingDriver, apiorders }) => {
                       textAlign: "center",
                     }}
                   >
-                    <h3 style={{ color: "black" }}>
+                    <h2 style={{ color: "black" }}>
                       Order: {selectedPlace.orderNumber}
+                    </h2>
+                    <h3 style={{ color: "black" }}>
+                      Status: {selectedPlace.status}
                     </h3>
                     <div style={{ color: "black" }}>
                       {selectedPlace.address}
@@ -133,5 +146,6 @@ const mapStateToProps = (state) => ({
   store: state.stores.connectedStore,
   ActiveMovingDriver: state.drivers.ActiveMovingDriver,
   apiorders: state.orders.apiorders,
+  updated_status_order: state.orders.updated_status_order,
 });
 export default connect(mapStateToProps, null)(Map);
