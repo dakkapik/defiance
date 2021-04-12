@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 const joi = require("joi");
+const moment = require("moment");
 const STATUS_COMPLETED = "completed";
 const STATUS_ON_ROUTE = "on_route";
 const STATUS_UNASSIGNED = "unassigned";
-const TIMEZONE = "en-US";
 
 function validateOrderStatus(status){
     const schema = joi.string().required().equal(STATUS_COMPLETED, STATUS_ON_ROUTE, STATUS_UNASSIGNED)
@@ -45,7 +45,7 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: String,
         required: true,
-        default: new Date().toLocaleDateString(TIMEZONE)
+        default: moment().format("MM/DD/YYYY")
     },
     time: {
         type: Object,

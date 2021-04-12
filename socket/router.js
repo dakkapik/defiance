@@ -5,16 +5,15 @@ const spectators = {};
 const position = require("./endpoints/position");
 const driverStatus = require("./endpoints/driverStatus");
 const orderBundles = require("./endpoints/orderBundles");
-const orderStatus = require("./endpoints/orderStatus");
 const message = require("./endpoints/message");
-const displayNumbers = require("./endpoints/displayNumbers");
+const orderExtract = require("./listeners/orderExtract");
 
 module.exports.socketIO = function (server, stores) {
     rooms = stores;
 
     const io = require('socket.io')(server);
     
-    displayNumbers(io);
+    orderExtract(io);
 
     io.on("connection", (socket)=>{
 
@@ -93,11 +92,7 @@ module.exports.socketIO = function (server, stores) {
 
         socket.on("message", (msg)=> message(socket, msg, users));
 
-        socket.on("order-bundles", (data) => {
-            orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0])
-        });
-        
-        socket.on("order-status", (data) => orderStatus(socket, data, getUserRoomsAndRole(socket.id)[0]));
+        socket.on("order-bundles", (data) => orderBundles(socket, data, users));
         
         socket.on("driver-status", (status) => driverStatus(socket, status, users[socket.id], getUserRoomsAndRole(socket.id)[0]));
         
