@@ -1,15 +1,12 @@
 import SocketActionTypes from "./socket.types";
-export const socketInitStore = (Store) => ({
-  type: SocketActionTypes.SET_SOCKET_STORE_NAME,
-  payload: Store,
-});
 
-export const putSocketInReducer = (socket) => ({
-  type: SocketActionTypes.INITALIZE_SOCKET,
+//socketOn called from socket.saga
+export const socketOn = (socket) => ({
+  type: SocketActionTypes.SOCKET_ON,
   payload: socket,
 });
-
-export const SocketOff = (bool) => ({
-  type: SocketActionTypes.TOGGLE_SOCKET_OFF,
-  payload: bool,
+// socketOff called from mapsidebar component
+// SOCKET_OFF listened by driver.saga
+export const socketOff = () => ({
+  type: SocketActionTypes.SOCKET_OFF,
 });

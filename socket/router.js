@@ -2,12 +2,20 @@ let rooms = {};
 const users = {};
 const spectators = {};
 
-module.exports.socketIO = async function (server, stores) {
+const position = require("./endpoints/position");
+const driverStatus = require("./endpoints/driverStatus");
+const orderBundles = require("./endpoints/orderBundles");
+const orderStatus = require("./endpoints/orderStatus");
+const message = require("./endpoints/message");
+const displayNumbers = require("./endpoints/displayNumbers");
 
+module.exports.socketIO = function (server, stores) {
     rooms = stores;
 
     const io = require('socket.io')(server);
     
+    displayNumbers(io);
+
     io.on("connection", (socket)=>{
 
         socket.on("new-user", (user)=>{
@@ -59,6 +67,8 @@ module.exports.socketIO = async function (server, stores) {
                         rooms[user.store].users[user.id] = user.role;
     
                         socket.to(user.store).broadcast.emit("current-users", rooms[user.store]);
+
+                        io.to(socket.id).emit("login-success");
                         
                         console.log(`Socket:`, user.id, `${user.role} connected to room store-${user.store}`);
                     }
@@ -70,16 +80,16 @@ module.exports.socketIO = async function (server, stores) {
             }
         });
     
-        socket.on("message", (message)=>{
-            console.log(`user-`,users[socket.id] `: `, message)
-        });
-    
-        socket.on("position", (positionObj)=>{
+        socket.on("message", (msg)=> message(socket, msg, users));
+
+        socket.on("order-bundles", (data) => orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0]));
+        
+        socket.on("order-status", (data) => orderStatus(socket, data, getUserRoomsAndRole(socket.id)[0]));
+        
+        socket.on("driver-status", (status) => driverStatus(socket, status, users[socket.id], getUserRoomsAndRole(socket.id)[0]));
+        
+        socket.on("position", (positionObj) => position(socket, positionObj));
             
-            socket.to(positionObj.storeId).emit("d-position", positionObj);
-            
-        });
-    
         socket.on("disconnect", (reason) => {
     
             getUserRoomsAndRole(socket.id).forEach((roomRole)=>{
@@ -92,8 +102,13 @@ module.exports.socketIO = async function (server, stores) {
     
                 if(role === "manager"){
                     rooms[roomId].manager = false
-                }else{
-                    io.to(roomId).emit("current-users", rooms[roomId])
+                } else {
+                    // changes => rooms[roomId] =>  users[socket.id]
+                    // changes => current-users =>  disconnected-users
+                    // fixes bug when all drivers disconnect simutanously when you press x on the browser... 
+                    // stops DELTA_DRIVER_FOR_DRAG_AND_DROP from running everytime it does two forloops 
+                    
+                    io.to(roomId).emit("disconnected-users", users[socket.id])
                 }
     
             });
@@ -115,10 +130,10 @@ function managerIsActive(userStore){
 }
 
 function getUserRoomsAndRole(socketId) {
-  return Object.entries(rooms).reduce((roomIds, [roomId, room]) => {
-    if (room.users[users[socketId]] != null) roomIds.push({roomId, role: room.users[users[socketId]]});
-    return roomIds;
-  }, []);
+    return Object.entries(rooms).reduce((roomIds, [roomId, room]) => {
+        if (room.users[users[socketId]] != null) roomIds.push({roomId, role: room.users[users[socketId]]});
+        return roomIds;
+    }, []);
 }
 
 function findStoreManagerId(roomId){

@@ -4,7 +4,6 @@ import axios from 'axios'
 import "./sign-in-form.styles.scss";
 
 import SignInNumpad from "../sign-in-numpad/sign-in-numpad.component";
-
 const SignInForm = () => {
   const handleSubmit = event => {
     event.preventDefault()

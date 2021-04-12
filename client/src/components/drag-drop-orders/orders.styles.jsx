@@ -11,8 +11,7 @@ export const animationName = keyframes`
 `;
 
 export const Container = styled.div`
-  width: 70%;
-  margin: auto;
+  padding: 10px;
   justify-content: center;
   display: flex;
   animation: ${animationName} ease 3s;
@@ -20,13 +19,16 @@ export const Container = styled.div`
 
 export const ContainerOrder = styled.div`
   height: 100%;
-  width: 50%;
-  margin: 1vh;
+  /* width: 50%; */
+  /* margin-left: 2vh; */
 `;
 
 export const ContainerDriver = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
-  margin: 1vh;
+  width: 320px;
+  height: fit-content;
+  @media screen and (max-width: 1150px) {
+    width: 180px;
+  }
 `;

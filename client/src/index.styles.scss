@@ -3,10 +3,12 @@
 body {
   font-family: "Roboto", sans-serif;
   background-color: $pagebackgroundcolor;
-  
 }
-
+// *:focus {
+//   outline: none;
+// }
 * {
+  outline:none;
   box-sizing: border-box;
   margin: 0;
   padding: 0;

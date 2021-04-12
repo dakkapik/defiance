@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Droppable } from "react-beautiful-dnd";
-import Order from "../order/order.component";
+import Order from "../drag-drop-order-card/order.component";
 import { Container, Title, OrderList } from "./column.styles";
 /*
 
@@ -10,10 +10,12 @@ React Beautiful DND
 
 */
 
-const Column = ({ column, orders }) => {
+const Column = ({ column, orders, delete_mark }) => {
   return (
     <Container>
-      <Title>{column.id === "column-1" ? "Orders" : column.firstName}</Title>
+      <Title>
+        {column.id === "column-1" ? "Unassigned Orders" : column.firstName}
+      </Title>
       {/* 
         <Droppable /> components can be dropped on by a <Draggable />.
          They also contain <Draggable />s. A <Draggable /> 
@@ -41,7 +43,12 @@ const Column = ({ column, orders }) => {
             isDraggingOver={snapshot.isDraggingOver}
           >
             {orders.map((order, index) => (
-              <Order key={order.id} order={order} index={index} />
+              <Order
+                delete_mark={delete_mark}
+                key={order.id}
+                order={order}
+                index={index}
+              />
             ))}
             {/* provided.placeholder Is to Increase space when something is dropped in a column */}
             {provided.placeholder}

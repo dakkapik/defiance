@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import globalcss from '../../global-css/styled-component-variable'
+import globalcss from "../../global-css/styled-component-variable";
 export const Container = styled.div`
-  margin: 8px;
+  margin: 6px;
   border: 1px solid ${globalcss.textcolor};
   border-radius: 2px;
+
   /* width: 300px; */
   /* display: flex;
   flex-direction: column;
@@ -15,9 +16,11 @@ export const Title = styled.div`
   padding: 8px;
 `;
 export const OrderList = styled.div`
-  padding: 8px;
+  height: fit-content;
+  padding-top: 3px;
   transition: background-color 0.2s ease;
-  background-color: ${(props) => (props.isDraggingOver ? globalcss.primary : globalcss.secondary)};
+  background-color: ${(props) =>
+    props.isDraggingOver ? "#8b0000" : globalcss.secondary};
   /* flex-grow: 1; */
-  min-height: 60px;
+  min-height: 150px;
 `;

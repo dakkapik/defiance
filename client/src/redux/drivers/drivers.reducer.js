@@ -7,11 +7,23 @@ const INITIAL_STATE = {
   disconnectedDriver: undefined,
   disconnectTrigger: false,
   position: {},
+  show_drivers_or_stores_panel: false,
 };
 
 const driverReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case DriversActionTypes.ADD_ACTIVE_DRIVER:
+    case DriversActionTypes.SHOW_DRIVER_PANEL:
+      return {
+        ...state,
+        show_drivers_or_stores_panel: true,
+      };
+    case DriversActionTypes.SHOW_STORE_PANEL:
+      return {
+        ...state,
+        show_drivers_or_stores_panel: false,
+      };
+
+    case DriversActionTypes.CURRENT_CONNECTED_DRIVER:
       let justadded = {};
       if (state.currentDrivers) {
         if (state.currentDrivers.length === 0) {
@@ -47,8 +59,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
       let Driver = state.currentDrivers[index];
 
       let ModifiedDriver;
-      
-    
+
       if (Driver) {
         //Merge Driver and position
         ModifiedDriver = { ...Driver, ...action.payload.position.coords };
@@ -68,7 +79,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
           ActiveMovingDriver: [ModifiedDriver, ...state.ActiveMovingDriver],
         };
       } else {
-        //if it does exist  than update their position 
+        //if it does exist  than update their position
         state.ActiveMovingDriver.splice(Activeindex, 1);
         return {
           ...state,

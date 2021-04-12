@@ -15,13 +15,14 @@ describe("Order Reducer", () => {
       orders: {},
       storename: "",
     },
+    drivers_with_orders: [],
   };
   it("should return default state", () => {
     const newState = ordersReducer(undefined, {});
     expect(newState).toEqual(defaultState);
   });
 
-  it("should return new state if receiving type ADD_DRAG_DROP_TO_COLLECTION", () => {
+  it("should return new state if receiving type SETUP_CURRENT_DRAG_DROP", () => {
     const mockPayload = {
       //Api orders
       orders: [
@@ -40,7 +41,7 @@ describe("Order Reducer", () => {
     };
     // we pass a payload to the reducer and expect a new state
     const newState = ordersReducer(undefined, {
-      type: OrdersActionTypes.ADD_DRAG_DROP_TO_COLLECTION,
+      type: OrdersActionTypes.SETUP_CURRENT_DRAG_DROP,
       payload: mockPayload,
     });
 

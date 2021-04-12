@@ -8,8 +8,7 @@ router.get('/:id', async(req, res) => {
     if (!user) {
         return res.status(404).send({ message: 'employee with searched ID not found' })
     }
-
-    const token = jwt.sign({ id: user.employeeId }, process.env.db_pswrd, { expiresIn: '12h' })
+    const token = jwt.sign({ id: user.employeeId, role: user.role, name: user.firstName }, process.env.db_pswrd)
     res.status(200).send(token)
 })
 

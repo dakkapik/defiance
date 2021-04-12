@@ -6,7 +6,12 @@ const server = require('http').createServer(app);
 
 const logger = require("./middleware/logger");
 
-require("./startup/db")().then(()=>socketSetUp(server));
+global.GLOBAL_TIMEZONE = "en-US" 
+
+require("./startup/db")().then(()=>{
+  socketSetUp(server);
+});
+// require("./startup/orderBundles");
 require("./startup/routes")(app);
 require("./startup/validation")();
 require("./startup/prod")(app);
@@ -15,15 +20,15 @@ require("./startup/config")();
 const port = process.env.PORT || config.get("app.port")
 
 server.listen(port, () =>{
-  logger.log("info", "server mode: " + process.env.NODE_ENV)
-  logger.log("info", "listening on port: " + port)
+  logger.log("info", "server mode: " + process.env.NODE_ENV);
+  logger.log("info", "listening on port: " + port);
 });
 
 module.exports = server;
 
 async function socketSetUp (server){
   const stores = await getStores()
-  require("./startup/socket").socketIO(server, stores);
+  require("./socket/router").socketIO(server, stores);
 }
 
 const getStores = () => {
@@ -31,11 +36,10 @@ const getStores = () => {
       let storesObj = {}
       require("./models/store").Store.find()
       .then(stores=>{
-          stores.forEach(store=>{
-              storesObj[store.storeId] = {users: {}, manager: false}
-          });
-          resolve(storesObj)
+        stores.forEach(store=>{
+          storesObj[store.storeId] = {users: {}, manager: false}
         });
-
+        resolve(storesObj)
+      });
   })
 };
