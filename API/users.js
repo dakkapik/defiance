@@ -1,19 +1,16 @@
 const express = require("express")
 const router = express.Router()
 const { User, validateUser } = require("../models/user")
-const jwt = require('jsonwebtoken')
-    // const { server } = require('../server');
-    // const io = require('socket.io')(server);
-    // const auth = require("../middleware/auth");
-    // const admin = require("../middleware/admin");
+const auth = require("../middleware/auth");
+// const admin = require("../middleware/admin");
 
-router.get('/', async(req, res) => {
+router.get('/', auth, async(req, res) => {
     const users = await User.find().sort('lastName')
     res.status(200).send(users)
         //get all users
 })
 
-router.get('/:id', async(req, res) => {
+router.get('/:id', auth, async(req, res) => {
     const user = await User.findOne({ employeeId: req.params.id })
     if (!user) {
         return res.status(404).send({ message: 'employee with searched ID not found' })
