@@ -93,7 +93,9 @@ module.exports.socketIO = function (server, stores) {
 
         socket.on("message", (msg)=> message(socket, msg, users));
 
-        socket.on("order-bundles", (data) => orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0]));
+        socket.on("order-bundles", (data) => {
+            orderBundles(socket, data, getUserRoomsAndRole(socket.id)[0])
+        });
         
         socket.on("order-status", (data) => orderStatus(socket, data, getUserRoomsAndRole(socket.id)[0]));
         

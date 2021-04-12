@@ -23,6 +23,7 @@ import {
 
 export function* read_Emit_Or_Write_Emit(socket) {
   yield fork(read, socket);
+  yield fork(write, socket);
 }
 
 export function* read(socket) {
@@ -30,6 +31,13 @@ export function* read(socket) {
   while (true) {
     let action = yield take(channel);
     yield put(action);
+  }
+}
+
+function* write(socket) {
+  while (true) {
+    const { payload } = yield take("SOCKET_ORDER_BUNDLES");
+    socket.emit("order-bundles", payload);
   }
 }
 

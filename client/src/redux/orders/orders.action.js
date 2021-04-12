@@ -1,5 +1,11 @@
 import OrdersActionTypes from "./orders.types";
 
+//
+export const sendOrderBundle = (Order_Bundle) => ({
+  type: OrdersActionTypes.SOCKET_ORDER_BUNDLES,
+  payload: Order_Bundle,
+});
+
 //  when api order succeeds add it to currentdragdrop reducer
 export const setupCurrentDragDrop = (OrdersAndStore) => ({
   type: OrdersActionTypes.SETUP_CURRENT_DRAG_DROP,
