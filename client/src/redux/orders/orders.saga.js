@@ -37,6 +37,7 @@ export function* read(socket) {
 function* write(socket) {
   while (true) {
     const { payload } = yield take("SOCKET_ORDER_BUNDLES");
+    console.log(payload);
     socket.emit("order-bundles", payload);
   }
 }

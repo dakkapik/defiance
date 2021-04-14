@@ -1,4 +1,8 @@
 import OrdersActionTypes from "./orders.types";
+export const socketSendOrderUpdate = (Order) => ({
+  type: OrdersActionTypes.SOCKET_ORDER_SEND_UPDATE,
+  pyaload: Order,
+});
 
 //
 export const sendOrderBundle = (Order_Bundle) => ({

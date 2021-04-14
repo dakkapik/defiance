@@ -16,7 +16,7 @@ import { cloneDeep } from "lodash";
 
 const INITIAL_STATE = {
   showorders: false, // red arrow component ui changes
-  apiorders: [],
+
   dragdropcollection: [], // disconnecting and reconnect things will be saved
 
   /*orderIds array dynamically changes when a order is being dragged to the columns key
@@ -33,6 +33,7 @@ const INITIAL_STATE = {
     "4545": { id: "4545", orderIds: [], title: "Orders" },
   },
   */
+  apiorders: [],
   currentdragdrop: {
     columnOrder: ["column-1"],
     columns: { "column-1": { id: "column-1", orderIds: [], title: "Orders" } },
@@ -91,7 +92,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         currentdragdrop: deleteOrderCurrentdragdrop,
         apiorders: DeleteApiOrders,
       };
-    
+
     case OrdersActionTypes.SOCKET_ORDER_UPDATE:
       let UpdateOrderStatusCurrentDragdrop = cloneDeep(state.currentdragdrop);
       let UpdateApiOrders = cloneDeep(state.apiorders);
@@ -168,7 +169,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
 
     case OrdersActionTypes.SOCKET_ORDER_NEW:
       const new_order = action.payload;
-      console.log('SOCKET_ORDER_NEW',action.payload);
+      console.log("SOCKET_ORDER_NEW", action.payload);
       let OrderNewCurrentDragdrop = { ...state.currentdragdrop };
       OrderNewCurrentDragdrop.orders[new_order._id] = new_order;
 
