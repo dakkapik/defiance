@@ -97,19 +97,20 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
       let UpdateOrderStatusCurrentDragdrop = cloneDeep(state.currentdragdrop);
       let UpdateApiOrders = cloneDeep(state.apiorders);
 
+      const {
+        [`${action.payload._id}`]: OrderInDnd,
+      } = UpdateOrderStatusCurrentDragdrop.orders;
+      //edge case if  order never existed then dont crash the ui
+      if (OrderInDnd === undefined) {
+        alert("tried updating an order that did not exist");
+        return { ...state };
+      }
+
       if (action.payload.status === "completed") {
         //We need to find where the order lives in for we can delete it
-        const {
-          [`${action.payload._id}`]: order,
-        } = UpdateOrderStatusCurrentDragdrop.orders;
-        //edge case if  order never existed then dont crash the ui
-        if (order === undefined) {
-          alert("tried updating an order that did not exist");
-          return { ...state };
-        }
 
         //Lives in Some driver Column
-        if (order.livesInColumn) {
+        if (OrderInDnd.livesInColumn) {
           const { livesInColumn } = UpdateOrderStatusCurrentDragdrop.orders[
             action.payload._id
           ];

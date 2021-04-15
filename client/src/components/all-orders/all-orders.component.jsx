@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { fetchOrders } from "../../redux/orders/orders.utils";
 import OrderCard from "../order-card/order-card.component";
-const AllApiOrders = () => {
-  const [api, setApi] = useState({});
+import { socketSendOrderUpdate } from "../../redux/orders/orders.action";
+import { connect } from "react-redux";
+const AllApiOrders = ({ socketSendOrderUpdate }) => {
+  const [api_orders, setApiOrders] = useState({});
+
   useEffect(() => {
     fetchOrders().then((data) => {
-      setApi(data);
+      setApiOrders(data);
     });
   }, []);
 
+  const changeAllApiOrderState = (chosen_completed_order) => {
+    setApiOrders(
+      api_orders.filter((order) => order !== chosen_completed_order)
+    );
+  };
+
   return (
     <div>
-      {api.length
-        ? api.map((order, index) => <OrderCard key={index} order={order} />)
+      {api_orders.length
+        ? api_orders.map((order, index) => (
+            <OrderCard
+              key={index}
+              order={order}
+              changeAllApiOrderState={changeAllApiOrderState}
+              socketSendOrderUpdate={socketSendOrderUpdate}
+            />
+          ))
         : null}
     </div>
   );
 };
+const mapDispatchToProps = (dispatch) => ({
+  socketSendOrderUpdate: (Order) => dispatch(socketSendOrderUpdate(Order)),
+});
 
-export default AllApiOrders;
+export default connect(null, mapDispatchToProps)(AllApiOrders);

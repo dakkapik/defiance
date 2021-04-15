@@ -23,7 +23,12 @@ export const theme = {
   height: "130px",
 };
 
-const OrderCard = ({ order = {} }) => {
+const OrderCard = ({
+  order = {},
+  socketSendOrderUpdate,
+  changeAllApiOrderState,
+  ...props
+}) => {
   const classes = useIconStyles();
   const classesAddress = useIconAddressStyles();
   const convertMiltaryTimeToStandard = ({ hour, minute } = {}) => {
@@ -74,7 +79,14 @@ const OrderCard = ({ order = {} }) => {
           <OrderTitle>Order</OrderTitle>
           <OrderNumber>{order.orderNumber}</OrderNumber>
           {/* you should make this resuable somehow here */}
-          <div onClick={() => console.log("hello")}>✅</div>
+          <div
+            onClick={() => {
+              socketSendOrderUpdate(order);
+              changeAllApiOrderState(order);
+            }}
+          >
+            ✅
+          </div>
         </OrderNumberContainer>
       </WhiteSideBarContainer>
     </CardContainer>
