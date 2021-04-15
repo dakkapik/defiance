@@ -16,11 +16,11 @@ export function disconnect(socket) {
 }
 export function socketOrderOn(socket) {
   return eventChannel((emit) => {
-    socket.on("orders-new", (New_Order) => {
+    socket.on("order-new", (New_Order) => {
       console.log('socket.on("orders-new")', New_Order);
       emit(socketOrderNew(New_Order));
     });
-    socket.on("order-updates", (Order_With_Updated_Status) => {
+    socket.on("order-update", (Order_With_Updated_Status) => {
       console.log('socket.on("order-updates")', Order_With_Updated_Status);
       emit(socketOrderUpdate(Order_With_Updated_Status));
     });

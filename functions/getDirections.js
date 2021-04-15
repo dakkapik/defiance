@@ -13,7 +13,7 @@ module.exports = function (origin, destination, waypoints) {
     
         const query = (gMapsEndpoint + `origin=${originString}&destination=${destinationString}&waypoints=${waypointString}&key=${process.env.google_maps_api}`)
     
-        console.log(query)
+        // console.log(query)
     
         axios.get(query)
         .then(responce => {
@@ -23,5 +23,6 @@ module.exports = function (origin, destination, waypoints) {
             else reject(data);
 
         })
+        .catch(err => console.log("getDirection AXIOS ERROR: ", err))
     })
 }

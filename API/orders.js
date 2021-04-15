@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { validateOrder, validateOrderStatus, Order } = require("../models/order");
 // const validateObjectId = require("../middleware/validateObjectId");
-const TIMEZONE = "en-US";
+const moment = require("moment");
 
 router.get('/', async(req, res)=>{
   const orders = await Order.find().sort('orderNumber')
@@ -25,14 +25,14 @@ router.get('/date/:month/:day/:year', async(req, res)=>{
 });
 
 router.get('/today', async(req, res)=>{
-  const order = await Order.find({date: new Date().toLocaleDateString(TIMEZONE)})
+  const order = await Order.find({date: moment().format("MM/DD/YYYY")})
   if(!order) return res.status(404).send({message: 'no orders found this day'})
   res.status(200).send(order)
   // send daily orders
 });
 
 router.get('/today/:orderNumber', async(req, res)=>{
-  const order = await Order.findOne({orderNumber: req.params.orderNumber , date: new Date().toLocaleDateString(TIMEZONE)});
+  const order = await Order.findOne({orderNumber: req.params.orderNumber , date: moment().format("MM/DD/YYYY")});
   if(!order) return res.status(404).send({message: 'order not found'});
   res.status(200).send(order);
   // send daily orders
@@ -45,7 +45,7 @@ router.put('/today/updateStatus/:orderNumber', async(req, res)=>{
   if(error) return res.status(422).send("cannot use status: " + req.body.status)
   
   try{
-    const order = await Order.findOne({orderNumber: req.params.orderNumber, date: new Date().toLocaleDateString(TIMEZONE)})
+    const order = await Order.findOne({orderNumber: req.params.orderNumber, date: moment().format("MM/DD/YYYY")})
     
     const result = await Order.findByIdAndUpdate(
       order._id,
@@ -191,7 +191,7 @@ router.put('/updateDriver/:orderNumber', async(req, res)=>{
 })
 
 router.delete("/today", (req, res) => {
-  Order.deleteMany({date: new Date().toLocaleDateString(TIMEZONE)})
+  Order.deleteMany({date: moment().format("MM/DD/YYYY")})
   .then(orders => res.status(200).send({deleted: orders}))
   .catch(err => res.status(404).send(err))
 })
