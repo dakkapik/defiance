@@ -8,6 +8,7 @@ const CURRENT_STORE = { lat: 26.286659103811463, lng: -80.19981933329022 }
 module.exports = function (socket, orderBundleList, users) {
     
     orderBundleList.forEach(orderBundle => {
+        console.log(orderBundle)
         const user = findUserSocket(orderBundle.id)
         const origin = CURRENT_STORE;
         const destination = CURRENT_STORE;
@@ -41,12 +42,12 @@ module.exports = function (socket, orderBundleList, users) {
         return Object.keys(users).find( socketId =>{return users[socketId] == userId})
     }
 
-    function updateOrders(orderNumberArray){
+    function updateOrders(_ids){
         const status = "on_route"
         const { error } = validateOrderStatus(status)
         if(error) return console.log("status validation error: ", error)
 
-        orderNumberArray.forEach(_id => {    
+        _ids.forEach(_id => {    
             Order.updateOne({_id}, {status})
         })
     }
