@@ -1,8 +1,7 @@
 const { Order, validateOrderStatus } = require("../../models/order");
 const { OrderBundle, validateOrderBundle } = require("../../models/orderBundle")
 const getDirections = require("../../functions/getDirections");
-const { writeFileSync } = require("fs")
-const mockDirections = require("../../../directions/responce.json")
+const { writeFileSync } = require("fs");
 
 const CURRENT_STORE = { lat: 26.286659103811463, lng: -80.19981933329022 }
 
