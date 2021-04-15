@@ -3,6 +3,7 @@ import { fetchOrders } from "../../redux/orders/orders.utils";
 import OrderCard from "../order-card/order-card.component";
 import { socketSendOrderUpdate } from "../../redux/orders/orders.action";
 import { connect } from "react-redux";
+import "./all-order.styles.scss";
 const AllApiOrders = ({ socketSendOrderUpdate }) => {
   const [api_orders, setApiOrders] = useState({});
 
@@ -19,7 +20,7 @@ const AllApiOrders = ({ socketSendOrderUpdate }) => {
   };
 
   return (
-    <div>
+    <div className="all-api-orders-container">
       {api_orders.length
         ? api_orders.map((order, index) => (
             <OrderCard

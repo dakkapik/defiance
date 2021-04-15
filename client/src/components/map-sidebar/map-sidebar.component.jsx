@@ -56,7 +56,7 @@ export const MapSideBar = ({
 
   const [show_arrow_modal, openArrowModal] = useState(false);
 
-  const [show_all_orders, showAllOrders] = useState(false);
+  const [show_all_orders_component, showAllOrders] = useState(false);
 
   const disconnect_button_classes = DisconnectButtonStyles();
   const handleClose = () => {
@@ -78,24 +78,36 @@ export const MapSideBar = ({
           {showorders ? (
             <>
               <div className="side-bar-expanded">
-                <div>
-                  <Button onClick={() => showAllOrders(false)}>Drivers</Button>
-                  <Button onClick={() => showAllOrders(true)}>Order</Button>
+                <div className="side-bar-expanded__driverorder-container">
+                  {show_all_orders_component ? (
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      style={{ margin: "10px" }}
+                      onClick={() => showAllOrders(false)}
+                    >
+                      Drivers
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        style={{ margin: "10px" }}
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => showAllOrders(true)}
+                      >
+                        Orders
+                      </Button>
+                      <SaveModalButton />
+                    </>
+                  )}
                 </div>
 
                 {[
-                  show_all_orders ? (
+                  show_all_orders_component ? (
                     <AllApiOrders key={1} />
                   ) : (
-                    <div key={1}>
-                      <div className="top-container-expanded">
-                        <div className="top-container-expanded__left-section" />
-                        <div className="top-container-expanded__right-section">
-                          <SaveModalButton />
-                        </div>
-                      </div>
-                      <Orders />
-                    </div>
+                    <Orders key={1} />
                   ),
                 ]}
               </div>

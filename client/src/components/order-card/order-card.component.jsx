@@ -16,6 +16,7 @@ import {
   OrderNumber,
   useIconStyles,
   useIconAddressStyles,
+  XMarkContainer,
 } from "./order-card.styles";
 
 //Change Card height here
@@ -79,14 +80,14 @@ const OrderCard = ({
           <OrderTitle>Order</OrderTitle>
           <OrderNumber>{order.orderNumber}</OrderNumber>
           {/* you should make this resuable somehow here */}
-          <div
+          <XMarkContainer
             onClick={() => {
               socketSendOrderUpdate(order);
               changeAllApiOrderState(order);
             }}
           >
             ✅
-          </div>
+          </XMarkContainer>
         </OrderNumberContainer>
       </WhiteSideBarContainer>
     </CardContainer>

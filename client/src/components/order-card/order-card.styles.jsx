@@ -117,6 +117,7 @@ export const animationName = keyframes`
 `;
 export const XMarkContainer = styled.div`
   animation: ${animationName} ease 1s;
+  cursor: pointer;
   @media screen and (max-width: 1150px) {
     border-top-right-radius: 10px;
     display: block;
