@@ -8,6 +8,7 @@ import {
   fork,
   take,
   cancel,
+  race,
 } from "redux-saga/effects";
 //Listener
 import SocketActionTypes from "../socket/socket.types";
@@ -34,10 +35,26 @@ export function* read(socket) {
   }
 }
 
+const driversWithOrdersOnly = ({ payload }) => {
+  return payload.filter((driver) => driver.orders.length > 0);
+};
+
 function* write(socket) {
   while (true) {
-    const { payload } = yield take("SOCKET_ORDER_BUNDLES");
-    socket.emit("order-bundles", payload);
+    // https://hackernoon.com/modelling-common-patterns-with-redux-saga-464a380a37ce
+    // https://medium.com/autodesk-tlv/keep-calm-and-race-on-redux-saga-case-study-1a16d4d7b234
+    // Race Effect Listens to multiple
+    // actions and whatever gets called does something
+    const { sendOrderBundle, updateOrder } = yield race({
+      updateOrder: take("SOCKET_ORDER_SEND_UPDATE"),
+      sendOrderBundle: take("SOCKET_ORDER_BUNDLES"),
+    });
+    if (updateOrder) {
+      socket.emit("update-order", updateOrder.payload);
+    }
+    if (sendOrderBundle) {
+      socket.emit("order-bundles", driversWithOrdersOnly(sendOrderBundle));
+    }
   }
 }
 
