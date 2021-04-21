@@ -31,8 +31,13 @@ export const SaveModalButton = ({
   };
 
   return (
-    <div>
-      <Button variant="outlined" color="inherit" onClick={handleOpen}>
+    <>
+      <Button
+        style={{ margin: "10px" }}
+        variant="outlined"
+        color="inherit"
+        onClick={handleOpen}
+      >
         Save
       </Button>
 
@@ -99,7 +104,7 @@ export const SaveModalButton = ({
           </div>
         </Fade>
       </Modal>
-    </div>
+    </>
   );
 };
 

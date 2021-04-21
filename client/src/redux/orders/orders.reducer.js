@@ -16,7 +16,7 @@ import { cloneDeep } from "lodash";
 
 const INITIAL_STATE = {
   showorders: false, // red arrow component ui changes
-  apiorders: [],
+
   dragdropcollection: [], // disconnecting and reconnect things will be saved
 
   /*orderIds array dynamically changes when a order is being dragged to the columns key
@@ -33,6 +33,7 @@ const INITIAL_STATE = {
     "4545": { id: "4545", orderIds: [], title: "Orders" },
   },
   */
+  apiorders: [],
   currentdragdrop: {
     columnOrder: ["column-1"],
     columns: { "column-1": { id: "column-1", orderIds: [], title: "Orders" } },
@@ -91,24 +92,25 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
         currentdragdrop: deleteOrderCurrentdragdrop,
         apiorders: DeleteApiOrders,
       };
-    
+
     case OrdersActionTypes.SOCKET_ORDER_UPDATE:
       let UpdateOrderStatusCurrentDragdrop = cloneDeep(state.currentdragdrop);
       let UpdateApiOrders = cloneDeep(state.apiorders);
 
+      const {
+        [`${action.payload._id}`]: OrderInDnd,
+      } = UpdateOrderStatusCurrentDragdrop.orders;
+      //edge case if  order never existed then dont crash the ui
+      if (OrderInDnd === undefined) {
+        alert("tried updating an order that did not exist");
+        return { ...state };
+      }
+
       if (action.payload.status === "completed") {
         //We need to find where the order lives in for we can delete it
-        const {
-          [`${action.payload._id}`]: order,
-        } = UpdateOrderStatusCurrentDragdrop.orders;
-        //edge case if  order never existed then dont crash the ui
-        if (order === undefined) {
-          alert("tried updating an order that did not exist");
-          return { ...state };
-        }
 
         //Lives in Some driver Column
-        if (order.livesInColumn) {
+        if (OrderInDnd.livesInColumn) {
           const { livesInColumn } = UpdateOrderStatusCurrentDragdrop.orders[
             action.payload._id
           ];
@@ -168,7 +170,7 @@ const ordersReducer = (state = INITIAL_STATE, action) => {
 
     case OrdersActionTypes.SOCKET_ORDER_NEW:
       const new_order = action.payload;
-      console.log('SOCKET_ORDER_NEW',action.payload);
+      console.log("SOCKET_ORDER_NEW", action.payload);
       let OrderNewCurrentDragdrop = { ...state.currentdragdrop };
       OrderNewCurrentDragdrop.orders[new_order._id] = new_order;
 

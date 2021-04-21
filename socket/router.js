@@ -1,12 +1,15 @@
 let rooms = {};
 const users = {};
 const spectators = {};
+const { Order } = require("../models/order");
+const moment = require("moment")
 
 const position = require("./endpoints/position");
 const driverStatus = require("./endpoints/driverStatus");
 const orderBundles = require("./endpoints/orderBundles");
 const message = require("./endpoints/message");
 const orderExtract = require("./listeners/orderExtract");
+const orderUpdate = require('./endpoints/orderUpdate')
 
 module.exports.socketIO = function (server, stores) {
     rooms = stores;
@@ -42,7 +45,12 @@ module.exports.socketIO = function (server, stores) {
                         rooms[user.store].manager = true
     
                         io.to(findUserSocket(user.id)).emit("current-users", rooms[user.store]);
-    
+
+                        Order.find({date: moment().format("MM/DD/YYYY"), status: "unassigned"})
+                        .then(orders => orders.forEach(order =>
+                            io.to(findUserSocket(user.id)).emit("order-new", order)
+                        ))
+
                         console.log(`Socket:`, user.id, `${user.role} connected to room store-${user.store}`);
                     };
     
@@ -78,21 +86,23 @@ module.exports.socketIO = function (server, stores) {
                 break;
             }
         });
-        socket.on('trigger-new-orders', (order) => {
-            io.to('psq2').emit("orders-new", order);
-        });
-        socket.on('trigger-new-updates', (order) => {
-            console.log(order);
-            io.to('psq2').emit("order-updates", order);
-        });
-        socket.on('trigger-order-delete', (order) => {
-            console.log(order);
-            io.to('psq2').emit("order-delete", order);
-        });
+        // socket.on('trigger-new-orders', (order) => {
+        //     io.to('psq2').emit("orders-new", order);
+        // });
+        // socket.on('trigger-new-updates', (order) => {
+        //     console.log(order);
+        //     io.to('psq2').emit("order-updates", order);
+        // });
+        // socket.on('trigger-order-delete', (order) => {
+        //     console.log(order);
+        //     io.to('psq2').emit("order-delete", order);
+        // });
 
         socket.on("message", (msg)=> message(socket, msg, users));
 
         socket.on("order-bundles", (data) => orderBundles(socket, data, users));
+
+        socket.on("order-update", (data) => orderUpdate(socket, data))
         
         socket.on("driver-status", (status) => driverStatus(socket, status, users[socket.id], getUserRoomsAndRole(socket.id)[0]));
         
