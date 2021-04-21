@@ -50,7 +50,11 @@ function* write(socket) {
       sendOrderBundle: take("SOCKET_ORDER_BUNDLES"),
     });
     if (updateOrder) {
-      socket.emit("update-order", updateOrder.payload);
+      if(updateOrder.payload.status === "unassigned"){
+        socket.emit("order-update", {_id: updateOrder.payload._id, status: "completed"});
+      }else{
+        socket.emit("order-update", {_id: updateOrder.payload._id, status: "unassigned"});
+      }
     }
     if (sendOrderBundle) {
       socket.emit("order-bundles", driversWithOrdersOnly(sendOrderBundle));
