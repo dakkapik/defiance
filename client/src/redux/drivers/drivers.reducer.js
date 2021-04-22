@@ -53,7 +53,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
     case DriversActionTypes.SET_ACTIVE_DRIVER_POSITION:
       //find the index driver with there position
       let index = state.currentDrivers.findIndex(
-        (driver) => driver.employeeId === action.payload.id
+        (driver) => driver.employeeId === action.payload.userId
       );
       // use action.payload.id which is position data to find the driver in current driver
       let Driver = state.currentDrivers[index];
@@ -62,20 +62,20 @@ const driverReducer = (state = INITIAL_STATE, action) => {
 
       if (Driver) {
         //Merge Driver and position
-        ModifiedDriver = { ...Driver, ...action.payload.position.coords };
+        ModifiedDriver = { ...Driver, ...action.payload.position };
       } else {
         return {
           ...state,
         };
       }
       let Activeindex = state.ActiveMovingDriver.findIndex(
-        (active) => active.employeeId === action.payload.id
+        (active) => active.employeeId === action.payload.userId
       );
       // if Active driver does not exist  in action.payload
       if (Activeindex === -1) {
         return {
           ...state,
-          position: action.payload,
+          position: action.payload.position,
           ActiveMovingDriver: [ModifiedDriver, ...state.ActiveMovingDriver],
         };
       } else {
@@ -83,7 +83,7 @@ const driverReducer = (state = INITIAL_STATE, action) => {
         state.ActiveMovingDriver.splice(Activeindex, 1);
         return {
           ...state,
-          position: action.payload,
+          position: action.payload.position,
           ActiveMovingDriver: [ModifiedDriver, ...state.ActiveMovingDriver],
         };
       }
