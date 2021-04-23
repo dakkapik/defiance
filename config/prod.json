@@ -6,9 +6,9 @@
         "prefix":"mongodb+srv",
         "host": null,
         "port": null,
-        "user":"defiance_dev",
+        "user":"defiance_prod",
         "cluster":"cluster0.dab6a.mongodb.net",
-        "name":"defiance",
+        "name":"defiance_prod",
         "suffix":"?retryWrites=true&w=majority"
     }
 }
