@@ -1,11 +1,11 @@
 {
     "app":{
-        "port":null
+        "port":3002
     },
     "db":{
         "prefix":"mongodb+srv",
-        "host":null,
-        "port":null,
+        "host": null,
+        "port": null,
         "user":"defiance_dev",
         "cluster":"cluster0.dab6a.mongodb.net",
         "name":"defiance_dev",
