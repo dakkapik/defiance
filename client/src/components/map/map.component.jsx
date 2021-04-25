@@ -59,6 +59,17 @@ const Map = ({
           zoom={13}
           mapContainerStyle={containerStyle}
         >
+        {store ? 
+          <Marker
+            icon={{
+              url: "https://www.iconpacks.net/icons/2/free-store-icon-2017-thumb.png",
+              labelOrigin: new maps.Point(20, -10),
+              scaledSize: new maps.Size(40, 40),
+              }}
+            position={store.location}
+          />
+          : null
+        }
           {ActiveMovingDriver.map((element, index) => (
             <div key={index}>
               {element.latitude ? (
