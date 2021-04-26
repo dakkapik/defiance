@@ -14,8 +14,15 @@ const AllApiOrders = ({ socketSendOrderUpdate }) => {
   }, []);
 
   const changeAllApiOrderState = (chosen_completed_order) => {
+    let nextStatus
+    if(chosen_completed_order.status === "unassigned"){
+      nextStatus = "completed"
+    }else{
+      nextStatus = "unassigned"
+    }
     setApiOrders(
-      api_orders.filter((order) => order !== chosen_completed_order)
+      // api_orders.filter((order) => order !== chosen_completed_order)
+      api_orders.map(order => order === chosen_completed_order ? {...order, status: nextStatus} : order)
     );
   };
 

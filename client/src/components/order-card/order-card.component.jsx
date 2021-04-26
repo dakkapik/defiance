@@ -86,7 +86,7 @@ const OrderCard = ({
               changeAllApiOrderState(order);
             }}
           >
-            ✅
+            {order.status === "completed" ? "✅" : "❌"}
           </XMarkContainer>
         </OrderNumberContainer>
       </WhiteSideBarContainer>
